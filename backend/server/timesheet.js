@@ -21,35 +21,33 @@ timesheetAPIs.post('/', async (req, res) => {
     const timesheet_id = uuidv4();
 
     const insertOrUpdateQuery = `
-        INSERT INTO emptimesheet (timesheet_id, employee_id, date, working_hours, leaves, holiday)
-        VALUES (?, ?, ?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE
-        employee_id = VALUES(employee_id),
-        date = VALUES(date),
-        working_hours = VALUES(working_hours),
-        leaves = VALUES(leaves),
-        holiday = VALUES(holiday)
-    `;
+    INSERT INTO emptimesheet (timesheet_id, employee_id, date, working_hours, leaves, holiday)
+    VALUES (?, ?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE
+    employee_id = VALUES(employee_id),
+    date = VALUES(date),
+    working_hours = VALUES(working_hours),
+    leaves = VALUES(leaves),
+    holiday = VALUES(holiday)
+`;
 
-    try {
-        const connection = await dbConnectionPool.getConnection();
-        const [results] = await connection.execute(insertOrUpdateQuery, [timesheet_id, employee_id, date, working_hours, leaves, holiday]);
+try {
+    const connection = await dbConnectionPool.getConnection();
+    const [results] = await connection.execute(insertOrUpdateQuery, [timesheet_id, employee_id, date, working_hours, leaves, holiday]);
 
-        if (results.affectedRows > 0) {
-            res.status(201).json({ message: "Timesheet added" });
-        } else {
-            res.status(500).json({ error: "Failed to add or update timesheet" });
-        }
-
-        connection.release(); // Release the connection back to the pool
-    } catch (err) {
-        console.error("Database error: " + err.message);
-        res.status(500).json({ error: "Database error: " + err.message });
+    if (results.affectedRows > 0) {
+        res.status(201).json({ message: "Timesheet added" });
+    } else {
+        res.status(500).json({ error: "Failed to add or update timesheet" });
     }
+
+    connection.release(); // Release the connection back to the pool
+} catch (err) {
+    console.error("Database error: " + err.message);
+    res.status(500).json({ error: "Database error: " + err.message });
+}
 });
 
-
-//FETCH TIMESHEET BASED ON EMPLOYEE ID
 
 //FETCH TIMESHEET BASED ON EMPLOYEE ID
 // Function to validate the yearAndMonth parameter
@@ -97,7 +95,6 @@ timesheetAPIs.get('/employees/:employeeId/month/:yearAndMonth', async (req, res)
 
 
 //FETCH TIMESHEET BASED ON REPORTING MANAGER ID
-
 timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndMonth', async (req, res) => {
     const { reporting_manager_id, yearAndMonth } = req.params;
     let connection;
@@ -120,7 +117,7 @@ timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndM
         const [year, month] = yearAndMonth.split('-');
 
         const fetchTimesheetQuery = `
-            SELECT t.timesheet_id, t.date, t.working_hours, t.leaves, t.holiday, t.employee_id
+            SELECT t.timesheet_id, t.date, t.working_hours, t.leaves, t.holiday, t.employee_id, e.employee_name
             FROM emptimesheet t
             JOIN empdata e ON t.employee_id = e.employee_id
             WHERE YEAR(t.date) = ? AND MONTH(t.date) = ?
@@ -144,6 +141,8 @@ timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndM
         }
     }
 });
+
+
 
 module.exports=timesheetAPIs;
 

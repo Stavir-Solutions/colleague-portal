@@ -12,11 +12,9 @@ const timesheetRoutes = require('./timesheet.js');
 const loginRoutes = require('./login.js');
 const tmsummaryRoutes = require('./tmsummary');
 
-
 app.use('/api/v1/employees', employeeRoutes);
 app.use('/api/v1/timesheet', timesheetRoutes);
 app.use('/api/v1/login', loginRoutes);
-
 app.use('/api/v1/tmsummary', tmsummaryRoutes);
 
 const port = 3000;

@@ -1,4 +1,4 @@
- const express = require('./parent.js');
+const express = require('./parent.js');
 const { authenticateToken } = require('./tokenValidation');
 const dbConnectionPool = require('./db.js');
 
@@ -8,31 +8,53 @@ const tmsummary = express.Router();
 tmsummary.use(authenticateToken);
 
 // API to get total time worked and total leaves for a specific employee, year, and month
-tmsummary.post('/totals', async (req, res) => {
+tmsummary.get('/summary', async (req, res) => {
   try {
-    const { employeeId, year, month } = req.body;
+    const { 'employee-id': employeeId, year, month } = req.query;
 
     // Validate input parameters
     if (!employeeId || !year || !month) {
       return res.status(400).json({ error: 'Invalid input parameters' });
     }
 
-    // Convert month from word to number (assuming you have a mapping from words to numbers)
-    const monthNumber = convertMonthToNumber(month);
+    // Check if the employee ID exists
+    const checkEmployeeQuery = 'SELECT COUNT(*) as employeeCount FROM empdata WHERE employee_id = ?';
+    const [employeeCheckResult] = await dbConnectionPool.query(checkEmployeeQuery, [employeeId]);
 
-    if (!monthNumber) {
-      return res.status(400).json({ error: 'Invalid month' });
+    const employeeCount = employeeCheckResult[0].employeeCount;
+
+    if (employeeCount === 0) {
+      return res.status(404).json({ error: 'Invalid employee ID' });
     }
 
-    // Get total time worked
-    const totalTimeQuery = `SELECT SUM(working_hours) as total_time_worked FROM emptimesheet WHERE employee_id = ? AND YEAR(date) = ? AND MONTH(date) = ?`;
-    const [totalTimeResult] = await dbConnectionPool.query(totalTimeQuery, [employeeId, year, monthNumber]);
-    const totalTimeWorked = totalTimeResult[0].total_time_worked || 0;
+    // Check if timesheet entries exist
+    const checkEntryQuery = `
+      SELECT COUNT(*) as entryCount
+      FROM emptimesheet 
+      WHERE employee_id = ? AND YEAR(date) = ? AND MONTH(date) = ?
+    `;
 
-    // Get total leaves count
-    const totalLeavesQuery = `SELECT COUNT(*) as total_leaves FROM emptimesheet WHERE employee_id = ? AND YEAR(date) = ? AND MONTH(date) = ? AND leaves IS NOT NULL`;
-    const [totalLeavesResult] = await dbConnectionPool.query(totalLeavesQuery, [employeeId, year, monthNumber]);
-    const totalLeaves = totalLeavesResult[0].total_leaves || 0;
+    const [entryCheckResult] = await dbConnectionPool.query(checkEntryQuery, [employeeId, year, month]);
+
+    const entryCount = entryCheckResult[0].entryCount;
+
+    if (entryCount === 0) {
+      return res.status(404).json({ error: 'No timesheet entries found for the specified employee and month' });
+    }
+
+    // Get total time worked and total leaves
+    const summaryQuery = `
+      SELECT 
+        SUM(working_hours) as total_time_worked, 
+        SUM(leaves) as total_leaves 
+      FROM emptimesheet 
+      WHERE employee_id = ? AND YEAR(date) = ? AND MONTH(date) = ?
+    `;
+
+    const [summaryResult] = await dbConnectionPool.query(summaryQuery, [employeeId, year, month]);
+
+    const totalTimeWorked = summaryResult[0].total_time_worked;
+    const totalLeaves = summaryResult[0].total_leaves;
 
     res.json({ total_time_worked: totalTimeWorked, total_leaves: totalLeaves });
   } catch (error) {
@@ -40,25 +62,5 @@ tmsummary.post('/totals', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-// Function to convert month from word to number (you might need to extend this based on your requirements)
-function convertMonthToNumber(monthWord) {
-  const monthMap = {
-    january: 1,
-    february: 2,
-    march: 3,
-    april: 4,
-    may: 5,
-    june: 6,
-    july: 7,
-    august: 8,
-    september: 9,
-    october: 10,
-    november: 11,
-    december: 12,
-  };
-
-  return monthMap[monthWord.toLowerCase()];
-}
 
 module.exports = tmsummary;

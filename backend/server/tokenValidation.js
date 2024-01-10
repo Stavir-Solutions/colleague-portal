@@ -24,7 +24,7 @@ const validateToken = async (token) => {
 };
 const authenticateToken = async (req, res, next) => {
     const token = req.header('Authorization');
-
+    
     if (!token) {
         return res.status(401).send('Unauthorized - Token missing');
     }
