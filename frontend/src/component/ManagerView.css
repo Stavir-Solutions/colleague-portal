@@ -1,0 +1,29 @@
+/* ManagerView.css */
+
+.managerview-container {
+    text-align: center;
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .tabs {
+    display: flex;
+  }
+  
+  button {
+    flex: 1;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    background-color: #665fcf;
+  }
+  
+  button.active {
+    background-color: #92928c;
+  }
+  
+  .tab-content {
+    margin-top: 20px;
+  }
+  
