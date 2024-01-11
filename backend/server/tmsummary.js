@@ -53,10 +53,10 @@ tmsummary.get('/summary', async (req, res) => {
 
     const [summaryResult] = await dbConnectionPool.query(summaryQuery, [employeeId, year, month]);
 
-    const totalTimeWorked = summaryResult[0].total_time_worked;
+    const totalWorkingHours = summaryResult[0].total_time_worked;
     const totalLeaves = summaryResult[0].total_leaves;
 
-    res.json({ total_time_worked: totalTimeWorked, total_leaves: totalLeaves });
+    res.json({ "Total Working Hours": totalWorkingHours, "Total Leaves": totalLeaves });
   } catch (error) {
     console.error('Error fetching totals:', error);
     res.status(500).json({ error: 'Internal Server Error' });
