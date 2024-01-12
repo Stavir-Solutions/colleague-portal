@@ -1,12 +1,18 @@
-// src/App.js
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './component/Login';
-function App() {
+import ManagerView from './component/ManagerView';
+
+const App = () => {
   return (
-    <div>
-      <Login/>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/ManagerView" element={<ManagerView />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/" element={<Navigate to="/Login" />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
