@@ -8,7 +8,7 @@
   }
   
   .tabs {
-    display: flex;
+        display: flex;
   }
   
   button {
@@ -25,5 +25,5 @@
   
   .tab-content {
     margin-top: 20px;
-  }
+     }
   
