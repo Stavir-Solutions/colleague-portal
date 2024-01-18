@@ -1,0 +1,18 @@
+/* EmployeeList.css */
+.employee-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px; /* Add margin to the entire table */
+  }
+  
+  .employee-table th, .employee-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  /* Add margin to each cell if needed */
+  .employee-table td {
+    margin: 5px;
+  }
+  
