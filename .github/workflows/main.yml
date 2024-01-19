@@ -27,4 +27,4 @@ jobs:
             cd colleague-portal
             cd backend
             cd server
-            node app.js &
+            nohup node app.js 
