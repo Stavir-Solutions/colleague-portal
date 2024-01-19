@@ -27,4 +27,5 @@ jobs:
             cd colleague-portal
             cd backend
             cd server
+            kill -9 $(ps aux | grep '\snode\s' | awk '{print $2}')
             nohup node app.js &
