@@ -22,5 +22,8 @@ jobs:
           port: 22
           script: |  
             
-            cd stavirsolutions/colleague-portal/backend/server
+            cd stavirsolutions
+            cd collague-portal
+            cd backend
+            cd server
             node app.js
