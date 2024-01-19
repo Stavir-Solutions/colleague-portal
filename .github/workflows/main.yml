@@ -21,7 +21,4 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |  
-             cd testrepository1
-             cd backend/server
-             sudo apt install nodejs
-             node app.js
+             git clone https://github.com/Stavir-Solutions/colleague-portal.git
