@@ -23,7 +23,7 @@ jobs:
           script: |  
             
             cd stavirsolutions
-            cd collague-portal
+            cd colleague-portal
             cd backend
             cd server
             node app.js
