@@ -13,19 +13,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: SSH into Server 
+      - name: SSH into Server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_DNS }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
-          
-          script: |  
-            
-            cd stavirsolutions
-            cd colleague-portal
-            cd backend
-            cd server
-            kill -9 $(ps aux | grep '\snode\s' | awk '{print $2}')
-            nohup node app.js &
+          script: |
+            cd stavirsolutions/colleague-portal/backend/server
+
+            # Gracefully stop Node.js server if it's already running
+            if pgrep -x "node" > /dev/null
+            then
+              echo "Stopping Node.js server..."
+              pkill -x node
+            fi
+
+            # Install dependencies and start the Node.js server
+            npm install
+            nohup npm start &
