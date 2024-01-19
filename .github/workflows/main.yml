@@ -22,5 +22,5 @@ jobs:
           port: 22
           script: |  
             
-            cd stavirsolutions/colleague-portal
-            git pull origin main
+            cd stavirsolutions/colleague-portal/backend/server
+            node app.js
