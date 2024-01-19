@@ -22,5 +22,5 @@ jobs:
           port: 22
           script: |  
             
-            cd stavirsolutions
+            cd stavirsolutions/colleague-portal
             git pull origin main
