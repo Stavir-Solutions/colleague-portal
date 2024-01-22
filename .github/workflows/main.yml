@@ -36,6 +36,7 @@ jobs:
             cd
             cd stavirsolutions/colleague-portal/frontend
             nohup npm start > log_node_text.txt 2>&1 &
+            vim log_node_text.txt
 
             
 
