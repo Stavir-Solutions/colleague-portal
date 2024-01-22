@@ -35,6 +35,7 @@ jobs:
             nohup node app.js > log_node_text.txt 2>&1 &
             cd
             cd stavirsolutions/colleague-portal/frontend
+             npm install
             nohup npm start &
 
             
