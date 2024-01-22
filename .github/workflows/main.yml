@@ -32,6 +32,5 @@ jobs:
 
             # Install dependencies and start the Node.js server
             npm install
-            service mysql start 
-            nohup node app.js &
+            nohup node app.js And &
 
