@@ -32,7 +32,6 @@ jobs:
 
             # Install dependencies and start the Node.js server
             npm install
-            nohup node app.js &
-            sleep 5
+            node app.js 
 
 
