@@ -27,7 +27,6 @@ jobs:
             # Gracefully stop Node.js server if it's already running
             if pgrep -x "node" > /dev/null
             then
-              echo "Stopping Node.js server..."
               pkill -x node
             fi
 
