@@ -31,5 +31,6 @@ jobs:
             fi
 
             # Install dependencies and start the Node.js server
-            nohup npm start &
+            npm install
+            nohup node app.js &
 
