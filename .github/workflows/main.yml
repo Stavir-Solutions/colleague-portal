@@ -32,5 +32,7 @@ jobs:
 
             # Install dependencies and start the Node.js server
             npm install
-            nohup node app.js & > log_node1.txt
+             node app.js 
+             nohup npm start &
+            
 
