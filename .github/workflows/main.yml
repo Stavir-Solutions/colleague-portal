@@ -22,6 +22,7 @@ jobs:
           port: 22
           script: |
             cd stavirsolutions/colleague-portal/backend/server
+            git pull origin main
 
             # Gracefully stop Node.js server if it's already running
             if pgrep -x "node" > /dev/null
