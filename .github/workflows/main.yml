@@ -33,6 +33,6 @@ jobs:
             # Install dependencies and start the Node.js server
             npm install
             nohup node app.js &
-            exit
+            estatus=127
 
 
