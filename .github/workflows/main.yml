@@ -32,11 +32,10 @@ jobs:
 
             # Install dependencies and start the Node.js server
             npm install
-            nohup node app.js > log_node_text.txt 2>&1 &
+            nohup node app.js &> backend.log &
             cd
             cd stavirsolutions/colleague-portal/frontend
-            pkill -f npm
-            nohup npm start 
+            nohup npm start &> frontend.log  &
             
 
             
