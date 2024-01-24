@@ -23,20 +23,20 @@ jobs:
           script: |
             cd stavirsolutions
             git pull origin main
+
+            # Stop all Node.js processes
+            pkill -x node || true
+
+            # Install backend dependencies and start the Node.js server
             cd colleague-portal/backend/server
-
-            # Gracefully stop Node.js server if it's already running
-            if pgrep -x "node" > /dev/null
-            then
-              pkill -x node
-            fi
-
-            # Install dependencies and start the Node.js server
             npm install
             nohup node app.js &> backend.log &
+
+            # Install frontend dependencies and start the frontend server
             cd
             cd stavirsolutions/colleague-portal/frontend
-            nohup npm start &> frontend.log  &
+            nohup npm start &> frontend.log &
+
             
 
             
