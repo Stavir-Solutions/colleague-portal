@@ -21,11 +21,11 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
+             # Stop all Node.js processes
+            pkill -x node || true
+            
             cd stavirsolutions
             git pull origin main
-
-            # Stop all Node.js processes
-            pkill -x node || true
 
             # Install backend dependencies and start the Node.js server
             cd colleague-portal/backend/server
