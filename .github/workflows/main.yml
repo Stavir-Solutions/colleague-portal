@@ -21,9 +21,11 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-             # Stop all Node.js processes
-            pkill -x node || true
-            
+            # Gracefully stop Node.js server if it's already running
+            if pgrep -x "node" > /dev/null
+            then
+              pkill -x node
+            fi
             cd stavirsolutions
             git pull origin main
 
