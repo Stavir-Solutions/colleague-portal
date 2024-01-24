@@ -21,7 +21,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-           git clone https://github.com/Stavir-Solutions/colleague-portal.git
+           git pull origin main
             
           
            
