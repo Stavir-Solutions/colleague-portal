@@ -60,7 +60,7 @@ const ReporteeTimeSheet = () => {
   return (
     <div>
       <h3>Reportee Time Sheet</h3>
-      <div style={{ marginRight: '500px', display: 'flex', alignItems: 'center' }}>
+      <div style={{ marginRight: '300px', display: 'flex', alignItems: 'center' }}>
         <label>Year:</label>
         &nbsp;&nbsp;
         <select value={year} onChange={(e) => setYear(e.target.value)}className="largeFontSize largePadding">
