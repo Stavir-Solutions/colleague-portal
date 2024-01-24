@@ -21,8 +21,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            cd stavirsolutions/colleague-portal/backend/server
+            cd stavirsolutions
             git pull origin main
+            cd colleague-portal/backend/server
 
             # Gracefully stop Node.js server if it's already running
             if pgrep -x "node" > /dev/null
