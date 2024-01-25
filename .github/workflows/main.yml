@@ -22,25 +22,26 @@ jobs:
           port: 22
           script: |
            
-             # Gracefully stop Node.js server if it's already running
-              if pgrep -x "node" > /dev/null
-              then
+            cd colleague-portal
+            
+            # Gracefully stop Node.js server if it's already running
+            if pgrep -x "node" > /dev/null; then
               pkill -x node
-              fi
-            
-              cd colleague-portal
-             git pull origin main
+            fi
 
-             # Install backend dependencies and start the Node.js server
-             cd backend/server/
-             npm install
-             nohup node app.js &> backend.log &
-            # Install frontend dependencies and start the frontend server
-              cd
-             cd colleague-portal/frontend
-             npm install
-             nohup npm start &> frontend.log &
             
+            git pull origin main
+
+            # Install backend dependencies and start the Node.js server
+            cd backend/server/
+            npm install
+            nohup node app.js &> backend.log &
+
+            # Install frontend dependencies and start the frontend server
+            cd ../frontend  
+            npm install
+            nohup npm start &> frontend.log &
+
            
             
             
