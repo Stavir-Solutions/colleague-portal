@@ -41,8 +41,7 @@ jobs:
             cd
             cd colleague-portal/frontend
             npm install
-            PORT=3001
-            nohup  npm start &> frontend.log &
+            nohup cross-env   npm start &> frontend.log &
            
            
             
