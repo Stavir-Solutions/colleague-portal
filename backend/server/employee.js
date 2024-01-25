@@ -90,6 +90,7 @@ employeeAPIs.put('/:employee_id', async (req, res) => {
         address,
         password  
     } = req.body;
+    console.log('Received data:', req.body);
 
     if (!employee_name || !designation || !phone_number || !email || !joining_date || !leaving_date || !reporting_manager_id || !address) {
         res.status(400).json({ error: 'Bad request - Missing data' });
