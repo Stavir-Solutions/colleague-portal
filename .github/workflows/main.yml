@@ -41,7 +41,7 @@ jobs:
             cd
             cd colleague-portal/frontend
             npm install
-            nohup cross-env   npm start &> frontend.log &
+            nohup $(which cross-env) npm start &> frontend.log &
            
            
             
