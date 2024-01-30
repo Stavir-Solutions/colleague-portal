@@ -47,6 +47,11 @@ jobs:
             cd colleague-portal/frontend
             npm install
             nohup npm start &> frontend.log &
+            sleep3
+            if grep -q "error" frontend.log
+            then
+             exit1
+             fi
 
            
 
