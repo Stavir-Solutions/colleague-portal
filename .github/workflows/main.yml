@@ -31,16 +31,8 @@ jobs:
             cd colleague-portal
            git pull origin main
 
-            # Install frontend dependencies and start the frontend server
-            cd frontend
-            npm install
-            nohup npm start &> frontend.log &
-
-           
-
            # Install backend dependencies and start the Node.js server
-           cd
-           cd colleague-portal
+           
             cd backend/server/
             npm install
             nohup node app.js &> backend.log &
@@ -49,6 +41,16 @@ jobs:
             then
              exit 1
             fi 
+
+            # Install frontend dependencies and start the frontend server
+            cd 
+            cd colleague-portal/frontend
+            npm install
+            nohup npm start &> frontend.log &
+
+           
+
+           
 
 
            
