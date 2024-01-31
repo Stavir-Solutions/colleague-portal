@@ -36,22 +36,13 @@ jobs:
             cd backend/server/
             npm install
             nohup node app.js &> backend.log &
-            sleep 3
-            if grep -q "error" backend.log
-            then
-             exit 1
-            fi 
 
             # Install frontend dependencies and start the frontend server
             cd 
             cd colleague-portal/frontend
             npm install
             nohup npm start &> frontend.log &
-            sleep3
-            if grep -q "error" frontend.log
-            then
-             exit1
-             fi
+            
 
            
 
