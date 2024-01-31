@@ -58,7 +58,7 @@ const Login = () => {
       <form>
         <label>
           Username:
-          //<input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
         </label>
         <br />
         <label>
