@@ -1,12 +1,12 @@
-name: PR Build and Deploy
+name: Build and Deploy
 
 on:
   pull_request:
-     branches:
-       - main
+    branches:
+      - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,58 +18,43 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Install dependencies
+      - name: Install dependencies and start servers
         run: |
-          cd colleague-portal
-
-          # Stop Node.js server if it's already running
-          if pgrep -x "node" > /dev/null
-          then
-            pkill -x node
-          fi
-
-          # Pull the latest changes from main
-          git pull origin main
-
-          # Start the backend server
-          cd backend/server/
+          cd colleague-portal/backend/server/
+          npm install
           nohup node app.js &> backend.log &
-
-          # Start the frontend server
-          cd ../frontend
+          
+          cd ../../frontend
+          npm install
           nohup npm start &> frontend.log &
 
-  deploy:
-    runs-on: ubuntu-latest
-
-    needs: build
-
-    steps:
-      - name: Set up Node.js for deploy
-        uses: actions/setup-node@v2
+      - name: SSH into Server and deploy changes
+        uses: appleboy/ssh-action@master
         with:
-          node-version: '14'
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+            # Gracefully stop Node.js server if it's already running
+            if pgrep -x "node" > /dev/null
+            then
+              pkill -x node
+            fi
+            
+            cd colleague-portal
+            git pull origin main
 
-      - name: Deploy changes
-        run: |
-          cd colleague-portal
+            # Install backend dependencies and start the Node.js server
+            cd backend/server/
+            npm install
+            nohup node app.js &> backend.log &
 
-          # Stop Node.js server if it's already running
-          if pgrep -x "node" > /dev/null
-          then
-            pkill -x node
-          fi
+            # Install frontend dependencies and start the frontend server
+            cd ../frontend
+            npm install
+            nohup npm start &> frontend.log &
 
-          # Pull the latest changes from main
-          git pull origin main
-
-          # Start the backend server
-          cd backend/server/
-          nohup node app.js &> backend.log &
-
-          # Start the frontend server
-          cd ../frontend
-          nohup npm start &> frontend.log &
 
 
            
