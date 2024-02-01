@@ -20,16 +20,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          
-
           # Stop Node.js server if it's already running
-          if pgrep -x "node" > /dev/null
-          then
+          if pgrep -x "node" > /dev/null; then
             pkill -x node
           fi
 
           # Pull the latest changes from main
-          git pull origin main
+          git pull --rebase=merge origin main
 
           # Install backend dependencies
           cd backend/server/
@@ -61,12 +58,9 @@ jobs:
           script: |
 
             # Gracefully stop Node.js server if it's already running
-            if pgrep -x "node" > /dev/null
-            then
+            if pgrep -x "node" > /dev/null; then
               pkill -x node
             fi
-
-            
 
             # Start the backend server
             cd backend/server/
@@ -74,7 +68,8 @@ jobs:
 
             # Start the frontend server
             cd ../frontend
-            nohup npm start &> frontend.log 
+            nohup npm start &> frontend.log
+
 
 
 
