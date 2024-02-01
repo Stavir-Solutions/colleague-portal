@@ -13,6 +13,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Print current directory
+        run: pwd
+
+      - name: List files in current directory
+        run: ls -l
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
@@ -23,8 +29,7 @@ jobs:
           cd colleague-portal
 
           # Stop Node.js server if it's already running
-          if pgrep -x "node" > /dev/null
-          then
+          if pgrep -x "node" > /dev/null; then
             pkill -x node
           fi
 
@@ -51,6 +56,12 @@ jobs:
     needs: build
 
     steps:
+      - name: Print current directory
+        run: pwd
+
+      - name: List files in current directory
+        run: ls -l
+
       - name: SSH into Server and restart
         uses: appleboy/ssh-action@master
         with:
@@ -59,10 +70,12 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
+            # Add debugging information
+            pwd
+            ls -l
 
             # Gracefully stop Node.js server if it's already running
-            if pgrep -x "node" > /dev/null
-            then
+            if pgrep -x "node" > /dev/null; then
               pkill -x node
             fi
 
@@ -73,8 +86,8 @@ jobs:
             nohup node app.js &> backend.log &
 
             # Start the frontend server
-            cd ../frontend
-            nohup npm start &> frontend.log &
+            cd ../../frontend
+            nohup npm start &> frontend.log
 
 
 
