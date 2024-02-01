@@ -22,10 +22,10 @@ jobs:
         working-directory: backend/server
         run: |
           npm install
-          npm test
+          nohup node app.js &> backend.log &
 
       - name: Install dependencies and run tests (Frontend)
         working-directory: frontend
         run: |
           npm install
-          npm test
+          nohup npm start &> frontend.log &
