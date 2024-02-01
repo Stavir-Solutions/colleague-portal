@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd colleague-portal
+          
 
           # Stop Node.js server if it's already running
           if pgrep -x "node" > /dev/null
