@@ -9,6 +9,8 @@ const ManagerView = () => {
   const [authToken, setAuthToken] = useState('');
   const [error, setError] = useState(null);
   const [timeSheetSummaries, setTimeSheetSummaries] = useState({});
+  const [logoutPopup, setLogoutPopup] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // State to control the success modal
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +23,7 @@ const ManagerView = () => {
           return;
         }
 
-        setAuthToken(storedToken);  
+        setAuthToken(storedToken);
 
         if (activeTab === 'reporteeData') {
           const response = await fetch('http://localhost:3000/api/v1/employees', {
@@ -33,17 +35,12 @@ const ManagerView = () => {
           if (response.ok) {
             const data = await response.json();
             setEmployeeData(data);
-            console.log('Employee Data:', data);
 
-            
             const currentYear = new Date().getFullYear();
-            const currentMonth = new Date().getMonth() + 1; 
+            const currentMonth = new Date().getMonth() + 1;
 
             const summaries = {};
             for (const employee of data) {
-              console.log('Employee:', employee);
-
-            
               if (employee.employee_id) {
                 const timeSheetResponse = await fetch(
                   `http://localhost:3000/api/v1/tmsummary/summary?employee-id=${employee.employee_id}&year=${currentYear}&month=${currentMonth}`,
@@ -57,7 +54,6 @@ const ManagerView = () => {
                 if (timeSheetResponse.ok) {
                   try {
                     const timeSheetData = await timeSheetResponse.json();
-                    console.log('Time Sheet Data:', timeSheetData);
                     summaries[employee.employee_id] = timeSheetData;
                   } catch (error) {
                     console.error('Error parsing time sheet data:', error);
@@ -90,10 +86,23 @@ const ManagerView = () => {
     setActiveTab(tab);
   };
 
-
   const handleEdit = (employeeId) => {
-    
     console.log(`Edit button clicked for employee ID: ${employeeId}`);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setAuthToken('');
+   // setLogoutPopup(true);
+
+    setTimeout(() => {
+      //setLogoutPopup(false);
+      setShowSuccessModal(true); // Display success modal
+      setTimeout(() => {
+        setShowSuccessModal(false); // Hide success modal after 2 seconds
+        window.location.replace('/login');
+      }, 2000);
+    }, 1000);
   };
 
   return (
@@ -124,6 +133,7 @@ const ManagerView = () => {
         >
           Reportee Time Sheet
         </button>
+        <button onClick={handleLogout}>Logout</button>
       </div>
       <div className="tab-content">
         {activeTab === 'myTimeSheet' && <p>My Time Sheet Content</p>}
@@ -138,8 +148,21 @@ const ManagerView = () => {
         )}
         {activeTab === 'reportingTimeSheet' && <ReporteeTimeSheet />}
       </div>
+      {logoutPopup && (
+        <div className="logout-popup">
+          <p>Successfully logged out!</p>
+        </div>
+      )}
+      {showSuccessModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={() => setShowSuccessModal(false)}>&times;</span>
+            <p>You have Successfully logged out..Redirecting to login page...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
-};
+}
 
 export default ManagerView;

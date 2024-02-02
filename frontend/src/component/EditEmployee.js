@@ -1,90 +1,56 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './EditEmployee.css';
 
 const EditEmployee = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    name: '',
-    address: '',
-    designation: '',
-    phoneNumber: '',
-    leavingDate: '',
-    email: '',
-  });
-
-  useEffect(() => {
-    console.log('Location state in EditEmployee:', location.state);
-
-    if (location.state && location.state.previousData) {
-      const { employee_id, employee_name, address, designation, phone_number, leaving_date, email } = location.state.previousData;
-
-      if (employee_id) {
-        setFormData({
-          employeeId: employee_id,
-          name: employee_name || '',
-          address: address || '',
-          designation: designation || '',
-          phoneNumber: phone_number || '',
-          leavingDate: leaving_date || '',
-          email: email || '',
-        });
-      } else {
-        console.error('Employee ID is missing in previousData:', location.state.previousData);
-      }
-    } else {
-      console.error('No previousData in location.state:', location.state);
-    }
-  }, [location.state]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.employeeId) {
-      const authToken = localStorage.getItem('token');
-      const apiUrl = `http://localhost:3000/api/v1/employees/${formData.employeeId}`;
+    const authToken = localStorage.getItem('token');
+    const apiUrl = `http://localhost:3000/api/v1/employees/04f232de-33b3-45fb-a02c-d28226a22748`;
 
-      try {
-        const response = await fetch(apiUrl, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `${authToken}`,
-          },
-          body: JSON.stringify({
-            employee_name: formData.name,
-            phone_number: formData.phoneNumber,
-            email: formData.email,
-            designation: formData.designation,
-            address: formData.address,
-            leaving_date: formData.leavingDate,
-            // Add other fields as needed
-          }),
-        });
+    // Hardcoded values
+    const employeeId = '04f232de-33b3-45fb-a02c-d28226a22748';
+    const joiningDate = '2023-08-15';
+    const reportingManagerId = 'b47d663d-f4ab-491c-a5cf-eda28e4ccbb8';
 
-        console.log('API Response:', response);
+    // Create FormData object and set values
+    const formData = new FormData();
+    formData.set('employee_id', employeeId);
+    formData.set('employee_name', e.target.employee_name.value);
+    formData.set('designation', e.target.designation.value);
+    formData.set('phone_number', e.target.phone_number.value);
+    formData.set('email', e.target.email.value);
+    formData.set('joining_date', joiningDate);
+    formData.set('leaving_date', e.target.leaving_date.value);
+    formData.set('reporting_manager_id', reportingManagerId);
+    formData.set('address', e.target.address.value);
 
-        if (response.ok) {
-          // Redirect to the employee list page or perform any other actions
-          navigate('/employee-list');
-        } else {
-          console.error('Failed to update employee.');
-        }
-      } catch (error) {
-        console.error('Error:', error);
+    console.log('FormData:', formData);
+
+    try {
+      console.log('Sending PUT request to:', apiUrl);
+
+      const response = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+          Authorization: `${authToken}`,
+        },
+        body: formData,
+      });
+
+      console.log('API Response:', response);
+
+      if (response.ok) {
+        console.log('Employee updated successfully!');
+        navigate('/employee-list');
+      } else {
+        console.error('Failed to update employee. Server response:', response);
       }
-    } else {
-      console.error('Employee ID is missing. Cannot update.');
+    } catch (error) {
+      console.error('Error during API call:', error);
     }
   };
 
@@ -94,71 +60,38 @@ const EditEmployee = () => {
       <form onSubmit={handleSubmit}>
         <label>
           Name:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-          />
+          <input type="text" name="employee_name" required />
         </label>
         <br />
 
         <label>
           Phone Number:
-          <input
-            type="tel"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleInputChange}
-            required
-          />
+          <input type="tel" name="phone_number" required />
         </label>
         <br />
 
         <label>
           Email Address:
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
+          <input type="email" name="email" required />
         </label>
         <br />
 
         <label>
           Designation:
-          <input
-            type="text"
-            name="designation"
-            value={formData.designation}
-            onChange={handleInputChange}
-            required
-          />
+          <input type="text" name="designation" required />
         </label>
         <br />
 
         <label>
           Address:
           <br />
-          <textarea
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            required
-          />
+          <textarea name="address" required />
         </label>
         <br />
+
         <label>
           Leaving Date:
-          <input
-            type="date"
-            name="leavingDate"
-            value={formData.leavingDate}
-            onChange={handleInputChange}
-          />
+          <input type="date" name="leaving_date" />
         </label>
         <br />
 
