@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: ["Check-code"]
     types:
-      - success
+      - completed
 
 jobs:
   deploy:
