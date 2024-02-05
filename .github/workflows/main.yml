@@ -2,7 +2,7 @@ name: Hello World Workflow
 
 on:
   workflow_run:
-    workflows: ["Code Checks Workflow"]
+    workflows: ["Check-code"]
     types:
       - completed
 
