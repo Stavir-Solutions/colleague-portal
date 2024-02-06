@@ -9,7 +9,6 @@ const ManagerView = () => {
   const [authToken, setAuthToken] = useState('');
   const [error, setError] = useState(null);
   const [timeSheetSummaries, setTimeSheetSummaries] = useState({});
-  const [logoutPopup, setLogoutPopup] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false); // State to control the success modal
 
   useEffect(() => {
@@ -93,21 +92,20 @@ const ManagerView = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setAuthToken('');
-   // setLogoutPopup(true);
 
+    setShowSuccessModal(true); // Display success modal
     setTimeout(() => {
-      //setLogoutPopup(false);
-      setShowSuccessModal(true); // Display success modal
-      setTimeout(() => {
-        setShowSuccessModal(false); // Hide success modal after 2 seconds
-        window.location.replace('/login');
-      }, 2000);
-    }, 1000);
+      setShowSuccessModal(false); // Hide success modal after 2 seconds
+      window.location.replace('/login');
+    }, 2000);
   };
 
   return (
     <div className="managerview-container">
       <h2>Welcome Manager</h2>
+      <div className="logout-btn">
+        <button onClick={handleLogout}>Logout</button>
+      </div>
       <div className="tabs">
         <button
           className={activeTab === 'myTimeSheet' ? 'active' : ''}
@@ -133,7 +131,6 @@ const ManagerView = () => {
         >
           Reportee Time Sheet
         </button>
-        <button onClick={handleLogout}>Logout</button>
       </div>
       <div className="tab-content">
         {activeTab === 'myTimeSheet' && <p>My Time Sheet Content</p>}
@@ -148,11 +145,6 @@ const ManagerView = () => {
         )}
         {activeTab === 'reportingTimeSheet' && <ReporteeTimeSheet />}
       </div>
-      {logoutPopup && (
-        <div className="logout-popup">
-          <p>Successfully logged out!</p>
-        </div>
-      )}
       {showSuccessModal && (
         <div className="modal">
           <div className="modal-content">
