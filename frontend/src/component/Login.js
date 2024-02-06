@@ -37,9 +37,11 @@ const Login = () => {
         // Log the token after storing it in local storage
         console.log('Token stored in localStorage:', data.token);
 
-        // Redirect to ManagerView only if hasReportees is true
+        // Redirect to ManagerView if hasReportees is true, otherwise to EmployeeView
         if (data.hasReportees) {
           navigate('/managerview');
+        } else {
+          navigate('/employeeview');
         }
       } else {
         const errorData = await response.json();
