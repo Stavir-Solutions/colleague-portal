@@ -1,7 +1,7 @@
 name: Combined Workflow
 
 on:
-  pull_request:
+  push:
     branches:
       - main
   workflow_run:
