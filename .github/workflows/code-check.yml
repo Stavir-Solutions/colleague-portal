@@ -39,6 +39,8 @@ jobs:
 
     needs: check-code
 
+    if: github.event_name == 'push' && github.event.head_commit.message =~ /Merge pull request #(\d+)/
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
