@@ -6,8 +6,8 @@ import EmployeeView from './component/EmployeeView';
 import AddEmployee from './component/AddEmployee';
 import EmployeeList from './component/EmployeeList';
 import EditEmployee from './component/EditEmployee';
-import AddTimesheet from './component/AddTimesheet'; // Import AddTimesheet component
-
+import AddTimesheet from './component/AddTimesheet';
+import MyData from './component/MyData'; 
 const App = () => {
   return (
     <Router>
@@ -18,7 +18,8 @@ const App = () => {
         <Route path="/add-employee" element={<AddEmployee />} />
         <Route path="/employee-list" element={<EmployeeList />} />
         <Route path="/edit-employee/:employee_id" element={<EditEmployee />} />
-        <Route path="/add-timesheet" element={<AddTimesheet />} /> {/* Add route for AddTimesheet */}
+        <Route path="/add-timesheet" element={<AddTimesheet />} />
+        <Route path="/mydata" element={<MyData />} /> {/* Add the route for '/mydata' */}
         <Route path="/" element={<Login />} />
       </Routes>
     </Router>
@@ -26,6 +27,7 @@ const App = () => {
 };
 
 export default App;
+
 
 
 

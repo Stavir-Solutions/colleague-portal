@@ -1,0 +1,35 @@
+/* styles.css */
+.employee-info {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .error-message {
+    color: red;
+  }
+  .employee-info-container {
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Align contents to the center */
+  }
+  
+  .error-message {
+    color: red;
+  }
+  
+  .edit-button {
+    background-color: #3741d5; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+    

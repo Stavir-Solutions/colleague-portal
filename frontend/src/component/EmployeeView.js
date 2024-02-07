@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import './EmployeeView.css'; // styling
+import { useNavigate } from 'react-router-dom'; 
+import './EmployeeView.css'; 
 
 const EmployeeView = () => {
   const [activeTab, setActiveTab] = useState(null); // Initialize activeTab with null
   const [employeeData, setEmployeeData] = useState([]);
   const [authToken, setAuthToken] = useState('');
   const [error, setError] = useState(null);
-  const [logoutPopup, setLogoutPopup] = useState(false);
+ const [logoutPopup, setLogoutPopup] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [timeSheetEntries, setTimeSheetEntries] = useState([]);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,6 +55,9 @@ const EmployeeView = () => {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+    if (tab === 'myData') {
+      navigate('/mydata'); 
+    }
   };
 
   const handleEdit = (employeeId) => {
