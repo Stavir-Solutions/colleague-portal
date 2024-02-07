@@ -39,7 +39,7 @@ jobs:
 
     needs: check-code
 
-    if: github.event_name == 'push' && github.event.head_commit.message =~ /Merge pull request #(\d+)/
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, 'Merge pull request')
 
     steps:
       - name: Checkout repository
