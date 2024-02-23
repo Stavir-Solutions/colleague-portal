@@ -9,7 +9,7 @@ const ManagerView = () => {
   const [authToken, setAuthToken] = useState('');
   const [error, setError] = useState(null);
   const [timeSheetSummaries, setTimeSheetSummaries] = useState({});
-  //const [logoutPopup, setLogoutPopup] = useState(false);
+  const [logoutPopup, /*setLogoutPopup*/] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false); // State to control the success modal
 
   useEffect(() => {
