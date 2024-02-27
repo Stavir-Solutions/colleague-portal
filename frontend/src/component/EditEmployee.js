@@ -9,7 +9,7 @@ const EditEmployee = () => {
     e.preventDefault();
 
     const authToken = localStorage.getItem('token');
-    const apiUrl = `http://localhost:3000/api/v1/employees/04f232de-33b3-45fb-a02c-d28226a22748`;
+    const apiUrl = `https://apps.stavir.com/colleague-api/v1/employees/04f232de-33b3-45fb-a02c-d28226a22748`;
 
     // Hardcoded values
     const employeeId = '04f232de-33b3-45fb-a02c-d28226a22748';
