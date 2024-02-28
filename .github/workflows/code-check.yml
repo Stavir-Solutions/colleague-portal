@@ -51,13 +51,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            echo "Updating app.properties on the server..."
-            echo "db.server=${{ secrets.DB_SERVER }}" > /colleague-portal/backend/server/config/app.properties
-            echo "db.name=${{ secrets.DB_NAME }}" >> /colleague-portal/backend/server/config/app.properties
-            echo "db.user=${{ secrets.DB_USER }}" >> /colleague-portal/backend/server/config/app.properties
-            echo "db.password=${{ secrets.DB_PASSWORD }}" >> /colleague-portal/backend/server/config/app.properties
-            echo "db.port=${{ secrets.DB_PORT }}" >> /colleague-portal/backend/server/config/app.properties
-            echo "db.connectionLimit=${{ secrets.DB_CONNECTION_LIMIT }}" >> /colleague-portal/backend/server/config/app.properties
+            
             
             # Gracefully stop Node.js server if it's already running
             if pgrep -x "node" > /dev/null
@@ -67,9 +61,20 @@ jobs:
             
             cd colleague-portal
             git pull origin main
+
+            cd
+            echo "Updating app.properties on the server..."
+            echo "db.server=${{ secrets.DB_SERVER }}" > /colleague-portal/backend/server/config/app.properties
+            echo "db.name=${{ secrets.DB_NAME }}" >> /colleague-portal/backend/server/config/app.properties
+            echo "db.user=${{ secrets.DB_USER }}" >> /colleague-portal/backend/server/config/app.properties
+            echo "db.password=${{ secrets.DB_PASSWORD }}" >> /colleague-portal/backend/server/config/app.properties
+            echo "db.port=${{ secrets.DB_PORT }}" >> /colleague-portal/backend/server/config/app.properties
+            echo "db.connectionLimit=${{ secrets.DB_CONNECTION_LIMIT }}" >> /colleague-portal/backend/server/config/app.properties
+
+            cd
             
             # Install backend dependencies and start the Node.js server
-            cd backend/server/
+            cd colleague-portal/backend/server/
             npm install
             nohup node app.js &> backend.log &
 
