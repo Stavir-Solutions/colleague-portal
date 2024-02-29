@@ -64,12 +64,12 @@ jobs:
 
             cd
             echo "Updating app.properties on the server..."
-            echo "db.server=${{ secrets.DB_SERVER }}" > /colleague-portal/backend/server/config/app.properties
-            echo "db.name=${{ secrets.DB_NAME }}" >> /colleague-portal/backend/server/config/app.properties
-            echo "db.user=${{ secrets.DB_USER }}" >> /colleague-portal/backend/server/config/app.properties
-            echo "db.password=${{ secrets.DB_PASSWORD }}" >> /colleague-portal/backend/server/config/app.properties
-            echo "db.port=${{ secrets.DB_PORT }}" >> /colleague-portal/backend/server/config/app.properties
-            echo "db.connectionLimit=${{ secrets.DB_CONNECTION_LIMIT }}" >> /colleague-portal/backend/server/config/app.properties
+            echo "db.server=${{ secrets.DB_SERVER }}" > ~/colleague-portal/backend/server/config/app.properties
+            echo "db.name=${{ secrets.DB_NAME }}" >> ~/colleague-portal/backend/server/config/app.properties
+            echo "db.user=${{ secrets.DB_USER }}" >> ~/colleague-portal/backend/server/config/app.properties
+            echo "db.password=${{ secrets.DB_PASSWORD }}" >> ~/colleague-portal/backend/server/config/app.properties
+            echo "db.port=${{ secrets.DB_PORT }}" >> ~/colleague-portal/backend/server/config/app.properties
+            echo "db.connectionLimit=${{ secrets.DB_CONNECTION_LIMIT }}" >> ~/colleague-portal/backend/server/config/app.properties
 
             cd
             
