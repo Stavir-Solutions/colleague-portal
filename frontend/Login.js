@@ -9,7 +9,7 @@ const Login = () => {
   const [hasReportees, setHasReportees] = useState(null);
   const [error, setError] = useState(null);
 
-  const handleLogin = async () => {
+  //const handleLogin = async () => {
     try {
       const response = await fetch('https://apps.stavir.com/colleague-api/v1/login', {
         method: 'POST',
