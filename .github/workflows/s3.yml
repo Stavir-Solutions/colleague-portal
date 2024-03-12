@@ -40,3 +40,7 @@ jobs:
     - name: Deploy to S3
       run: |
          aws s3 sync ./frontend/build s3://colleagues.stavir.com
+
+    - name: Invalidate CloudFront Cache
+      run: |
+        aws cloudfront create-invalidation --distribution-id E2G5HKQOT7TW2T --paths "/*"
