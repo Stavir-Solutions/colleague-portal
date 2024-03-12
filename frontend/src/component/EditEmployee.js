@@ -1,104 +1,180 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import './MyData.css';
 import { useNavigate } from 'react-router-dom';
-import './EditEmployee.css';
 
-const EditEmployee = () => {
+const MyData = () => {
+  const [employeeInfo, setEmployeeInfo] = useState(null);
+  const [error, setError] = useState(null);
+  const [isEditable, setIsEditable] = useState(false);
+  const [editedInfo, setEditedInfo] = useState(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const employeeId = localStorage.getItem('employee_id');
 
-    const authToken = localStorage.getItem('token');
-    const apiUrl = `http://localhost:3000/api/v1/employees/04f232de-33b3-45fb-a02c-d28226a22748`;
+    const fetchEmployeeInfo = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/v1/employees/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${token}`
+          }
+        });
 
-    // Hardcoded values
-    const employeeId = '04f232de-33b3-45fb-a02c-d28226a22748';
-    const joiningDate = '2023-08-15';
-    const reportingManagerId = 'b47d663d-f4ab-491c-a5cf-eda28e4ccbb8';
+        if (response.ok) {
+          const data = await response.json();
+          const loggedInEmployee = data.find(employee => employee.employee_id === employeeId);
+          setEmployeeInfo(loggedInEmployee);
+          setEditedInfo(loggedInEmployee);
+          setError(null);
+        } else {
+          const errorData = await response.json();
+          setError(errorData.error || 'Unable to fetch employee information');
+          console.error('Error fetching employee information:', errorData.error || response.statusText);
+        }
+      } catch (error) {
+        setError('Error during fetching employee information. Please try again.');
+        console.error('Error during fetching employee information:', error.message);
+      }
+    };
 
-    // Create FormData object and set values
-    const formData = new FormData();
-    formData.set('employee_id', employeeId);
-    formData.set('employee_name', e.target.employee_name.value);
-    formData.set('designation', e.target.designation.value);
-    formData.set('phone_number', e.target.phone_number.value);
-    formData.set('email', e.target.email.value);
-    formData.set('joining_date', joiningDate);
-    formData.set('leaving_date', e.target.leaving_date.value);
-    formData.set('reporting_manager_id', reportingManagerId);
-    formData.set('address', e.target.address.value);
+    if (token && employeeId) {
+      fetchEmployeeInfo();
+    } else {
+      setError('Token or employee ID not found in local storage');
+    }
+  }, []);
 
-    console.log('FormData:', formData);
+  const handleEdit = () => {
+    setIsEditable(true);
+  };
+
+  const handleSave = async (event) => {
+    event.preventDefault(); 
 
     try {
-      console.log('Sending PUT request to:', apiUrl);
+      const token = localStorage.getItem('token');
+      const employeeId = localStorage.getItem('employee_id');
 
-      const response = await fetch(apiUrl, {
+      const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+      const formattedJoiningDate = new Date(editedInfo.joining_date).toISOString().split('T')[0]; // Get joining date without time
+
+      const response = await fetch(`http://localhost:3000/api/v1/employees/${employeeId}`, {
         method: 'PUT',
         headers: {
-          Authorization: `${authToken}`,
+          'Content-Type': 'application/json',
+          'Authorization': token
         },
-        body: formData,
+        body: JSON.stringify({
+          employee_id: employeeId,
+          employee_name: editedInfo.employee_name,
+          designation: editedInfo.designation,
+          phone_number: editedInfo.phone_number,
+          email: editedInfo.email,
+          joining_date: formattedJoiningDate, 
+          leaving_date: currentDate, 
+          reporting_manager_id: employeeInfo.reporting_manager_id,
+          address: editedInfo.address,
+          password: editedInfo.password 
+        })
       });
 
-      console.log('API Response:', response);
-
       if (response.ok) {
-        console.log('Employee updated successfully!');
-        navigate('/employee-list');
+        console.log('Employee information successfully updated');
+        setIsEditable(false);
+        setShowSuccessModal(true); 
       } else {
-        console.error('Failed to update employee. Server response:', response);
+        const errorData = await response.json();
+        setError(errorData.error || 'Unable to update employee information');
+        console.error('Error updating employee information:', errorData.error || response.statusText);
       }
     } catch (error) {
-      console.error('Error during API call:', error);
+      setError('Error during updating employee information. Please try again.');
+      console.error('Error during updating employee information:', error.message);
     }
   };
 
+  const goBack = () => {
+    navigate('/managerview');
+  };
+
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
+    navigate('/managerview');
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    const formattedValue = name === 'joining_date' ? value.split('T')[0] : value;
+
+    setEditedInfo(prevState => ({
+      ...prevState,
+      [name]: formattedValue
+    }));
+  };
+
   return (
-    <div className="edit-employee-container">
-      <h2>Edit Employee</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input type="text" name="employee_name" required />
-        </label>
-        <br />
-
-        <label>
-          Phone Number:
-          <input type="tel" name="phone_number" required />
-        </label>
-        <br />
-
-        <label>
-          Email Address:
-          <input type="email" name="email" required />
-        </label>
-        <br />
-
-        <label>
-          Designation:
-          <input type="text" name="designation" required />
-        </label>
-        <br />
-
-        <label>
-          Address:
-          <br />
-          <textarea name="address" required />
-        </label>
-        <br />
-
-        <label>
-          Leaving Date:
-          <input type="date" name="leaving_date" />
-        </label>
-        <br />
-
-        <button type="submit">Save Changes</button>
-      </form>
+    <div className="employee-info-container">
+      <button className="back-button" onClick={goBack}>Back</button>
+      {error && <p className="error-message">{error}</p>}
+      {employeeInfo && (
+        <form>
+          <div className="form-group">
+            <label>Employee Name:</label>
+            <input type="text" name="employee_name" value={editedInfo.employee_name} readOnly={!isEditable} onChange={handleChange} className={isEditable ? '' : 'non-editable'} />
+          </div>
+          <div className="form-group">
+            <label>Designation:</label>
+            <input type="text" name="designation" value={editedInfo.designation} readOnly={!isEditable} onChange={handleChange} className={isEditable ? '' : 'non-editable'} />
+          </div>
+          <div className="form-group">
+            <label>Phone Number:</label>
+            <input type="text" name="phone_number" value={editedInfo.phone_number} readOnly={!isEditable} onChange={handleChange} style={{backgroundColor: isEditable ? 'lightblue' : 'transparent'}} />
+          </div>
+          <div className="form-group">
+            <label>Email:</label>
+            <input type="email" name="email" value={editedInfo.email} readOnly={!isEditable} onChange={handleChange} className={isEditable ? '' : 'non-editable'} />
+          </div>
+          <div className="form-group">
+            <label>Joining Date:</label>
+            <input type="text" name="joining_date" value={editedInfo.joining_date ? new Date(editedInfo.joining_date).toISOString().split('T')[0] : ''} readOnly={!isEditable} onChange={handleChange} className={isEditable ? '' : 'non-editable'} />
+          </div>
+          <div className="form-group">
+            <label>Address:</label>
+            <input type="text" name="address" value={editedInfo.address} readOnly={!isEditable} onChange={handleChange} style={{backgroundColor: isEditable ? 'lightblue' : 'transparent'}} />
+          </div>
+          <div className="form-group">
+            <label>Password:</label>
+            <input 
+              type="password" 
+              name="password" 
+              value={editedInfo.password || ''} 
+              readOnly={!isEditable} 
+              onChange={handleChange} 
+              style={{backgroundColor: isEditable ? 'lightblue' : 'transparent'}} 
+            />
+          </div>
+          <div className="form-group">
+            {isEditable ? (
+              <button type="button" className="save-button" onClick={handleSave}>Save</button>
+            ) : (
+              <button className="edit-button" onClick={handleEdit}>Edit</button>
+            )}
+          </div>
+        </form>
+      )}
+      {/* Success modal */}
+      {showSuccessModal && (
+        <div className="success-modal">
+          <p>Employee information successfully updated!</p>
+          <button onClick={handleCloseModal}>Close</button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default EditEmployee;
+export default MyData;

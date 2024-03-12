@@ -13,7 +13,7 @@ const AddTimesheet = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Retrieve the authorization token from local storage
+    
     const token = localStorage.getItem('token');
 
     const payload = {
@@ -37,7 +37,7 @@ const AddTimesheet = () => {
       if (response.ok) {
         console.log('Timesheet entry submitted successfully.');
         setSuccessMessage('Timesheet saved successfully.');
-        // Reset form fields
+        
         setDate('');
         setHoursWorked(1);
         setLeave(0);
@@ -56,6 +56,10 @@ const AddTimesheet = () => {
     }
   };
 
+  const goBack = () => {
+    navigate('/employeeview');
+  };
+
   const currentDate = new Date();
   const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
@@ -64,6 +68,7 @@ const AddTimesheet = () => {
 
   return (
     <div className="add-timesheet-container">
+      <button className="back-button" onClick={goBack}>Back</button>
       <h2>Add Timesheet Entry</h2>
       <form className="add-timesheet-form" onSubmit={handleSubmit}>
         <label className="add-timesheet-label">Select Date:</label>
