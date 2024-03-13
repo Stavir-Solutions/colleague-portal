@@ -16,7 +16,7 @@ const MyData = () => {
 
     const fetchEmployeeInfo = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/v1/employees/', {
+        const response = await fetch('https://apps.stavir.com/colleague-api/v1/employees/', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ const MyData = () => {
       const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
       const formattedJoiningDate = new Date(editedInfo.joining_date).toISOString().split('T')[0]; // Get joining date without time
 
-      const response = await fetch(`http://localhost:3000/api/v1/employees/${employeeId}`, {
+      const response = await fetch(`https://apps.stavir.com/colleague-api/v1/employees/${employeeId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
