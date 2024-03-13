@@ -97,16 +97,6 @@ const MyData = () => {
     }
   };
 
-  const goBack = () => {
-    const hasReportees = localStorage.getItem('hasReportees') === 'true';
-  
-    if (hasReportees) {
-      navigate('/managerview');
-    } else {
-      navigate('/employeeview');
-    }
-  }
-
   const handleCloseModal = () => {
     setShowSuccessModal(false);
     navigate('/employeeview');
@@ -165,7 +155,6 @@ const MyData = () => {
         </form>
       )}
       <div className="button-container">
-        <button className="back-button" onClick={goBack}>Back</button>
         {isEditable ? (
           <button type="button" className="save-button" onClick={handleSave}>Save</button>
         ) : (
