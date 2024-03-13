@@ -13,7 +13,6 @@ const AddTimesheet = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    
     const token = localStorage.getItem('token');
 
     const payload = {
@@ -122,6 +121,7 @@ const AddTimesheet = () => {
         </select>
         <button type="submit" className="add-timesheet-button">Save</button>
       </form>
+      {successMessage && <p>{successMessage}</p>}
     </div>
   );
 };
