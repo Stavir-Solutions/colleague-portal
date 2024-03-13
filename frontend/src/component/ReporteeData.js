@@ -9,7 +9,7 @@ const ReporteeData = ({ authToken }) => {
     const fetchData = async () => {
       setError(null);
       try {
-        const response = await fetch('http://localhost:3000/api/v1/employees', {
+        const response = await fetch('https://apps.stavir.com/colleague-api/v1/employees', {
           headers: {
             Authorization: `${authToken}`,
           },
@@ -26,7 +26,7 @@ const ReporteeData = ({ authToken }) => {
           for (const employee of data) {
             if (employee.employee_id) {
               const timeSheetResponse = await fetch(
-                `http://localhost:3000/api/v1/tmsummary/summary?employee-id=${employee.employee_id}&year=${currentYear}&month=${currentMonth}`,
+                `https://apps.stavir.com/colleague-api/v1/tmsummary/summary?employee-id=${employee.employee_id}&year=${currentYear}&month=${currentMonth}`,
                 {
                   headers: {
                     Authorization: `${authToken}`,
