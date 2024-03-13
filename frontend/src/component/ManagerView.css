@@ -5,6 +5,14 @@
   width: 80%;
   margin: auto;
   padding: 20px;
+  position: relative; /* Add position relative to enable absolute positioning */
+}
+
+.logout-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
 }
 
 .tabs {

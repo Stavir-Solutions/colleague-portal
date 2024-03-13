@@ -41,7 +41,6 @@ const MyData = () => {
       }
     };
 
-
     if (token && employeeId) {
       fetchEmployeeInfo();
     } else {
@@ -75,18 +74,18 @@ const MyData = () => {
           designation: editedInfo.designation,
           phone_number: editedInfo.phone_number,
           email: editedInfo.email,
-          joining_date: formattedJoiningDate, 
-          leaving_date: currentDate, 
+          joining_date: formattedJoiningDate, // Pass formatted joining date without time
+          leaving_date: currentDate, // Set leaving date to current date
           reporting_manager_id: employeeInfo.reporting_manager_id,
           address: editedInfo.address,
-          password: editedInfo.password 
+          password: editedInfo.password // Include password in the payload
         })
       });
 
       if (response.ok) {
         console.log('Employee information successfully updated');
         setIsEditable(false);
-        setShowSuccessModal(true); 
+        setShowSuccessModal(true); // Show success modal
       } else {
         const errorData = await response.json();
         setError(errorData.error || 'Unable to update employee information');
@@ -99,12 +98,18 @@ const MyData = () => {
   };
 
   const goBack = () => {
-    navigate('/managerview');
-  };
+    const hasReportees = localStorage.getItem('hasReportees') === 'true';
+  
+    if (hasReportees) {
+      navigate('/managerview');
+    } else {
+      navigate('/employeeview');
+    }
+  }
 
   const handleCloseModal = () => {
     setShowSuccessModal(false);
-    navigate('/managerview');
+    navigate('/employeeview');
   };
 
   const handleChange = (e) => {
@@ -119,7 +124,6 @@ const MyData = () => {
 
   return (
     <div className="employee-info-container">
-      <button className="back-button" onClick={goBack}>Back</button>
       {error && <p className="error-message">{error}</p>}
       {employeeInfo && (
         <form>
@@ -158,15 +162,16 @@ const MyData = () => {
               style={{backgroundColor: isEditable ? 'lightblue' : 'transparent'}} 
             />
           </div>
-          <div className="form-group">
-            {isEditable ? (
-              <button type="button" className="save-button" onClick={handleSave}>Save</button>
-            ) : (
-              <button className="edit-button" onClick={handleEdit}>Edit</button>
-            )}
-          </div>
         </form>
       )}
+      <div className="button-container">
+        <button className="back-button" onClick={goBack}>Back</button>
+        {isEditable ? (
+          <button type="button" className="save-button" onClick={handleSave}>Save</button>
+        ) : (
+          <button className="edit-button" onClick={handleEdit}>Edit</button>
+        )}
+      </div>
       {/* Success modal */}
       {showSuccessModal && (
         <div className="success-modal">
