@@ -1,0 +1,38 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      # Backend Tests
+      - name: Install Backend Dependencies
+        working-directory: backend
+        run: npm install
+
+      - name: Run Backend Tests
+        working-directory: backend
+        run: npm test
+
+      # Frontend Tests
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Start Frontend Server
+        working-directory: frontend
+        run: npm start
+
