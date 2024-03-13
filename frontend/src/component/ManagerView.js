@@ -8,6 +8,7 @@ import ReporteeData from './ReporteeData'; // Modified: Added ReporteeData
 const ManagerView = () => {
   const [activeTab, setActiveTab] = useState(null); // Initialize activeTab to null
   const [authToken, setAuthToken] = useState('');
+
   const [showSuccessModal, setShowSuccessModal] = useState(false); // State to control the success modal
 
   useEffect(() => {
@@ -16,6 +17,7 @@ const ManagerView = () => {
       setAuthToken(storedToken);
     }
   }, []);
+
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
