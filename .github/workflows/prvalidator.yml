@@ -20,12 +20,12 @@ jobs:
 
       # Backend Tests
       - name: Install Backend Dependencies
-        working-directory: backend
+        working-directory: backend/server
         run: npm install
         
       - name: Run Backend Tests
-        working-directory: backend
-        run: node app.js
+        working-directory: backend/server
+        run: npm run build
 
       # Frontend Tests
       - name: Install Frontend Dependencies
