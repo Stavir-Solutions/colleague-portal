@@ -20,19 +20,19 @@ jobs:
 
       # Backend Tests
       - name: Install Backend Dependencies
-        working-directory: backend
+        working-directory: colleague-portal/backend
         run: npm install
 
       - name: Run Backend Tests
-        working-directory: backend
+        working-directory: colleague-portal/backend
         run: node app.js
 
       # Frontend Tests
       - name: Install Frontend Dependencies
-        working-directory: frontend
+        working-directory: colleague-portal/frontend
         run: npm install
 
       - name: Start Frontend Server
-        working-directory: frontend
+        working-directory: colleague-portal/frontend
         run: npm start
 
