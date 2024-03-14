@@ -9,6 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -20,12 +24,15 @@ jobs:
 
       # Backend Tests
       - name: Install Backend Dependencies
-        working-directory: backend
+        working-directory: backend/server
         run: npm install
         
       - name: Run Backend Tests
-        working-directory: backend
-        run: node app.js
+        working-directory: backend/server
+        run: |
+          export DB_PORT=$DB_PORT
+          export DB_USERNAME=$DB_NAME
+          node app.js
 
       # Frontend Tests
       - name: Install Frontend Dependencies
