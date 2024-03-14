@@ -18,6 +18,15 @@ jobs:
         with:
           node-version: '14'
 
+          # Frontend Tests
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Start Frontend Server
+        working-directory: frontend
+        run: npm start
+
       # Backend Tests
       - name: Install Backend Dependencies
         working-directory: backend
@@ -27,12 +36,5 @@ jobs:
         working-directory: backend
         run: node app.js
 
-      # Frontend Tests
-      - name: Install Frontend Dependencies
-        working-directory: frontend
-        run: npm install
-
-      - name: Start Frontend Server
-        working-directory: frontend
-        run: npm start
+      
 
