@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import EditReportee from './EditReportee';
 
-const ReporteeData = ({ authToken }) => {
+const ReporteeData = () => {
   const [employeeData, setEmployeeData] = useState([]);
   const [error, setError] = useState(null);
   const [timeSheetSummaries, setTimeSheetSummaries] = useState({});
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       setError(null);
       try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('Token not found in local storage');
+        }
+
         const response = await fetch('http://localhost:3000/api/v1/employees', {
           headers: {
-            Authorization: `${authToken}`,
+            Authorization: `${token}`,
           },
         });
 
@@ -29,7 +38,7 @@ const ReporteeData = ({ authToken }) => {
                 `http://localhost:3000/api/v1/tmsummary/summary?employee-id=${employee.employee_id}&year=${currentYear}&month=${currentMonth}`,
                 {
                   headers: {
-                    Authorization: `${authToken}`,
+                    Authorization: `${token}`,
                   },
                 }
               );
@@ -62,11 +71,11 @@ const ReporteeData = ({ authToken }) => {
     };
 
     fetchData();
-  }, [authToken]);
+  }, []);
 
   const handleEdit = (employeeId) => {
-    console.log(`Edit button clicked for employee ID: ${employeeId}`);
-    // Add your edit functionality here
+    setSelectedEmployeeId(employeeId); // Set the selected employee ID
+    navigate(`/editreportee/${employeeId}`); // Navigate to the edit page with the employee ID
   };
 
   return (
@@ -84,29 +93,27 @@ const ReporteeData = ({ authToken }) => {
           </tr>
         </thead>
         <tbody>
-          {employeeData.map(employee => (
-            <tr key={employee.employee_id}>
+          {employeeData.map((employee, index) => (
+            <tr key={index}>
               <td>{employee.employee_name}</td>
               <td>{employee.phone_number}</td>
               <td>{employee.email}</td>
               <td>
-                {/* Render Total Working Hours */}
                 {timeSheetSummaries[employee.employee_id] &&
                   timeSheetSummaries[employee.employee_id]['Total Working Hours']}
               </td>
               <td>
-                {/* Render Total Leaves */}
                 {timeSheetSummaries[employee.employee_id] &&
                   timeSheetSummaries[employee.employee_id]['Total Leaves']}
               </td>
               <td>
-                {/* Edit Button */}
                 <button onClick={() => handleEdit(employee.employee_id)}>Edit</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {selectedEmployeeId && <EditReportee employeeId={selectedEmployeeId} />} {/* Pass selected employee ID to EditReportee */}
     </div>
   );
 };

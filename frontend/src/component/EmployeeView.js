@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './EmployeeView.css';
-import MyTimesheet from './MyTimesheet'; 
+import './EmployeeView.css'; // Import styling
+import MyData from './MyData'; 
+import MyTimesheet from './MyTimesheet';
 
 const EmployeeView = () => {
-  const [activeTab, setActiveTab] = useState(null);
+  const [activeTab, setActiveTab] = useState(null); // Initialize activeTab to null
   const navigate = useNavigate();
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    if (tab === 'myData') {
-      navigate('/mydata');
-    }
   };
 
   const handleLogout = () => {
@@ -23,7 +21,7 @@ const EmployeeView = () => {
 
   return (
     <div className="employeeview-container">
-      <h2>Welcome </h2>
+      <h2>Welcome</h2>
       <div className="logout-btn">
         <button onClick={handleLogout}>Logout</button>
       </div>
@@ -42,11 +40,15 @@ const EmployeeView = () => {
         </button>
       </div>
       <div className="tab-content">
-        {activeTab === 'myTimeSheet' && <MyTimesheet />}
-        {activeTab === 'myData' && <p>My Data Content</p>}
+        {activeTab && (
+          <>
+            {activeTab === 'myData' && <MyData />}
+            {activeTab === 'myTimeSheet' && <MyTimesheet />}
+          </>
+        )}
       </div>
     </div>
   );
-};
+}
 
 export default EmployeeView;

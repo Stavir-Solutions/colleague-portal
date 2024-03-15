@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './MyData.css';
+import './EditReportee.css'; 
 import { useNavigate } from 'react-router-dom';
 
-const MyData = () => {
+const EditReportee = ({ employeeId }) => {
   const [employeeInfo, setEmployeeInfo] = useState(null);
   const [error, setError] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
@@ -12,11 +12,10 @@ const MyData = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const employeeId = localStorage.getItem('employee_id');
 
     const fetchEmployeeInfo = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/v1/employees/', {
+        const response = await fetch(`http://localhost:3000/api/v1/employees/${employeeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -24,17 +23,14 @@ const MyData = () => {
           }
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          const loggedInEmployee = data.find(employee => employee.employee_id === employeeId);
-          setEmployeeInfo(loggedInEmployee);
-          setEditedInfo(loggedInEmployee);
-          setError(null);
-        } else {
-          const errorData = await response.json();
-          setError(errorData.error || 'Unable to fetch employee information');
-          console.error('Error fetching employee information:', errorData.error || response.statusText);
+        if (!response.ok) {
+          throw new Error('Failed to fetch employee information');
         }
+
+        const data = await response.json();
+        setEmployeeInfo(data);
+        setEditedInfo(data);
+        setError(null);
       } catch (error) {
         setError('Error during fetching employee information. Please try again.');
         console.error('Error during fetching employee information:', error.message);
@@ -46,7 +42,7 @@ const MyData = () => {
     } else {
       setError('Token or employee ID not found in local storage');
     }
-  }, []);
+  }, [employeeId]); // Depend on employeeId
 
   const handleEdit = () => {
     setIsEditable(true);
@@ -57,10 +53,8 @@ const MyData = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const employeeId = localStorage.getItem('employee_id');
-
-      const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-      const formattedJoiningDate = new Date(editedInfo.joining_date).toISOString().split('T')[0]; // Get joining date without time
+      const currentDate = new Date().toISOString().split('T')[0];
+      const formattedJoiningDate = new Date(editedInfo.joining_date).toISOString().split('T')[0];
 
       const response = await fetch(`http://localhost:3000/api/v1/employees/${employeeId}`, {
         method: 'PUT',
@@ -69,23 +63,22 @@ const MyData = () => {
           'Authorization': token
         },
         body: JSON.stringify({
-          employee_id: employeeId,
           employee_name: editedInfo.employee_name,
           designation: editedInfo.designation,
           phone_number: editedInfo.phone_number,
           email: editedInfo.email,
-          joining_date: formattedJoiningDate, // Pass formatted joining date without time
-          leaving_date: currentDate, // Set leaving date to current date
+          joining_date: formattedJoiningDate, 
+          leaving_date: currentDate, 
           reporting_manager_id: employeeInfo.reporting_manager_id,
           address: editedInfo.address,
-          password: editedInfo.password // Include password in the payload
+          password: editedInfo.password 
         })
       });
 
       if (response.ok) {
         console.log('Employee information successfully updated');
         setIsEditable(false);
-        setShowSuccessModal(true); // Show success modal
+        setShowSuccessModal(true); 
       } else {
         const errorData = await response.json();
         setError(errorData.error || 'Unable to update employee information');
@@ -99,7 +92,7 @@ const MyData = () => {
 
   const handleCloseModal = () => {
     setShowSuccessModal(false);
-    window.history.back(); // Redirect to the previous page
+    navigate('/managerview');
   };
 
   const handleChange = (e) => {
@@ -152,15 +145,15 @@ const MyData = () => {
               style={{backgroundColor: isEditable ? 'lightblue' : 'transparent'}} 
             />
           </div>
+          <div className="form-group">
+            {isEditable ? (
+              <button type="button" className="save-button" onClick={handleSave}>Save</button>
+            ) : (
+              <button className="edit-button" onClick={handleEdit}>Edit</button>
+            )}
+          </div>
         </form>
       )}
-      <div className="button-container">
-        {isEditable ? (
-          <button type="button" className="save-button" onClick={handleSave}>Save</button>
-        ) : (
-          <button className="edit-button" onClick={handleEdit}>Edit</button>
-        )}
-      </div>
       {/* Success modal */}
       {showSuccessModal && (
         <div className="success-modal">
@@ -172,4 +165,4 @@ const MyData = () => {
   );
 };
 
-export default MyData;
+export default EditReportee;
