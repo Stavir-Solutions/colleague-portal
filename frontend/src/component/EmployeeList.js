@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import './EmployeeList.css';
 
 const EmployeeList = ({ employeeData, timeSheetSummaries }) => {
- // const handleEditButtonClick = (employee) => {
-   // console.log('Edit button clicked for employee:', employee);
- // };
+  // const handleEditButtonClick = (employee) => {
+  // console.log('Edit button clicked for employee:', employee);
+  // };
 
   return (
     <div>
@@ -41,14 +41,14 @@ const EmployeeList = ({ employeeData, timeSheetSummaries }) => {
                 )}
               </td>
               <td>
-              <Link
-  to={{
-    pathname: `/edit-employee/${employee.employee_id}`,
-    state: { previousData: employee },
-  }}
->
-  <button>Edit</button>
-</Link>
+                <Link
+                  to={{
+                    pathname: `/edit-employee/${employee.employee_id}`,
+                    state: { previousData: employee },
+                  }}
+                >
+                  <button>Edit</button>
+                </Link>
 
               </td>
             </tr>
