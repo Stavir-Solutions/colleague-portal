@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './EditReportee.css'; 
+import './EditReportee.css';
 import { useNavigate } from 'react-router-dom';
 
 const EditReportee = ({ employeeId }) => {
@@ -49,7 +49,7 @@ const EditReportee = ({ employeeId }) => {
   };
 
   const handleSave = async (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
 
     try {
       const token = localStorage.getItem('token');
@@ -67,18 +67,18 @@ const EditReportee = ({ employeeId }) => {
           designation: editedInfo.designation,
           phone_number: editedInfo.phone_number,
           email: editedInfo.email,
-          joining_date: formattedJoiningDate, 
-          leaving_date: currentDate, 
+          joining_date: formattedJoiningDate,
+          leaving_date: currentDate,
           reporting_manager_id: employeeInfo.reporting_manager_id,
           address: editedInfo.address,
-          password: editedInfo.password 
+          password: editedInfo.password
         })
       });
 
       if (response.ok) {
         console.log('Employee information successfully updated');
         setIsEditable(false);
-        setShowSuccessModal(true); 
+        setShowSuccessModal(true);
       } else {
         const errorData = await response.json();
         setError(errorData.error || 'Unable to update employee information');
@@ -120,7 +120,7 @@ const EditReportee = ({ employeeId }) => {
           </div>
           <div className="form-group">
             <label>Phone Number:</label>
-            <input type="text" name="phone_number" value={editedInfo.phone_number} readOnly={!isEditable} onChange={handleChange} style={{backgroundColor: isEditable ? 'lightblue' : 'transparent'}} />
+            <input type="text" name="phone_number" value={editedInfo.phone_number} readOnly={!isEditable} onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>
           <div className="form-group">
             <label>Email:</label>
@@ -132,17 +132,17 @@ const EditReportee = ({ employeeId }) => {
           </div>
           <div className="form-group">
             <label>Address:</label>
-            <input type="text" name="address" value={editedInfo.address} readOnly={!isEditable} onChange={handleChange} style={{backgroundColor: isEditable ? 'lightblue' : 'transparent'}} />
+            <input type="text" name="address" value={editedInfo.address} readOnly={!isEditable} onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>
           <div className="form-group">
             <label>Password:</label>
-            <input 
-              type="password" 
-              name="password" 
-              value={editedInfo.password || ''} 
-              readOnly={!isEditable} 
-              onChange={handleChange} 
-              style={{backgroundColor: isEditable ? 'lightblue' : 'transparent'}} 
+            <input
+              type="password"
+              name="password"
+              value={editedInfo.password || ''}
+              readOnly={!isEditable}
+              onChange={handleChange}
+              style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }}
             />
           </div>
           <div className="form-group">

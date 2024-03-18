@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './EmployeeView.css'; // Import styling
-import MyData from './MyData'; 
+import MyData from './MyData';
 import MyTimesheet from './MyTimesheet';
 
 const EmployeeView = () => {

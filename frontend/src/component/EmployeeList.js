@@ -41,14 +41,14 @@ const EmployeeList = ({ employeeData, timeSheetSummaries }) => {
                 )}
               </td>
               <td>
-              <Link
-  to={{
-    pathname: `/edit-employee/${employee.employee_id}`,
-    state: { previousData: employee },
-  }}
->
-  <button>Edit</button>
-</Link>
+                <Link
+                  to={{
+                    pathname: `/edit-employee/${employee.employee_id}`,
+                    state: { previousData: employee },
+                  }}
+                >
+                  <button>Edit</button>
+                </Link>
 
               </td>
             </tr>

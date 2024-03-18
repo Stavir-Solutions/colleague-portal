@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './ManagerView.css'; // styling
 import ReporteeTimeSheet from './ReporteeTimeSheet';
-import MyData from './MyData'; 
-import MyTimesheet from './MyTimesheet'; 
+import MyData from './MyData';
+import MyTimesheet from './MyTimesheet';
 import ReporteeData from './ReporteeData'; // Modified: Added ReporteeData
 
 const ManagerView = () => {
@@ -24,7 +24,7 @@ const ManagerView = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setAuthToken('');
-    setShowSuccessModal(true); 
+    setShowSuccessModal(true);
     setTimeout(() => {
       setShowSuccessModal(false); // Hide success modal after 2 seconds
       window.location.replace('/login');

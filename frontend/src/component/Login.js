@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import './Login.css'; 
+import { useNavigate } from 'react-router-dom';
+import './Login.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -10,7 +10,7 @@ const Login = () => {
   const [name, setName] = useState(null);
   const [hasReportees, setHasReportees] = useState(null);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
@@ -25,7 +25,7 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         setToken(data.token);
-        setEmployeeId(data.employee_id); 
+        setEmployeeId(data.employee_id);
         setName(data.employee_name);
         setHasReportees(data.hasReportees);
         setError(null);
@@ -33,7 +33,7 @@ const Login = () => {
         // Store the token, employee_id, and hasReportees in localStorage
         localStorage.setItem('token', data.token);
         localStorage.setItem('employee_id', data.employee_id);
-        localStorage.setItem('hasReportees', data.hasReportees); 
+        localStorage.setItem('hasReportees', data.hasReportees);
 
         // Log the token after storing it in local storage
         console.log('Token stored in localStorage:', data.token);

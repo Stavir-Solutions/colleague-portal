@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 var dbConnectionPool = require('./db.js');
 const express = require('./parent.js');
-const { authenticateToken } = require('./tokenValidation'); 
+const { authenticateToken } = require('./tokenValidation');
 var employeeAPIs = express.Router();
 
 
@@ -88,7 +88,7 @@ employeeAPIs.put('/:employee_id', async (req, res) => {
         leaving_date,
         reporting_manager_id,
         address,
-        password  
+        password
     } = req.body;
     console.log('Received data:', req.body);
 
@@ -148,4 +148,4 @@ employeeAPIs.put('/:employee_id', async (req, res) => {
 
 
 
-module.exports=employeeAPIs;
+module.exports = employeeAPIs;

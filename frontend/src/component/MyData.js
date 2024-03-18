@@ -53,7 +53,7 @@ const MyData = () => {
   };
 
   const handleSave = async (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
 
     try {
       const token = localStorage.getItem('token');
@@ -127,7 +127,7 @@ const MyData = () => {
           </div>
           <div className="form-group">
             <label>Phone Number:</label>
-            <input type="text" name="phone_number" value={editedInfo.phone_number} readOnly={!isEditable} onChange={handleChange} style={{backgroundColor: isEditable ? 'lightblue' : 'transparent'}} />
+            <input type="text" name="phone_number" value={editedInfo.phone_number} readOnly={!isEditable} onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>
           <div className="form-group">
             <label>Email:</label>
@@ -139,17 +139,17 @@ const MyData = () => {
           </div>
           <div className="form-group">
             <label>Address:</label>
-            <input type="text" name="address" value={editedInfo.address} readOnly={!isEditable} onChange={handleChange} style={{backgroundColor: isEditable ? 'lightblue' : 'transparent'}} />
+            <input type="text" name="address" value={editedInfo.address} readOnly={!isEditable} onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>
           <div className="form-group">
             <label>Password:</label>
-            <input 
-              type="password" 
-              name="password" 
-              value={editedInfo.password || ''} 
-              readOnly={!isEditable} 
-              onChange={handleChange} 
-              style={{backgroundColor: isEditable ? 'lightblue' : 'transparent'}} 
+            <input
+              type="password"
+              name="password"
+              value={editedInfo.password || ''}
+              readOnly={!isEditable}
+              onChange={handleChange}
+              style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }}
             />
           </div>
         </form>
