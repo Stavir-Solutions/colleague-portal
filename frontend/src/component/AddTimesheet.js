@@ -24,7 +24,7 @@ const AddTimesheet = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/v1/timesheet/', {
+      const response = await fetch('https://apps.stavir.com/colleague-api/v1/timesheet/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

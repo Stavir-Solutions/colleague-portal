@@ -19,6 +19,7 @@ const ReporteeData = () => {
         }
 
         const response = await fetch('http://localhost:3000/api/v1/employees', {
+
           headers: {
             Authorization: `${token}`,
           },
@@ -35,7 +36,7 @@ const ReporteeData = () => {
           for (const employee of data) {
             if (employee.employee_id) {
               const timeSheetResponse = await fetch(
-                `http://localhost:3000/api/v1/tmsummary/summary?employee-id=${employee.employee_id}&year=${currentYear}&month=${currentMonth}`,
+                `https://apps.stavir.com/colleague-api/v1/tmsummary/summary?employee-id=${employee.employee_id}&year=${currentYear}&month=${currentMonth}`,
                 {
                   headers: {
                     Authorization: `${token}`,

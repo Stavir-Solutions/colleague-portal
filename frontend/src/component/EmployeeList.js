@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import './EmployeeList.css';
 
 const EmployeeList = ({ employeeData, timeSheetSummaries }) => {
-  const handleEditButtonClick = (employee) => {
-    console.log('Edit button clicked for employee:', employee);
-  };
+  // const handleEditButtonClick = (employee) => {
+  // console.log('Edit button clicked for employee:', employee);
+  // };
 
   return (
     <div>
