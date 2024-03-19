@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './MyData.css';
-import { useNavigate } from 'react-router-dom';
 
 const MyData = () => {
   const [employeeInfo, setEmployeeInfo] = useState(null);
@@ -8,7 +7,7 @@ const MyData = () => {
   const [isEditable, setIsEditable] = useState(false);
   const [editedInfo, setEditedInfo] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');

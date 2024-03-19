@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './EmployeeView.css'; // Import styling
 import MyData from './MyData';
 import MyTimesheet from './MyTimesheet';
 
 const EmployeeView = () => {
   const [activeTab, setActiveTab] = useState(null); // Initialize activeTab to null
-  const navigate = useNavigate();
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
