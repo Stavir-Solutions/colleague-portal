@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/skStavir/colleagues-portal/issues"
   },
-  "homepage": "https://github.com/skStavir/colleagues-portal#readme"
+  "homepage": "https://github.com/skStavir/colleagues-portal#readme",
+  "devDependencies": {
+    "react-scripts": "^5.0.0"
+  }
 }

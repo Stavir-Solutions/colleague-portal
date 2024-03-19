@@ -11,6 +11,7 @@ employeeAPIs.use(authenticateToken);
 
 // Insert data into the "empdata" and "empcred" tables
 employeeAPIs.post("/", async (req, res) => {
+    console.log("API is invoked");
     const empData = req.body;
     console.log(empData);
 
