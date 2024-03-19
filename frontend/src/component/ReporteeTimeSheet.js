@@ -24,7 +24,7 @@ const ReporteeTimeSheet = () => {
       }
 
       const employeeId = localStorage.getItem('employee_id');
-      const apiUrl = `http://localhost:3000/api/v1/timesheet/employees/${employeeId}/subordinates/month/${year}-${month}`;
+      const apiUrl = `https://apps.stavir.com/colleague-api/v1/timesheet/employees/${employeeId}/subordinates/month/${year}-${month}`;
 
       const response = await fetch(apiUrl, {
         method: 'GET',

@@ -1,0 +1,85 @@
+name: Combined Workflow
+
+on:
+  push:
+    branches:
+      - main
+  workflow_run:
+    workflows: ["Check-code"]
+    types:
+      - completed
+
+jobs:
+  check-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies and run tests (Backend)
+        working-directory: backend/server
+        run: |
+          npm install
+          nohup node app.js &> backend.log &
+
+      - name: Install dependencies and run tests (Frontend)
+        working-directory: frontend
+        run: |
+          npm install
+          nohup npm start &> frontend.log &
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    needs: check-code
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: SSH into Server and restart
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+            
+            
+            # Gracefully stop Node.js server if it's already running
+            if pgrep -x "node" > /dev/null
+            then
+              pkill -x node
+            fi
+            
+            cd colleague-portal
+            git pull origin main
+
+            cd
+            echo "Updating app.properties on the server..."
+            echo "db.server=${{ secrets.DB_SERVER }}" > ~/colleague-portal/backend/server/config/app.properties
+            echo "db.name=${{ secrets.DB_NAME }}" >> ~/colleague-portal/backend/server/config/app.properties
+            echo "db.user=${{ secrets.DB_USER }}" >> ~/colleague-portal/backend/server/config/app.properties
+            echo "db.password=${{ secrets.DB_PASSWORD }}" >> ~/colleague-portal/backend/server/config/app.properties
+            echo "db.port=${{ secrets.DB_PORT }}" >> ~/colleague-portal/backend/server/config/app.properties
+            echo "db.connectionLimit=${{ secrets.DB_CONNECTION_LIMIT }}" >> ~/colleague-portal/backend/server/config/app.properties
+
+            cd
+            
+            # Install backend dependencies and start the Node.js server
+            cd colleague-portal/backend/server/
+            npm install
+            nohup node app.js &> backend.log &
+
+            # Install frontend dependencies and start the frontend server
+            cd 
+            cd colleague-portal/frontend
+            npm install
+            nohup npm start &> frontend.log &
