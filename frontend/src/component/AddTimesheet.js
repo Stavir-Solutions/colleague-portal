@@ -28,7 +28,7 @@ const AddTimesheet = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `${token}` 
+          'Authorization': `${token}`
         },
         body: JSON.stringify(payload)
       });
@@ -36,12 +36,12 @@ const AddTimesheet = () => {
       if (response.ok) {
         console.log('Timesheet entry submitted successfully.');
         setSuccessMessage('Timesheet saved successfully.');
-        
+
         setDate('');
         setHoursWorked(1);
         setLeave(0);
         setHoliday(0);
-    
+
         if (window.confirm('Timesheet added successfully. Do you want to add more?')) {
           navigate('/add-timesheet');
         } else {
@@ -77,8 +77,8 @@ const AddTimesheet = () => {
           onChange={(e) => setDate(e.target.value)}
           className="add-timesheet-input"
           required
-          min={minDate} 
-          max={maxDate} 
+          min={minDate}
+          max={maxDate}
         />
         <label className="add-timesheet-label">Total Hours Worked:</label>
         <select

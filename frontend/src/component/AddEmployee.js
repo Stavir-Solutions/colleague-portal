@@ -105,7 +105,7 @@ const AddEmployee = () => {
           <input type="date" name="leaving_date" value={employeeData.leaving_date || ''} onChange={handleInputChange} className="input" />
         </div>
 
-      
+
         <div className="form-group">
           <label className="label">
             Address:

@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 var dbConnectionPool = require('./db.js');
 const express = require('./parent.js')
-const { authenticateToken } = require('./tokenValidation'); 
+const { authenticateToken } = require('./tokenValidation');
 var timesheetAPIs = express.Router();
 
 // Apply the authentication middleware to all API routes
@@ -31,21 +31,21 @@ timesheetAPIs.post('/', async (req, res) => {
     holiday = VALUES(holiday)
 `;
 
-try {
-    const connection = await dbConnectionPool.getConnection();
-    const [results] = await connection.execute(insertOrUpdateQuery, [timesheet_id, employee_id, date, working_hours, leaves, holiday]);
+    try {
+        const connection = await dbConnectionPool.getConnection();
+        const [results] = await connection.execute(insertOrUpdateQuery, [timesheet_id, employee_id, date, working_hours, leaves, holiday]);
 
-    if (results.affectedRows > 0) {
-        res.status(201).json({ message: "Timesheet added" });
-    } else {
-        res.status(500).json({ error: "Failed to add or update timesheet" });
+        if (results.affectedRows > 0) {
+            res.status(201).json({ message: "Timesheet added" });
+        } else {
+            res.status(500).json({ error: "Failed to add or update timesheet" });
+        }
+
+        connection.release(); // Release the connection back to the pool
+    } catch (err) {
+        console.error("Database error: " + err.message);
+        res.status(500).json({ error: "Database error: " + err.message });
     }
-
-    connection.release(); // Release the connection back to the pool
-} catch (err) {
-    console.error("Database error: " + err.message);
-    res.status(500).json({ error: "Database error: " + err.message });
-}
 });
 
 
@@ -144,6 +144,6 @@ timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndM
 
 
 
-module.exports=timesheetAPIs;
+module.exports = timesheetAPIs;
 
 
