@@ -97,11 +97,12 @@ const MyData = () => {
     }
   };
 
+ 
   const handleCloseModal = () => {
     setShowSuccessModal(false);
-    window.history.back(); // Redirect to the previous page
+    const previousRoute = localStorage.getItem('previousRoute');
+    navigate(previousRoute );
   };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     const formattedValue = name === 'joining_date' ? value.split('T')[0] : value;

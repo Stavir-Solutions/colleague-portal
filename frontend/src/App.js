@@ -1,3 +1,5 @@
+// App.js
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './component/Login';
@@ -8,7 +10,8 @@ import EmployeeList from './component/EmployeeList';
 import EditEmployee from './component/EditEmployee';
 import AddTimesheet from './component/AddTimesheet';
 import MyData from './component/MyData';
-import ReporteeData from './component/ReporteeData'; // Import ReporteeData component
+import ReporteeData from './component/ReporteeData';
+import EditReportee from './component/EditReportee'; // Import EditReportee component
 
 const App = () => {
   return (
@@ -22,7 +25,9 @@ const App = () => {
         <Route path="/edit-employee/:employee_id" element={<EditEmployee />} />
         <Route path="/add-timesheet" element={<AddTimesheet />} />
         <Route path="/mydata" element={<MyData />} />
-        <Route path="/reportee-data" element={<ReporteeData />} /> {/* Add ReporteeData route */}
+        <Route path="/reportee-data" element={<ReporteeData />} />
+        {/* Add route for the EditReportee page */}
+        <Route path="/editreportee/:employee_id" element={<EditReportee />} />
         <Route path="/" element={<Login />} />
       </Routes>
     </Router>

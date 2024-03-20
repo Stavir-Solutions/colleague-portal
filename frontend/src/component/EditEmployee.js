@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './MyData.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const MyData = () => {
   const [employeeInfo, setEmployeeInfo] = useState(null);
@@ -9,6 +9,7 @@ const MyData = () => {
   const [editedInfo, setEditedInfo] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -48,6 +49,12 @@ const MyData = () => {
       setError('Token or employee ID not found in local storage');
     }
   }, []);
+
+  useEffect(() => {
+    if (location.state && location.state.from) {
+      localStorage.setItem('previousRoute', location.state.from);
+    }
+  }, [location]);
 
   const handleEdit = () => {
     setIsEditable(true);
@@ -98,13 +105,15 @@ const MyData = () => {
     }
   };
 
-  const goBack = () => {
-    navigate('/managerview');
-  };
+  /*const goBack = () => {
+    const previousRoute = localStorage.getItem('previousRoute');
+    navigate(previousRoute || '/managerview');
+  };*/
 
   const handleCloseModal = () => {
     setShowSuccessModal(false);
-    navigate('/managerview');
+    const previousRoute = localStorage.getItem('previousRoute');
+    navigate(previousRoute );
   };
 
   const handleChange = (e) => {
