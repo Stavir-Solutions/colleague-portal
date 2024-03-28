@@ -11,6 +11,7 @@ async function updateTokenInDatabase(username, newToken) {
       text: 'UPDATE empcred SET token = ?, expiryTime = NOW() + INTERVAL 1 HOUR WHERE username = ?',
       values: [newToken, username],
     };
+    console.log("saved new token " + newToken);
     const [updateResults] = await connection.execute(updateQuery.text, updateQuery.values);
     connection.release();
 
@@ -32,7 +33,9 @@ async function hasReportees(employeeId) {
     const [countResults] = await connection.execute(countQuery.text, countQuery.values);
     connection.release();
 
-    return countResults[0].reporteeCount > 0;
+    const hasReportees = countResults[0].reporteeCount > 0;
+    console.log('Employee ' + employeeId + ' has reportees:' + hasReportees);
+    return hasReportees;
   } catch (error) {
     console.error('Error checking reportees:', error);
     return false;

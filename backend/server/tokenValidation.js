@@ -1,5 +1,6 @@
 var dbConnectionPool = require('./db.js');
 const validateToken = async (token) => {
+    console.log('Validating token:', token);
     try {
         const connection = await dbConnectionPool.getConnection();
         const query = 'SELECT token, expiryTime FROM empcred WHERE token = ?';
@@ -7,15 +8,18 @@ const validateToken = async (token) => {
         connection.release();
 
         if (results.length === 0) {
+            console.log('Token not found:');
             return null; // Token not found
         }
 
         const { expiryTime } = results[0];
 
         if (new Date(expiryTime) < new Date()) {
+            console.log('Token expired');
             return null; // Token expired
         }
 
+        console.log('Token validated successfully');
         return results[0]; // Valid token
     } catch (error) {
         console.error('Error validating token:', error);

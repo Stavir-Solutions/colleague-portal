@@ -14,12 +14,12 @@ const ReporteeData = () => {
       setError(null);
       try {
         const token = localStorage.getItem('token');
+        console.log('Token:', token);
         if (!token) {
           throw new Error('Token not found in local storage');
         }
 
         const response = await fetch('http://localhost:3000/api/v1/employees', {
-
           headers: {
             Authorization: `${token}`,
           },
