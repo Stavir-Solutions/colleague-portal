@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './MyData.css';
+import { useNavigate } from 'react-router-dom';
 
 const MyData = () => {
+  const navigate = useNavigate();
   const [employeeInfo, setEmployeeInfo] = useState(null);
   const [error, setError] = useState(null);
   const [isEditable, setIsEditable] = useState(false);

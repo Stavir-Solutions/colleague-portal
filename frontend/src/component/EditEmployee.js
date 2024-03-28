@@ -105,10 +105,10 @@ const MyData = () => {
     }
   };
 
-  /*const goBack = () => {
+  const goBack = () => {
     const previousRoute = localStorage.getItem('previousRoute');
     navigate(previousRoute || '/managerview');
-  };*/
+  };
 
   const handleCloseModal = () => {
     setShowSuccessModal(false);
