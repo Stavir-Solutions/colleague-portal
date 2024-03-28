@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './EditReportee.css';
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from './constants'; 
 
 const EditReportee = ({ employeeId }) => {
   const [employeeInfo, setEmployeeInfo] = useState(null);
@@ -15,7 +16,7 @@ const EditReportee = ({ employeeId }) => {
 
     const fetchEmployeeInfo = async () => {
       try {
-        const response = await fetch(`https://apps.stavir.com/colleague-api/v1/employees/${employeeId}`, {
+        const response = await fetch(`${BASE_URL}/employees/${employeeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -56,7 +57,7 @@ const EditReportee = ({ employeeId }) => {
       const currentDate = new Date().toISOString().split('T')[0];
       const formattedJoiningDate = new Date(editedInfo.joining_date).toISOString().split('T')[0];
 
-      const response = await fetch(`http://localhost:3000/api/v1/employees/${employeeId}`, {
+      const response = await fetch(`${BASE_URL}/employees/${employeeId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

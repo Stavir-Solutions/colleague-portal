@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import BASE_URL from './constants'; // Importing the BASE_URL constant
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -14,7 +15,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('https://apps.stavir.com/colleague-api/v1/login', {
+      const response = await fetch(`${BASE_URL}/login`, { // Using BASE_URL constant
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

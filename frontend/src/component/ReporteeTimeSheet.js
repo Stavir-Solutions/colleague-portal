@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ReporteeTimeSheet.css';
+import BASE_URL from './constants';
+
 const ReporteeTimeSheet = () => {
   const [year, setYear] = useState('');
   const [month, setMonth] = useState('');
@@ -24,7 +26,7 @@ const ReporteeTimeSheet = () => {
       }
 
       const employeeId = localStorage.getItem('employee_id');
-      const apiUrl = `https://apps.stavir.com/colleague-api/v1/timesheet/employees/${employeeId}/subordinates/month/${year}-${month}`;
+      const apiUrl = `${BASE_URL}/timesheet/employees/${employeeId}/subordinates/month/${year}-${month}`;
 
       const response = await fetch(apiUrl, {
         method: 'GET',

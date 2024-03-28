@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './MyData.css';
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from './constants'; // Importing the base URL
 
 const MyData = () => {
   const navigate = useNavigate();
@@ -10,14 +11,13 @@ const MyData = () => {
   const [editedInfo, setEditedInfo] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     const employeeId = localStorage.getItem('employee_id');
 
     const fetchEmployeeInfo = async () => {
       try {
-        const response = await fetch('https://apps.stavir.com/colleague-api/v1/employees/', {
+        const response = await fetch(`${BASE_URL}/employees/`, { // Using the base URL
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ const MyData = () => {
       const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
       const formattedJoiningDate = new Date(editedInfo.joining_date).toISOString().split('T')[0]; // Get joining date without time
 
-      const response = await fetch(`https://apps.stavir.com/colleague-api/v1/employees/${employeeId}`, {
+      const response = await fetch(`${BASE_URL}/employees/${employeeId}`, { // Using the base URL
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -113,7 +113,6 @@ const MyData = () => {
       [name]: formattedValue
     }));
   };
-
   return (
     <div className="employee-info-container">
       {error && <p className="error-message">{error}</p>}
