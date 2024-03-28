@@ -144,10 +144,4 @@ employeeAPIs.put('/:employee_id', async (req, res) => {
     }
 });
 
-
-// app.use('/api/v1/employees', employeeAPIs);
-// app.use('/api/v1/timesheet', require('./timesheet.js'));
-
-
-
 module.exports = employeeAPIs;
