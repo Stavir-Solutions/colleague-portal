@@ -53,6 +53,8 @@ loginAPIs.post('/', async (req, res) => {
       values: [username],
     };
 
+    console.log(query.text);
+    console.log(query.values);
     const [results] = await connection.execute(query.text, query.values);
 
     if (results.length === 0) {
