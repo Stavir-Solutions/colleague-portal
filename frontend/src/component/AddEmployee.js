@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './AddEmployee.css';
 import { useNavigate } from 'react-router-dom';
+import BASE_URL from './constants';
 
 const AddEmployee = () => {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const AddEmployee = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://apps.stavir.com/colleague-api/v1/employees', {
+      const response = await fetch(`${BASE_URL}/employees`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

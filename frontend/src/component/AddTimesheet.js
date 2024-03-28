@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AddTimesheet.css';
+import BASE_URL from './constants';
 
 const AddTimesheet = () => {
   const [date, setDate] = useState('');
@@ -24,7 +25,7 @@ const AddTimesheet = () => {
     };
 
     try {
-      const response = await fetch('https://apps.stavir.com/colleague-api/v1/timesheet/', {
+      const response = await fetch(`${BASE_URL}/timesheet/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 // MyTimesheet.js
 
 import React, { useState, useEffect } from 'react';
+import BASE_URL from './constants';
 
 const MyTimesheet = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
@@ -12,8 +13,7 @@ const MyTimesheet = () => {
       try {
         const employeeId = localStorage.getItem('employee_id');
         const formattedMonth = selectedMonth < 10 ? `0${selectedMonth}` : selectedMonth;
-        const apiUrl = `https://apps.stavir.com/colleague-api/v1/timesheet/employees/${employeeId}/month/${selectedYear}-${formattedMonth}`;
-
+        const apiUrl = `${BASE_URL}/timesheet/employees/${employeeId}/month/${selectedYear}-${formattedMonth}`;
         const token = localStorage.getItem('token');
         const headers = {
           'Authorization': `${token}`,

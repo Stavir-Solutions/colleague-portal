@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EditReportee from './EditReportee';
+import BASE_URL from './constants';
 
 const ReporteeData = () => {
   const [employeeData, setEmployeeData] = useState([]);
@@ -19,7 +20,7 @@ const ReporteeData = () => {
           throw new Error('Token not found in local storage');
         }
 
-        const response = await fetch('http://localhost:3000/api/v1/employees', {
+        const response = await fetch(`${BASE_URL}/employees`, {
           headers: {
             Authorization: `${token}`,
           },
@@ -36,7 +37,7 @@ const ReporteeData = () => {
           for (const employee of data) {
             if (employee.employee_id) {
               const timeSheetResponse = await fetch(
-                `https://apps.stavir.com/colleague-api/v1/tmsummary/summary?employee-id=${employee.employee_id}&year=${currentYear}&month=${currentMonth}`,
+                `${BASE_URL}/tmsummary/summary?employee-id=${employee.employee_id}&year=${currentYear}&month=${currentMonth}`,
                 {
                   headers: {
                     Authorization: `${token}`,
