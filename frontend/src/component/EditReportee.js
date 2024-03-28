@@ -15,7 +15,7 @@ const EditReportee = ({ employeeId }) => {
 
     const fetchEmployeeInfo = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/v1/employees/${employeeId}`, {
+        const response = await fetch(`https://apps.stavir.com/colleague-api/v1/employees/${employeeId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
