@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './EmployeeView.css'; // Import styling
 import MyData from './MyData';
 import MyTimesheet from './MyTimesheet';
+const storedEmployeeName = localStorage.getItem('employee_name');
 
 const EmployeeView = () => {
   const [activeTab, setActiveTab] = useState(null); // Initialize activeTab to null
@@ -19,7 +20,7 @@ const EmployeeView = () => {
 
   return (
     <div className="employeeview-container">
-      <h2>Welcome</h2>
+      <h2>Welcome {storedEmployeeName}</h2>
       <div className="logout-btn">
         <button onClick={handleLogout}>Logout</button>
       </div>

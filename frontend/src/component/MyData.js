@@ -16,7 +16,7 @@ const MyData = () => {
     const employeeId = localStorage.getItem('employee_id');
 
     const fetchEmployeeInfo = async () => {
-      console.log("fetching all empoloyees");
+      console.log("fetching logged in employee data");
       try {
         const response = await fetch(`${BASE_URL}/employees/${employeeId}`, { // Using the base URL
           method: 'GET',
@@ -121,27 +121,34 @@ const MyData = () => {
         <form>
           <div className="form-group">
             <label>Employee Name:</label>
-            <input type="text" name="employee_name" value={editedInfo.employee_name} readOnly={!isEditable} onChange={handleChange} className={isEditable ? '' : 'non-editable'} />
+            <input type="text" name="employee_name" value={editedInfo.employee_name} readOnly={!isEditable} 
+            onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>
           <div className="form-group">
             <label>Designation:</label>
-            <input type="text" name="designation" value={editedInfo.designation} readOnly={!isEditable} onChange={handleChange} className={isEditable ? '' : 'non-editable'} />
+            <input type="text" name="designation" value={editedInfo.designation} readOnly='true' 
+            onChange={handleChange} />
           </div>
           <div className="form-group">
             <label>Phone Number:</label>
-            <input type="text" name="phone_number" value={editedInfo.phone_number} readOnly={!isEditable} onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
+            <input type="text" name="phone_number" value={editedInfo.phone_number} readOnly={!isEditable} 
+            onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>
           <div className="form-group">
             <label>Email:</label>
-            <input type="email" name="email" value={editedInfo.email} readOnly={!isEditable} onChange={handleChange} className={isEditable ? '' : 'non-editable'} />
+            <input type="email" name="email" value={editedInfo.email} readOnly={!isEditable} 
+            onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>
           <div className="form-group">
             <label>Joining Date:</label>
-            <input type="text" name="joining_date" value={editedInfo.joining_date ? new Date(editedInfo.joining_date).toISOString().split('T')[0] : ''} readOnly={!isEditable} onChange={handleChange} className={isEditable ? '' : 'non-editable'} />
+            <input type="text" name="joining_date" 
+            value={editedInfo.joining_date ? new Date(editedInfo.joining_date).toISOString().split('T')[0] : ''} 
+            readOnly='true' onChange={handleChange} />
           </div>
           <div className="form-group">
             <label>Address:</label>
-            <input type="text" name="address" value={editedInfo.address} readOnly={!isEditable} onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
+            <input type="text" name="address" value={editedInfo.address} readOnly={!isEditable} 
+            onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>
           <div className="form-group">
             <label>Password:</label>

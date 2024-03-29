@@ -36,6 +36,7 @@ const Login = () => {
         // Store the token, employee_id, and hasReportees in localStorage
         localStorage.setItem('token', data.token);
         localStorage.setItem('employee_id', data.employee_id);
+        localStorage.setItem('employee_name', data.employee_name);
         localStorage.setItem('hasReportees', data.hasReportees);
 
         // Log the token after storing it in local storage

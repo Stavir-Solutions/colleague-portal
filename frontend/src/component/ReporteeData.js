@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import EditReportee from './EditReportee';
-import AddEmployee from './AddEmployee'; 
 import BASE_URL from './constants';
 
 const ReporteeData = () => {
   const [employeeData, setEmployeeData] = useState([]);
   const [error, setError] = useState(null);
   const [timeSheetSummaries, setTimeSheetSummaries] = useState({});
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,7 +52,6 @@ const ReporteeData = () => {
                 }
               } else {
                 console.error(`Error fetching time sheet summary for ${employee.employee_id}:`, timeSheetResponse.statusText);
-                setError(`Error fetching time sheet summary for ${employee.employee_id}`);
               }
             } else {
               console.warn('Employee ID is undefined for:', employee);
@@ -76,7 +72,6 @@ const ReporteeData = () => {
   }, []);
 
   const handleEdit = (employeeId) => {
-    setSelectedEmployeeId(employeeId); 
     console.log("navigating to editreportee employeeId", employeeId)
     navigate(`/editreportee/${employeeId}`); 
   };
@@ -117,7 +112,7 @@ const ReporteeData = () => {
           ))}
         </tbody>
       </table>
-      {selectedEmployeeId && <EditReportee employeeId={selectedEmployeeId} />}
+      
       <button onClick={() => navigate('/add-employee')}>Add Employee</button>
     </div>
   );
