@@ -2,16 +2,19 @@ const { v4: uuidv4 } = require('uuid');
 const express = require('./parent.js');
 const dbConnectionPool = require('./db.js');
 const loginAPIs = express.Router();
+var PropertiesReader = require('properties-reader');
+var properties = PropertiesReader('config/app.properties');
 
 // Function to update the token in the database
 async function updateTokenInDatabase(username, newToken) {
   try {
     const connection = await dbConnectionPool.getConnection();
+    const validityDuration = properties.get("token.validity.hours");
     const updateQuery = {
-      text: 'UPDATE empcred SET token = ?, expiryTime = NOW() + INTERVAL 1 HOUR WHERE username = ?',
+      text: 'UPDATE empcred SET token = ?, expiryTime = NOW() + INTERVAL ' + validityDuration + ' HOUR WHERE username = ?',
       values: [newToken, username],
     };
-    console.log("saved new token " + newToken);
+    console.log("saved new token " + newToken );
     const [updateResults] = await connection.execute(updateQuery.text, updateQuery.values);
     connection.release();
 
