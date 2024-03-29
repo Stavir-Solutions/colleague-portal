@@ -1,11 +1,16 @@
 name: Frontend Deployment
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'frontend/**'  # Specify the path to trigger the workflow on changes in the frontend folder
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'production'
+  workflow_run:
+    workflows: ["Check-code"]
+    types:
+      - completed
 
 jobs:
   build-and-deploy-frontend:
@@ -41,4 +46,4 @@ jobs:
       run: |
          aws s3 sync ./frontend/build s3://colleagues.stavir.com
 
-   
+  
