@@ -3,9 +3,7 @@ name: Backend Deployment
 on:
   push:
     branches:
-      - main
-    paths:
-      - 'backend/**' 
+      - main 
   workflow_run:
     workflows: ["Check-code"]
     types:
