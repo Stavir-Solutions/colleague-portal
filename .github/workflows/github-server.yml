@@ -60,7 +60,7 @@ jobs:
             fi
             
             cd colleague-portal
-            git pull origin2 main
+            git pull origin main
 
             cd
             echo "Updating app.properties on the server..."
