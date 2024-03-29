@@ -16,6 +16,7 @@ const MyData = () => {
     const employeeId = localStorage.getItem('employee_id');
 
     const fetchEmployeeInfo = async () => {
+      console.log("fetching all empoloyees");
       try {
         const response = await fetch(`${BASE_URL}/employees/`, { // Using the base URL
           method: 'GET',

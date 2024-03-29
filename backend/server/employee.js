@@ -66,7 +66,7 @@ employeeAPIs.post("/", async (req, res) => {
 
 // Define a route to get employee data
 employeeAPIs.get('/', async (req, res) => {
-    console.log('Fetching employee data');
+    console.log('Fetching all employees data');
     try {
         const connection = await dbConnectionPool.getConnection();
         const query = 'SELECT employee_id, employee_name, designation, phone_number, email, joining_date, leaving_date, reporting_manager_id, address FROM empdata';
