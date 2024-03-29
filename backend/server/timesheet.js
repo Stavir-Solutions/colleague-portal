@@ -59,6 +59,7 @@ function isValidYearAndMonth(yearAndMonth) {
 timesheetAPIs.get('/employees/:employeeId/month/:yearAndMonth', async (req, res) => {
     const employeeId = req.params.employeeId;
     const yearAndMonth = req.params.yearAndMonth;
+    console.log("fetching timesheet for employeeId: " + employeeId + " for month: " + yearAndMonth);
 
     // Check for an invalid month in the request parameters
     if (!isValidYearAndMonth(yearAndMonth)) {
