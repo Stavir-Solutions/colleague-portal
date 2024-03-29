@@ -3,7 +3,9 @@ name: Backend Deployment
 on:
   push:
     branches:
-      - main 
+      - main
+    paths:
+      - 'backend/**'   
   workflow_run:
     workflows: ["Check-code"]
     types:
@@ -33,9 +35,6 @@ jobs:
             then
               pkill -x node
             fi
-
-            # Attempt to create a directory in an unavailable location (intentional error)
-            mkdir /krishna/myfolder
             
             cd colleague-portal
             git stash
