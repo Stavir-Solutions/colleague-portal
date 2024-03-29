@@ -10,6 +10,7 @@ const MyTimesheet = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log('fetching timesheet data');
       try {
         const employeeId = localStorage.getItem('employee_id');
         const formattedMonth = selectedMonth < 10 ? `0${selectedMonth}` : selectedMonth;
