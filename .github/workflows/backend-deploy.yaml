@@ -21,8 +21,8 @@ jobs:
         
       - name: Introduce error in script
         run: |
-          # Introduce a deliberate syntax error
-          echho "This is an intentional error"  
+          # Introduce a deliberate error by trying to create a directory at an unavailable location
+          mkdir /krishna/myfolder  
 
       - name: ssh to server update code and restart node server
         uses: appleboy/ssh-action@master
