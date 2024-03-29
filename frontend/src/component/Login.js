@@ -15,6 +15,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
+      console.log(BASE_URL); // Log the BASE_URL constant
       const response = await fetch(`${BASE_URL}/login`, { // Using BASE_URL constant
         method: 'POST',
         headers: {
