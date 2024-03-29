@@ -43,10 +43,11 @@ const AddTimesheet = () => {
         setLeave(0);
         setHoliday(0);
 
+        // Prompt user to add more timesheets
         if (window.confirm('Timesheet added successfully. Do you want to add more?')) {
           navigate('/add-timesheet');
         } else {
-          navigate('/employeeview');
+          window.history.back(); 
         }
       } else {
         console.error('Failed to submit timesheet entry:', response.statusText);
@@ -57,7 +58,8 @@ const AddTimesheet = () => {
   };
 
   const goBack = () => {
-    navigate('/employeeview');
+    const previousRoute = localStorage.getItem('previousRoute');
+    navigate(previousRoute || '/managerview');
   };
 
   const currentDate = new Date();

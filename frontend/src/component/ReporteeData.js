@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EditReportee from './EditReportee';
+import AddEmployee from './AddEmployee'; 
 import BASE_URL from './constants';
 
 const ReporteeData = () => {
@@ -15,7 +16,6 @@ const ReporteeData = () => {
       setError(null);
       try {
         const token = localStorage.getItem('token');
-        console.log('Token:', token);
         if (!token) {
           throw new Error('Token not found in local storage');
         }
@@ -76,12 +76,13 @@ const ReporteeData = () => {
   }, []);
 
   const handleEdit = (employeeId) => {
-    setSelectedEmployeeId(employeeId); // Set the selected employee ID
-    navigate(`/editreportee/${employeeId}`); // Navigate to the edit page with the employee ID
+    setSelectedEmployeeId(employeeId); 
+    navigate(`/editreportee/${employeeId}`); 
   };
 
   return (
     <div>
+      
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <table>
         <thead>
@@ -115,7 +116,8 @@ const ReporteeData = () => {
           ))}
         </tbody>
       </table>
-      {selectedEmployeeId && <EditReportee employeeId={selectedEmployeeId} />} {/* Pass selected employee ID to EditReportee */}
+      {selectedEmployeeId && <EditReportee employeeId={selectedEmployeeId} />}
+      <button onClick={() => navigate('/add-employee')}>Add Employee</button>
     </div>
   );
 };
