@@ -18,6 +18,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        
+      - name: Introduce error in script
+        run: |
+          # Introduce a deliberate syntax error
+          echho "This is an intentional error"  
 
       - name: ssh to server update code and restart node server
         uses: appleboy/ssh-action@master
