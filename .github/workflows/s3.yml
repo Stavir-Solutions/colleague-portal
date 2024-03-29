@@ -8,7 +8,7 @@ on:
       - 'frontend/**'  # Specify the path to trigger the workflow on changes in the frontend folder
 
 jobs:
-  build-and-deploy:
+  build-and-deploy-frontend:
     runs-on: ubuntu-latest
 
     steps:
