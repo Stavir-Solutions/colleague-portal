@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './EditReportee.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import BASE_URL from './constants'; 
 
-const EditReportee = ({ employeeId }) => {
+const EditReportee = ()=> {
+  const params= useParams();
+  const employeeId = params.employee_id;
+  console.log('received employeeid' , employeeId);
   const [employeeInfo, setEmployeeInfo] = useState(null);
   const [error, setError] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
@@ -24,6 +27,7 @@ const EditReportee = ({ employeeId }) => {
           }
         });
 
+        console.log('response', response);
         if (!response.ok) {
           throw new Error('Failed to fetch employee information');
         }

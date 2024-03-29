@@ -18,7 +18,7 @@ const MyData = () => {
     const fetchEmployeeInfo = async () => {
       console.log("fetching all empoloyees");
       try {
-        const response = await fetch(`${BASE_URL}/employees/`, { // Using the base URL
+        const response = await fetch(`${BASE_URL}/employees/${employeeId}`, { // Using the base URL
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ const MyData = () => {
 
         if (response.ok) {
           const data = await response.json();
-          const loggedInEmployee = data.find(employee => employee.employee_id === employeeId);
+          const loggedInEmployee = data[0];
           setEmployeeInfo(loggedInEmployee);
           setEditedInfo(loggedInEmployee);
           setError(null);

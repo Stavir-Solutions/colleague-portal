@@ -11,7 +11,7 @@ employeeAPIs.use(authenticateToken);
 
 // Insert data into the "empdata" and "empcred" tables
 employeeAPIs.post("/", async (req, res) => {
-    console.log("API is invoked");
+    console.log("create employee");
     const empData = req.body;
     console.log(empData);
 
@@ -78,9 +78,29 @@ employeeAPIs.get('/', async (req, res) => {
         res.status(500).send('An error occurred while fetching employee data.');
     }
 });
+
+// Define a route to get employee data
+employeeAPIs.get('/:employee_id', async (req, res) => {
+    const employeeId = req.params.employee_id;
+    console.log('Fetching data of employee',employeeId);
+    try {
+        const connection = await dbConnectionPool.getConnection();
+        const query = 'SELECT employee_id, employee_name, designation, phone_number, email, joining_date, leaving_date, reporting_manager_id, address FROM empdata where employee_id = ' + employeeId;
+        const [results] = await connection.query(query, [employeeId]);
+        connection.release(); // Release the connection back to the pool
+        console.log(results);
+        res.json(results);
+    } catch (error) {
+        console.error('Error querying the database:', error);
+        res.status(500).send('An error occurred while fetching employee data.');
+    }
+});
+
 // Define a route to update an employee's information
 employeeAPIs.put('/:employee_id', async (req, res) => {
     const employeeId = req.params.employee_id;
+    console.log('Updating employee data', employeeId);
+    
     const {
         employee_name,
         designation,

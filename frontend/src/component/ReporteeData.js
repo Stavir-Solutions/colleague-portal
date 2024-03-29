@@ -77,6 +77,7 @@ const ReporteeData = () => {
 
   const handleEdit = (employeeId) => {
     setSelectedEmployeeId(employeeId); 
+    console.log("navigating to editreportee employeeId", employeeId)
     navigate(`/editreportee/${employeeId}`); 
   };
 
