@@ -1,12 +1,22 @@
-.largeFontSize {
-    font-size: 16px;
+/* Common styles for td elements */
+.input-container {
+  display: flex;
+  align-items: center;
+}
+
+.input-container label {
+  margin-right: 10px;
+}
+
+.view-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .view-button-container {
+    width: 100%;
   }
-  
-  .largePadding {
-    padding: 10px;
-  }
-  td {
-    border: 1px solid #ddd;
-    padding: 8px;
-     }
-  
+}
