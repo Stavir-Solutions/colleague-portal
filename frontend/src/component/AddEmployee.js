@@ -21,9 +21,19 @@ const AddEmployee = () => {
   });
 
   const [successModal, setSuccessModal] = useState(false);
+  const [usernameError, setUsernameError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    // Check for whitespace characters
+    if (name === 'username' && /\s/.test(value)) {
+      setUsernameError('No whitespace allowed');
+      return;
+    } else {
+      setUsernameError('');
+    }
+
     setEmployeeData((prevData) => ({
       ...prevData,
       [name]: value || null,
@@ -45,7 +55,6 @@ const AddEmployee = () => {
 
       if (response.ok) {
         setSuccessModal(true);
-        // You may add a delay or use a state to control when to navigate back
         setTimeout(() => {
           setSuccessModal(false);
           navigate('/ManagerView');
@@ -53,16 +62,20 @@ const AddEmployee = () => {
       } else {
         const errorData = await response.json();
         console.error('Failed to add employee:', errorData.error || response.statusText);
-        // Handle errors as needed
       }
     } catch (error) {
       console.error('Error during employee addition:', error.message);
-      // Handle errors as needed
     }
+  };
+
+  const goBack = () => {
+    const previousRoute = localStorage.getItem('previousRoute');
+    navigate(previousRoute || '/managerview');
   };
 
   return (
     <div className="container">
+      <button className="back-button" onClick={goBack}>Back</button>
       <h2 className="heading">Enter Employee Details</h2>
       <form onSubmit={handleSubmit} className="form">
         <div className="form-group">
@@ -120,7 +133,7 @@ const AddEmployee = () => {
         </div>
         <div className="form-group">
           <label className="label">
-            Username:
+            Login name:
           </label>
           <input
             type="text"
@@ -129,6 +142,7 @@ const AddEmployee = () => {
             onChange={handleInputChange}
             className="input"
           />
+          {usernameError && <p className="error-message">{usernameError}</p>}
         </div>
 
         <div className="form-group">
