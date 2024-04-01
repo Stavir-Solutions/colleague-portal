@@ -84,12 +84,14 @@ employeeAPIs.get('/:employee_id', async (req, res) => {
     console.log('Fetching data of employee', employeeId);
     try {
         const connection = await dbConnectionPool.getConnection();
+
         const query = `
             SELECT e.employee_id, e.employee_name, e.designation, e.phone_number, e.email, e.joining_date, 
                    e.leaving_date, e.reporting_manager_id, e.address, c.username
             FROM empdata e
             INNER JOIN empcred c ON e.employee_id = c.employee_id
             WHERE e.employee_id = ?`;
+
         const [results] = await connection.query(query, [employeeId]);
         connection.release(); // Release the connection back to the pool
         console.log(results);
