@@ -78,14 +78,20 @@ employeeAPIs.get('/', async (req, res) => {
         res.status(500).send('An error occurred while fetching employee data.');
     }
 });
-
 // Define a route to get employee data
 employeeAPIs.get('/:employee_id', async (req, res) => {
     const employeeId = req.params.employee_id;
-    console.log('Fetching data of employee',employeeId);
+    console.log('Fetching data of employee', employeeId);
     try {
         const connection = await dbConnectionPool.getConnection();
-        const query = 'SELECT employee_id, employee_name, designation, phone_number, email, joining_date, leaving_date, reporting_manager_id, address FROM empdata WHERE employee_id = ?';
+
+        const query = `
+            SELECT e.employee_id, e.employee_name, e.designation, e.phone_number, e.email, e.joining_date, 
+                   e.leaving_date, e.reporting_manager_id, e.address, c.username
+            FROM empdata e
+            INNER JOIN empcred c ON e.employee_id = c.employee_id
+            WHERE e.employee_id = ?`;
+
         const [results] = await connection.query(query, [employeeId]);
         connection.release(); // Release the connection back to the pool
         console.log(results);

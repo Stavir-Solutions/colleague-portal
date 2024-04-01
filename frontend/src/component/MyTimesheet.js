@@ -54,7 +54,7 @@ const MyTimesheet = () => {
           <option value={2027}>2027</option>
           <option value={2028}>2028</option>
         </select>
-        <label>Select Month:</label>
+        <label style={{ whiteSpace: 'nowrap' }}>Select Month:</label>
         <select
           value={selectedMonth}
           onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
@@ -95,9 +95,12 @@ const MyTimesheet = () => {
           </tbody>
         </table>
       </div>
+      
+      <div style={{ height: '2em' }}></div>
+      
       <div className="button-container">
         <Link to="/add-timesheet"> {/* Navigate to AddTimesheet */}
-          <button>Add Timesheet</button>
+          <button>Add Timesheet Entry</button>
         </Link>
       </div>
     </div>

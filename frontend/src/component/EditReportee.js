@@ -76,6 +76,7 @@ const EditReportee = ()=> {
           leaving_date: currentDate,
           reporting_manager_id: employeeInfo.reporting_manager_id,
           address: editedInfo.address,
+          username: editedInfo.username,
           password: editedInfo.password
         })
       });
@@ -109,9 +110,13 @@ const EditReportee = ()=> {
       [name]: formattedValue
     }));
   };
-
+  const goBack = () => {
+    const previousRoute = localStorage.getItem('previousRoute');
+    navigate(previousRoute || '/managerview');
+  };
   return (
     <div className="employee-info-container">
+      <button className="back-button" onClick={goBack}>Back</button>
       <h2>Edit Employee Information</h2>
       {error && <p className="error-message">{error}</p>}
       {employeeInfo && (
@@ -145,6 +150,11 @@ const EditReportee = ()=> {
           <div className="form-group">
             <label>Address:</label>
             <input type="text" name="address" value={editedInfo.address} readOnly={!isEditable} 
+            onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
+          </div>
+          <div className="form-group">
+            <label>Login Name:</label>
+            <input type="text" name="username" value={editedInfo.username} readOnly={!isEditable} 
             onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>
           <div className="form-group">
