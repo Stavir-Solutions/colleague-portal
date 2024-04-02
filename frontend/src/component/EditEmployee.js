@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './MyData.css';
 import { useNavigate, useLocation } from 'react-router-dom';
-import BASE_URL from './constants';
+import BASE_URL from './Constants';
 
 const MyData = () => {
   const [employeeInfo, setEmployeeInfo] = useState(null);

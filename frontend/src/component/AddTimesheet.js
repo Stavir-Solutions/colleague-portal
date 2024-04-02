@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AddTimesheet.css';
-import BASE_URL from './constants';
+import BASE_URL from './Constants';
 
 const AddTimesheet = () => {
   const [date, setDate] = useState('');

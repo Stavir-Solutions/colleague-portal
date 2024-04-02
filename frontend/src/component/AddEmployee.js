@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './AddEmployee.css';
 import { useNavigate } from 'react-router-dom';
-import BASE_URL from './constants';
+import BASE_URL from './Constants';;
 
 const AddEmployee = () => {
   const navigate = useNavigate();

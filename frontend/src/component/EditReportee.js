@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './EditReportee.css';
 import { useNavigate, useParams } from 'react-router-dom';
-import BASE_URL from './constants'; 
+import BASE_URL from './Constants'; 
 
 const EditReportee = ()=> {
   const params= useParams();

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
-import BASE_URL from './constants'; // Importing the BASE_URL constant
+import BASE_URL from './Constants'; // Importing the BASE_URL constant
 
 const Login = () => {
   const [username, setUsername] = useState('');
