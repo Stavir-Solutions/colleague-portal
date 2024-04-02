@@ -82,6 +82,7 @@ jobs:
             echo "db.password=${{ secrets.DB_PASSWORD }}" >> ~/colleague-portal/backend/server/config/app.properties
             echo "db.port=${{ secrets.DB_PORT }}" >> ~/colleague-portal/backend/server/config/app.properties
             echo "db.connectionLimit=${{ secrets.DB_CONNECTION_LIMIT }}" >> ~/colleague-portal/backend/server/config/app.properties
+            echo "token.validity.hours=24" >> ~/colleague-portal/backend/server/config/app.properties
 
           
             
