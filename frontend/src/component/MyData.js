@@ -121,7 +121,9 @@ const MyData = () => {
       {employeeInfo && (
         <form>
           <div className="form-group">
+
             <label>Name:</label>
+
             <input type="text" name="employee_name" value={editedInfo.employee_name} readOnly={!isEditable}
                    onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>

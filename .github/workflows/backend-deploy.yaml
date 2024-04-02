@@ -13,6 +13,30 @@ on:
       - completed
 
 jobs:
+  check-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies and run tests (Backend)
+        working-directory: backend/server
+        run: |
+          npm install
+          nohup node app.js &> backend.log &
+
+      - name: Install dependencies and run tests (Frontend)
+        working-directory: frontend
+        run: |
+          npm install
+          nohup npm start &> frontend.log &
+
   deploy:
     runs-on: ubuntu-latest
 
@@ -32,13 +56,17 @@ jobs:
             
             
             # Gracefully stop Node.js server if it's already running
+            echo "Stopping Node.js server if it's running"
             if pgrep -x "node" > /dev/null
             then
               pkill -x node
             fi
             
+            echo "Navigating to project directory"
             cd colleague-portal
+            echo "Stashing any local changes"
             git stash
+            echo "Pulling latest changes from main branch"
             git pull origin main
 
             cd
@@ -50,10 +78,12 @@ jobs:
             echo "db.port=${{ secrets.DB_PORT }}" >> ~/colleague-portal/backend/server/config/app.properties
             echo "db.connectionLimit=${{ secrets.DB_CONNECTION_LIMIT }}" >> ~/colleague-portal/backend/server/config/app.properties
 
+            echo "Navigating back to home directory"
             cd
             
             # Install backend dependencies and start the Node.js server
+            echo "Installing backend dependencies"
             cd colleague-portal/backend/server/
             npm install
+            echo "Starting the Node.js server"
             nohup node app.js &> backend.log &
-
