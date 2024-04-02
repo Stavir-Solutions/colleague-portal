@@ -13,6 +13,30 @@ on:
       - completed
 
 jobs:
+  check-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies and run tests (Backend)
+        working-directory: backend/server
+        run: |
+          npm install
+          nohup node app.js &> backend.log &
+
+      - name: Install dependencies and run tests (Frontend)
+        working-directory: frontend
+        run: |
+          npm install
+          nohup npm start &> frontend.log &
+
   deploy:
     runs-on: ubuntu-latest
 
