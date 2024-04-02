@@ -51,7 +51,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
-          script_stop: true
           script: |
             
             
@@ -94,3 +93,11 @@ jobs:
             echo "Starting the server"
             nohup node app.js &> backend.log &
             echo "Server started"
+            
+            if pgrep -x "node" > /dev/null
+            then
+              echo "Deployment completed succesfully"
+            else
+              echo "deployment failed"
+              exit 1
+            fi
