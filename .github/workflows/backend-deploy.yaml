@@ -59,7 +59,7 @@ jobs:
             echo "Stopping Node.js server if it's running"
             if pgrep -x "node" > /dev/null
             then
-              pkill -x node
+              sudo pkill -x node
             fi
             
             echo "Navigating to project directory"
