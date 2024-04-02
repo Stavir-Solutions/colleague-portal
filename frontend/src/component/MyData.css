@@ -32,7 +32,7 @@ input[type="password"] {
 
 .back-button, .edit-button {
   padding: 10px 20px;
-  background-color: #0e0ee3;
+  background-color: #742bcc;
   color: white;
   border: none;
   border-radius: 5px;
@@ -41,7 +41,7 @@ input[type="password"] {
 }
 
 .back-button:hover, .edit-button:hover {
-  background-color: #aaa8ae;
+  background-color: #6939c9;
 }
 .non-editable {
   background-color: #f2f2f2; /* Light grey background */

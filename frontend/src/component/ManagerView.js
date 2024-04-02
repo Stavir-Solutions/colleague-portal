@@ -8,7 +8,6 @@ import ReporteeData from './ReporteeData'; // Modified: Added ReporteeData
 const ManagerView = () => {
   const [activeTab, setActiveTab] = useState(null); // Initialize activeTab to null
   const [authToken, setAuthToken] = useState('');
-  const storedEmployeeName = localStorage.getItem('employee_name');
 
   const [showSuccessModal, setShowSuccessModal] = useState(false); // State to control the success modal
 
@@ -17,7 +16,6 @@ const ManagerView = () => {
     if (storedToken) {
       setAuthToken(storedToken);
     }
-    const storedEmployeeName = localStorage.getItem('employee_name');
   }, []);
 
 
@@ -37,7 +35,7 @@ const ManagerView = () => {
 
   return (
     <div className="managerview-container">
-      <h2>Welcome {storedEmployeeName}</h2>
+      <h2>Welcome {localStorage.getItem('employee_name')}</h2>
       <div className="logout-btn">
         <button onClick={handleLogout}>Logout</button>
       </div>
