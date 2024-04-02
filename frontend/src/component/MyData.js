@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './MyData.css';
 import { useNavigate } from 'react-router-dom';
-import BASE_URL from './constants'; // Importing the base URL
+import BASE_URL from './Constants'; // Importing the base URL
 
 const MyData = () => {
   const navigate = useNavigate();

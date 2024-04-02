@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ReporteeTimeSheet.css';
-import BASE_URL from './constants';
+import BASE_URL from './Constants';
 
 const ReporteeTimeSheet = () => {
   const [year, setYear] = useState('');
