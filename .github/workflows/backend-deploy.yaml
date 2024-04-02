@@ -32,13 +32,17 @@ jobs:
             
             
             # Gracefully stop Node.js server if it's already running
+            echo
             if pgrep -x "node" > /dev/null
             then
               pkill -x node
             fi
             
+            echo
             cd colleague-portal
+            echo
             git stash
+            echo
             git pull origin main
 
             cd
@@ -50,10 +54,13 @@ jobs:
             echo "db.port=${{ secrets.DB_PORT }}" >> ~/colleague-portal/backend/server/config/app.properties
             echo "db.connectionLimit=${{ secrets.DB_CONNECTION_LIMIT }}" >> ~/colleague-portal/backend/server/config/app.properties
 
+            echo
             cd
             
             # Install backend dependencies and start the Node.js server
+            echo
             cd colleague-portal/backend/server/
             npm install
+            echo
             nohup node app.js &> backend.log &
 
