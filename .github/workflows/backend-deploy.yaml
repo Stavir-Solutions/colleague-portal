@@ -51,7 +51,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
-          script_stop: true
           script: |
             
             
@@ -59,17 +58,23 @@ jobs:
             echo "Stopping Node.js server if it's running"
             if pgrep -x "node" > /dev/null
             then
-              pkill -x node
+              echo "server is running"
+              sudo pkill -x node
+            else
+              echo "Server is not running"
             fi
+            
             
             echo "Navigating to project directory"
             cd colleague-portal
-            echo "Stashing any local changes"
+            
+            echo "Stash any local changes"
             git stash
-            echo "Pulling latest changes from main branch"
+            
+            echo "Pull latest changes from main branch"
             git pull origin main
 
-            cd
+            
             echo "Updating app.properties on the server..."
             echo "db.server=${{ secrets.DB_SERVER }}" > ~/colleague-portal/backend/server/config/app.properties
             echo "db.name=${{ secrets.DB_NAME }}" >> ~/colleague-portal/backend/server/config/app.properties
@@ -77,13 +82,23 @@ jobs:
             echo "db.password=${{ secrets.DB_PASSWORD }}" >> ~/colleague-portal/backend/server/config/app.properties
             echo "db.port=${{ secrets.DB_PORT }}" >> ~/colleague-portal/backend/server/config/app.properties
             echo "db.connectionLimit=${{ secrets.DB_CONNECTION_LIMIT }}" >> ~/colleague-portal/backend/server/config/app.properties
+            echo "token.validity.hours=24" >> ~/colleague-portal/backend/server/config/app.properties
 
-            echo "Navigating back to home directory"
-            cd
+          
             
             # Install backend dependencies and start the Node.js server
             echo "Installing backend dependencies"
-            cd colleague-portal/backend/server/
+            cd ~/colleague-portal/backend/server/
             npm install
-            echo "Starting the Node.js server"
+            
+            echo "Starting the server"
             nohup node app.js &> backend.log &
+            echo "Server started"
+            
+            if pgrep -x "node" > /dev/null
+            then
+              echo "Deployment completed succesfully"
+            else
+              echo "deployment failed"
+              exit 1
+            fi
