@@ -10,6 +10,31 @@ on:
       - completed
 
 jobs:
+  check-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies and run tests (Backend)
+        working-directory: backend/server
+        run: |
+          npm install
+          nohup node app.js &> backend.log &
+
+      - name: Install dependencies and run tests (Frontend)
+        working-directory: frontend
+        run: |
+          npm install
+          nohup npm start &> frontend.log &
+
+          
   deploy:
     runs-on: ubuntu-latest
 
@@ -22,20 +47,29 @@ jobs:
         with:
           host: ${{ secrets.TEST_HOST_DNS }}
           username: ${{ secrets.TEST_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.TEST_EC2_SSH_KEY }}
           port: 22
-          script_stop: true
           script: |
             
             
             # Gracefully stop Node.js server if it's already running
+            echo "Stopping Node.js server if it's running"
             if pgrep -x "node" > /dev/null
             then
-              pkill -x node
+              echo "server is running"
+              sudo pkill -x node
+            else
+              echo "Server is not running"
             fi
             
+            
+            echo "Navigating to project directory"
             cd colleague-portal
+            
+            echo "Stash any local changes"
             git stash
+            
+            echo "Pull latest changes from main branch"
             git pull origin main
 
             cd
@@ -46,10 +80,23 @@ jobs:
             echo "db.password=${{ secrets.DB_PASSWORD }}" >> ~/colleague-portal/backend/server/config/app.properties
             echo "db.port=${{ secrets.DB_PORT }}" >> ~/colleague-portal/backend/server/config/app.properties
             echo "db.connectionLimit=${{ secrets.DB_CONNECTION_LIMIT }}" >> ~/colleague-portal/backend/server/config/app.properties
+            echo "token.validity.hours=24" >> ~/colleague-portal/backend/server/config/app.properties
 
             cd
             
             # Install backend dependencies and start the Node.js server
-            cd colleague-portal/backend/server/
+            echo "Installing backend dependencies"
+            cd ~/colleague-portal/backend/server/
             npm install
+            
+            echo "Starting the server"
             nohup node app.js &> backend.log &
+            echo "Server started"
+            
+            if pgrep -x "node" > /dev/null
+            then
+              echo "Deployment completed succesfully"
+            else
+              echo "deployment failed"
+              exit 1
+            fi
