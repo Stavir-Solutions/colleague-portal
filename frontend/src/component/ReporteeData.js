@@ -78,7 +78,6 @@ const ReporteeData = () => {
 
   return (
     <div>
-      
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <table>
         <thead>
@@ -113,7 +112,9 @@ const ReporteeData = () => {
         </tbody>
       </table>
       
-      <button onClick={() => navigate('/add-employee')}>Add Employee</button>
+      <div style={{ marginTop: '20px' }}> 
+        <button onClick={() => navigate('/add-employee')}>Add</button> 
+      </div>
     </div>
   );
 };
