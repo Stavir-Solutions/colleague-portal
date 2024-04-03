@@ -41,4 +41,8 @@ jobs:
       run: |
          aws s3 sync ./frontend/build s3://colleagues.test.stavir.com
 
+    - name: CloudFront Cache Invalidation
+      run: |
+        aws cloudfront create-invalidation --distribution-id E2RFPEFEU6LNFK --paths '/*'     
+
    
