@@ -89,10 +89,6 @@ employeeAPIs.get('/:employee_id', async (req, res) => {
             FROM empdata e
             INNER JOIN empcred c ON e.employee_id = c.employee_id
             WHERE e.employee_id = ?`;
-<<<<<<< HEAD
-
-=======
->>>>>>> 13670e8 ("api change to display username,login name displayed in reportee data,edit screen ,my data screens and mytimesheet ui bugs")
         const [results] = await connection.query(query, [employeeId]);
         connection.release(); // Release the connection back to the pool
         console.log(results);
