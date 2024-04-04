@@ -5,7 +5,6 @@ const { authenticateToken } = require('./tokenValidation');
 var employeeAPIs = express.Router();
 
 
-
 // Apply token authentication middleware to all employee APIs
 employeeAPIs.use(authenticateToken);
 
@@ -84,7 +83,6 @@ employeeAPIs.get('/:employee_id', async (req, res) => {
     console.log('Fetching data of employee', employeeId);
     try {
         const connection = await dbConnectionPool.getConnection();
-
         const query = `
             SELECT e.employee_id, e.employee_name, e.designation, e.phone_number, e.email, e.joining_date, 
                    e.leaving_date, e.reporting_manager_id, e.address, c.username
