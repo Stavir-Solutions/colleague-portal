@@ -1,0 +1,7 @@
+db.server=127.0.0.1
+db.name=db
+db.user=user
+db.password=password
+db.port=3306
+db.connectionLimit=10
+token.validity.hours=24
