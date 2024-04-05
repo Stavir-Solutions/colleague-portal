@@ -31,14 +31,11 @@ const ReporteeTimeSheet = () => {
         console.error('Authentication token is missing.');
         return;
       }
-  
       const employeeId = localStorage.getItem('employee_id');
       const apiUrl = `${BASE_URL}/timesheet/employees/${employeeId}/subordinates/month/${year}-${month}`;
-  
       // Clear old data
       setFetchedData(null);
       setError(null);
-  
       const response = await fetch(apiUrl, {
         method: 'GET',
         headers: {
@@ -46,7 +43,6 @@ const ReporteeTimeSheet = () => {
           'Content-Type': 'application/json',
         },
       });
-  
       if (response.ok) {
         const data = await response.json();
         console.log('Fetched data:', data);
@@ -61,13 +57,10 @@ const ReporteeTimeSheet = () => {
       setError('Error fetching data. Please try again.');
     }
   };
-  
-
   const formatDate = (dateString) => {
     const dateWithoutTime = dateString.split('T')[0];
     return dateWithoutTime;
   };
-
   return (
     <div>
       <h3>Reportee Time Sheet</h3>
@@ -87,7 +80,6 @@ const ReporteeTimeSheet = () => {
           {['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'].map((m) => (
             <option key={m} value={m}>{m}</option>
           ))}
-          &nbsp;
         </select>
         
         <div className="view-button-container">

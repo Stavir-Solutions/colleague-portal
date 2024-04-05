@@ -3,22 +3,21 @@ import './EditReportee.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import BASE_URL from './Constants'; 
 
-const EditReportee = ()=> {
-  const params= useParams();
+const EditReportee = () => {
+  const params = useParams();
   const employeeId = params.employee_id;
-  
+  const navigate = useNavigate();
+
   const [employeeInfo, setEmployeeInfo] = useState(null);
   const [error, setError] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
   const [editedInfo, setEditedInfo] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    console.log('get details of the received employeeid' , employeeId);
     const fetchEmployeeInfo = async () => {
       try {
+        const token = localStorage.getItem('token');
         const response = await fetch(`${BASE_URL}/employees/${employeeId}`, {
           method: 'GET',
           headers: {
@@ -27,7 +26,6 @@ const EditReportee = ()=> {
           }
         });
 
-        console.log('response', response);
         if (!response.ok) {
           throw new Error('Failed to fetch employee information');
         }
@@ -42,47 +40,30 @@ const EditReportee = ()=> {
       }
     };
 
-    if (token && employeeId) {
+    if (employeeId) {
       fetchEmployeeInfo();
     } else {
-      setError('Token or employee ID not found in local storage');
+      setError('Employee ID not found');
     }
-  }, [employeeId]); // Depend on employeeId
+  }, [employeeId]); 
 
   const handleEdit = () => {
     setIsEditable(true);
   };
 
-  const handleSave = async (event) => {
-    event.preventDefault();
-
+  const handleSave = async () => {
     try {
       const token = localStorage.getItem('token');
-      const currentDate = new Date().toISOString().split('T')[0];
-      const formattedJoiningDate = new Date(editedInfo.joining_date).toISOString().split('T')[0];
-
       const response = await fetch(`${BASE_URL}/employees/${employeeId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': token
         },
-        body: JSON.stringify({
-          employee_name: editedInfo.employee_name,
-          designation: editedInfo.designation,
-          phone_number: editedInfo.phone_number,
-          email: editedInfo.email,
-          joining_date: formattedJoiningDate,
-          leaving_date: currentDate,
-          reporting_manager_id: employeeInfo.reporting_manager_id,
-          address: editedInfo.address,
-          username: editedInfo.username,
-          password: editedInfo.password
-        })
+        body: JSON.stringify(editedInfo)
       });
 
       if (response.ok) {
-        console.log('Employee information successfully updated');
         setIsEditable(false);
         setShowSuccessModal(true);
       } else {
@@ -103,59 +84,99 @@ const EditReportee = ()=> {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const formattedValue = name === 'joining_date' ? value.split('T')[0] : value;
-
     setEditedInfo(prevState => ({
       ...prevState,
-      [name]: formattedValue
+      [name]: value
     }));
   };
+
   const goBack = () => {
-    const previousRoute = localStorage.getItem('previousRoute');
-    navigate(previousRoute || '/managerview');
+    navigate('/managerview');
   };
+
   return (
     <div className="employee-info-container">
-      <button className="back-button" onClick={goBack}>Back</button>
+    
       <h2>Edit Employee Information</h2>
       {error && <p className="error-message">{error}</p>}
       {employeeInfo && (
         <form>
           <div className="form-group">
             <label>Name:</label>
-            <input type="text" name="employee_name" value={editedInfo.employee_name} readOnly={!isEditable} 
-            onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
+            <input 
+              type="text" 
+              name="employee_name" 
+              value={editedInfo.employee_name} 
+              readOnly={!isEditable} 
+              onChange={handleChange} 
+              style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} 
+            />
           </div>
           <div className="form-group">
             <label>Designation:</label>
-            <input type="text" name="designation" value={editedInfo.designation} readOnly={!isEditable} 
-            onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
+            <input 
+              type="text" 
+              name="designation" 
+              value={editedInfo.designation} 
+              readOnly={!isEditable} 
+              onChange={handleChange} 
+              style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} 
+            />
           </div>
           <div className="form-group">
             <label>Phone Number:</label>
-            <input type="text" name="phone_number" value={editedInfo.phone_number} readOnly={!isEditable} 
-            onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
+            <input 
+              type="text" 
+              name="phone_number" 
+              value={editedInfo.phone_number} 
+              readOnly={!isEditable} 
+              onChange={handleChange} 
+              style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} 
+            />
           </div>
           <div className="form-group">
             <label>Email:</label>
-            <input type="email" name="email" value={editedInfo.email} readOnly={!isEditable} 
-            onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
+            <input 
+              type="email" 
+              name="email" 
+              value={editedInfo.email} 
+              readOnly={!isEditable} 
+              onChange={handleChange} 
+              style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} 
+            />
           </div>
           <div className="form-group">
             <label>Joining Date:</label>
-            <input type="text" name="joining_date" 
-            value={editedInfo.joining_date ? new Date(editedInfo.joining_date).toISOString().split('T')[0] : ''} 
-            readOnly={!isEditable} onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
+            <input 
+              type="text" 
+              name="joining_date" 
+              value={editedInfo.joining_date ? new Date(editedInfo.joining_date).toISOString().split('T')[0] : ''} 
+              readOnly={!isEditable} 
+              onChange={handleChange} 
+              style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} 
+            />
           </div>
           <div className="form-group">
             <label>Address:</label>
-            <input type="text" name="address" value={editedInfo.address} readOnly={!isEditable} 
-            onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
+            <input 
+              type="text" 
+              name="address" 
+              value={editedInfo.address} 
+              readOnly={!isEditable} 
+              onChange={handleChange} 
+              style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} 
+            />
           </div>
           <div className="form-group">
             <label>Login Name:</label>
-            <input type="text" name="username" value={editedInfo.username} readOnly={!isEditable} 
-            onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
+            <input 
+              type="text" 
+              name="username" 
+              value={editedInfo.username} 
+              readOnly={!isEditable} 
+              onChange={handleChange} 
+              style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} 
+            />
           </div>
           <div className="form-group">
             <label>Password:</label>
@@ -168,15 +189,16 @@ const EditReportee = ()=> {
               style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }}
             />
           </div>
-          <div className="form-group">
-            {isEditable ? (
-              <button type="button" className="save-button" onClick={handleSave}>Save</button>
-            ) : (
-              <button className="edit-button" onClick={handleEdit}>Edit</button>
-            )}
-          </div>
         </form>
       )}
+      <div className="button-container">
+        <button className="back-button" onClick={goBack}>Back</button>
+        {isEditable ? (
+          <button type="button" className="save-button" onClick={handleSave}>Save</button>
+        ) : (
+          <button className="edit-button" onClick={handleEdit}>Edit</button>
+        )}
+      </div>
       {/* Success modal */}
       {showSuccessModal && (
         <div className="success-modal">

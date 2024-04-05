@@ -123,7 +123,7 @@ timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndM
             JOIN empdata e ON t.employee_id = e.employee_id
             WHERE YEAR(t.date) = ? AND MONTH(t.date) = ?
             AND e.reporting_manager_id = ?
-            ORDER BY t.employee_id, t.date;
+            ORDER BY e.employee_name,t.date ; -- Sort by date and employee_name
         `;
 
         const [timesheetResult] = await connection.execute(fetchTimesheetQuery, [year, month, reporting_manager_id]);
@@ -142,7 +142,6 @@ timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndM
         }
     }
 });
-
 
 
 module.exports = timesheetAPIs;
