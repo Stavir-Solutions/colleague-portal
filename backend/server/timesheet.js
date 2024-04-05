@@ -75,9 +75,11 @@ timesheetAPIs.get('/employees/:employeeId/month/:yearAndMonth', async (req, res)
 
         // Query the database to fetch timesheet data
         const query = `
-            SELECT * FROM emptimesheet
-            WHERE employee_id = ? AND YEAR(date) = ? AND MONTH(date) = ?
-        `;
+    SELECT * FROM emptimesheet
+    WHERE employee_id = ? AND YEAR(date) = ? AND MONTH(date) = ?
+    ORDER BY date
+`;
+
 
         const [results] = await connection.execute(query, [employeeId, year, month]);
 

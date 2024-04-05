@@ -58,9 +58,15 @@ const AddTimesheet = () => {
   };
 
   const goBack = () => {
-    const previousRoute = localStorage.getItem('previousRoute');
-    navigate(previousRoute || '/managerview');
+    const userRole = localStorage.getItem('userRole'); // Assuming you store the user's role in localStorage
+  
+    if (userRole === 'employee') {
+      navigate('/employeeview');
+    } else if (userRole === 'manager') {
+      navigate('/managerview');
+    }
   };
+  
 
   const currentDate = new Date();
   const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -70,7 +76,6 @@ const AddTimesheet = () => {
 
   return (
     <div className="add-timesheet-container">
-      <button className="back-button" onClick={goBack}>Back</button>
       <h2>Add Timesheet Entry</h2>
       <form className="add-timesheet-form" onSubmit={handleSubmit}>
         <label className="add-timesheet-label">Select Date:</label>
@@ -122,7 +127,11 @@ const AddTimesheet = () => {
             </option>
           ))}
         </select>
-        <button type="submit" className="add-timesheet-button">Save</button>
+  
+        <div className="button-container">
+          <button className="back-button" onClick={goBack}>Back</button>
+          <button type="submit" className="add-timesheet-button">Save</button>
+        </div>
       </form>
       {successMessage && <p>{successMessage}</p>}
     </div>

@@ -59,6 +59,12 @@ const Login = () => {
     }
   };
 
+  // Function to set userRole after login
+  const setUserRole = () => {
+    const userRole = hasReportees ? 'manager' : 'employee';
+    localStorage.setItem('userRole', userRole);
+  };
+
   return (
     <div className="login-container">
       <h2>Login</h2>
@@ -73,7 +79,7 @@ const Login = () => {
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </label>
         <br />
-        <button type="button" onClick={handleLogin}>
+        <button type="button" onClick={() => { handleLogin(); setUserRole(); }}>
           Submit
         </button>
       </form>
