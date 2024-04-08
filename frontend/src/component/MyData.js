@@ -121,45 +121,45 @@ const MyData = () => {
       {employeeInfo && (
         <form>
           <div className="form-group">
-            <label>Name:</label>
+            <label htmlFor='employee_name'>Name:</label>
             <input type="text" name="employee_name" value={editedInfo.employee_name} readOnly={!isEditable}
                    onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>
           <div className="form-group">
-            <label>Designation:</label>
+            <label htmlFor='designation'>Designation:</label>
             <input type="text" name="designation" value={editedInfo.designation} readOnly='true'
                    onChange={handleChange} />
           </div>
           <div className="form-group">
-            <label>Phone Number:</label>
+            <label htmlFor='phone_number'>Phone Number:</label>
             <input type="text" name="phone_number" value={editedInfo.phone_number} readOnly={!isEditable}
                    onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>
           <div className="form-group">
-            <label>Email:</label>
+            <label htmlFor='email'>Email:</label>
             <input type="email" name="email" value={editedInfo.email} readOnly={!isEditable}
                    onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>
           <div className="form-group">
-            <label>Joining Date:</label>
+            <label htmlFor='joining_date'>Joining Date:</label>
             <input type="text" name="joining_date"
                    value={editedInfo.joining_date ? new Date(editedInfo.joining_date).toISOString().split('T')[0] : ''}
                    readOnly='true' onChange={handleChange} />
           </div>
           <div className="form-group">
-            <label>Address:</label>
+            <label htmlFor='address'>Address:</label>
             <input type="text" name="address" value={editedInfo.address} readOnly={!isEditable}
                    onChange={handleChange} style={{ backgroundColor: isEditable ? 'lightblue' : 'transparent' }} />
           </div>
 
           <div className="form-group">
-            <label>Login name:</label>
+            <label htmlFor='username'>Login name:</label>
             <input type="text" name="username" value={editedInfo.username} readOnly='true'
                    onChange={handleChange} />
           </div>
 
           <div className="form-group">
-            <label>Password:</label>
+            <label htmlFor='password'>Password:</label>
             <input
               type="password"
               name="password"

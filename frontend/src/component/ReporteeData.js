@@ -96,12 +96,10 @@ const ReporteeData = () => {
               <td>{employee.phone_number}</td>
               <td>{employee.email}</td>
               <td>
-                {timeSheetSummaries[employee.employee_id] &&
-                  timeSheetSummaries[employee.employee_id]['Total Working Hours']}
+                {timeSheetSummaries[employee.employee_id]?.['Total Working Hours']}
               </td>
               <td>
-                {timeSheetSummaries[employee.employee_id] &&
-                  timeSheetSummaries[employee.employee_id]['Total Leaves']}
+                {timeSheetSummaries[employee.employee_id]?.['Total Leaves']}
               </td>
               <td>
                 <button onClick={() => handleEdit(employee.employee_id)}>Edit</button>

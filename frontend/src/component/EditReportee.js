@@ -102,7 +102,7 @@ const EditReportee = () => {
       {employeeInfo && (
         <form>
           <div className="form-group">
-            <label>Name:</label>
+            <label htmlFor='employee_name'>Name:</label>
             <input 
               type="text" 
               name="employee_name" 
@@ -113,7 +113,7 @@ const EditReportee = () => {
             />
           </div>
           <div className="form-group">
-            <label>Designation:</label>
+            <label htmlFor='designation'>Designation:</label>
             <input 
               type="text" 
               name="designation" 
@@ -124,7 +124,7 @@ const EditReportee = () => {
             />
           </div>
           <div className="form-group">
-            <label>Phone Number:</label>
+            <label htmlFor='phone_number'>Phone Number:</label>
             <input 
               type="text" 
               name="phone_number" 
@@ -135,7 +135,7 @@ const EditReportee = () => {
             />
           </div>
           <div className="form-group">
-            <label>Email:</label>
+            <label htmlFor='email'>Email:</label>
             <input 
               type="email" 
               name="email" 
@@ -146,7 +146,7 @@ const EditReportee = () => {
             />
           </div>
           <div className="form-group">
-            <label>Joining Date:</label>
+            <label htmlFor='joining_date'>Joining Date:</label>
             <input 
               type="text" 
               name="joining_date" 
@@ -157,7 +157,7 @@ const EditReportee = () => {
             />
           </div>
           <div className="form-group">
-            <label>Address:</label>
+            <label htmlFor='address'>Address:</label>
             <input 
               type="text" 
               name="address" 
@@ -168,7 +168,7 @@ const EditReportee = () => {
             />
           </div>
           <div className="form-group">
-            <label>Login Name:</label>
+            <label htmlFor='username'>Login Name:</label>
             <input 
               type="text" 
               name="username" 
@@ -179,7 +179,7 @@ const EditReportee = () => {
             />
           </div>
           <div className="form-group">
-            <label>Password:</label>
+            <label htmlFor='password'>Password:</label>
             <input
               type="password"
               name="password"

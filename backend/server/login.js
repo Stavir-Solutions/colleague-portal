@@ -2,8 +2,8 @@ const { v4: uuidv4 } = require('uuid');
 const express = require('./parent.js');
 const dbConnectionPool = require('./db.js');
 const loginAPIs = express.Router();
-var PropertiesReader = require('properties-reader');
-var properties = PropertiesReader('config/app.properties');
+const PropertiesReader = require('properties-reader');
+const properties = PropertiesReader('config/app.properties');
 
 // Function to update the token in the database
 async function updateTokenInDatabase(username, newToken) {

@@ -65,17 +65,17 @@ const ReporteeTimeSheet = () => {
     <div>
       <h3>Reportee Time Sheet</h3>
       <div style={{ marginRight: '300px', display: 'flex', alignItems: 'center' }}>
-        <label>Year:</label>
-        <select value={year} onChange={(e) => setYear(e.target.value)} >
+        <label htmlFor='year'>Year:</label>
+        <select value={year} onChange={(e) => setYear(e.target.value)} name='year'>
           <option value="">Select Year</option>
           {Array.from({ length: 3 }, (_, index) => 2023 + index).map((y) => (
             <option key={y} value={y}>{y}</option>
           ))}
         </select>
        
-        <label>Month:</label>
+        <label htmlFor='month'>Month:</label>
       
-        <select value={month} onChange={(e) => setMonth(e.target.value)} >
+        <select value={month} onChange={(e) => setMonth(e.target.value)} name='month'>
           <option value="">Select Month</option>
           {['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'].map((m) => (
             <option key={m} value={m}>{m}</option>
