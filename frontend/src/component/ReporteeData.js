@@ -70,7 +70,6 @@ const ReporteeData = () => {
 
     fetchData();
   }, []);
-
   const handleEdit = (employeeId) => {
     console.log("navigating to editreportee employeeId", employeeId)
     navigate(`/editreportee/${employeeId}`); 

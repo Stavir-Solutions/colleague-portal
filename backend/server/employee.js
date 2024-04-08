@@ -103,7 +103,6 @@ employeeAPIs.get('/:employee_id', async (req, res) => {
 employeeAPIs.put('/:employee_id', async (req, res) => {
     const employeeId = req.params.employee_id;
     console.log('Updating employee data', employeeId);
-    
     const {
         employee_name,
         designation,

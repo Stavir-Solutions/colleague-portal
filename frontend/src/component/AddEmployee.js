@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './AddEmployee.css';
 import { useNavigate } from 'react-router-dom';
-import BASE_URL from './Constants';;
+import BASE_URL from './Constants';
 
 const AddEmployee = () => {
   const navigate = useNavigate();
@@ -67,15 +67,12 @@ const AddEmployee = () => {
       console.error('Error during employee addition:', error.message);
     }
   };
-
   const goBack = () => {
     const previousRoute = localStorage.getItem('previousRoute');
     navigate(previousRoute || '/managerview');
   };
-
   return (
     <div className="container">
-      <button className="back-button" onClick={goBack}>Back</button>
       <h2 className="heading">Enter Employee Details</h2>
       <form onSubmit={handleSubmit} className="form">
         <div className="form-group">
@@ -90,36 +87,30 @@ const AddEmployee = () => {
           </label>
           <input type="text" name="designation" value={employeeData.designation || ''} onChange={handleInputChange} className="input" />
         </div>
-
         <div className="form-group">
           <label className="label">
             Phone Number <sup>*</sup>:
           </label>
           <input type="tel" name="phone_number" value={employeeData.phone_number} onChange={handleInputChange} className="input" required />
         </div>
-
         <div className="form-group">
           <label className="label">
             Email <sup>*</sup>:
           </label>
           <input type="email" name="email" value={employeeData.email} onChange={handleInputChange} className="input" required />
         </div>
-
         <div className="form-group">
           <label className="label">
             Joining Date:
           </label>
           <input type="date" name="joining_date" value={employeeData.joining_date || ''} onChange={handleInputChange} className="input" />
         </div>
-
         <div className="form-group">
           <label className="label">
             Leaving Date:
           </label>
           <input type="date" name="leaving_date" value={employeeData.leaving_date || ''} onChange={handleInputChange} className="input" />
         </div>
-
-
         <div className="form-group">
           <label className="label">
             Address:
@@ -144,7 +135,6 @@ const AddEmployee = () => {
           />
           {usernameError && <p className="error-message">{usernameError}</p>}
         </div>
-
         <div className="form-group">
           <label className="label">
             Password:
@@ -157,10 +147,11 @@ const AddEmployee = () => {
             className="input"
           />
         </div>
-
-        <button type="submit" className="button">Save Employee</button>
+        <div className="button-container">
+          <button className="back-button" onClick={goBack}>Back</button>
+          <button type="submit" className="button">Save Employee</button>
+        </div>
       </form>
-
       {successModal && (
         <div className="modal">
           <div className="modal-content">
