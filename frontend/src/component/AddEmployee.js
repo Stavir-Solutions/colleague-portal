@@ -76,43 +76,43 @@ const AddEmployee = () => {
       <h2 className="heading">Enter Employee Details</h2>
       <form onSubmit={handleSubmit} className="form">
         <div className="form-group">
-          <label className="label">
+          <label htmlFor='employee_name' className="label">
             Name <sup>*</sup>:
           </label>
           <input type="text" name="employee_name" value={employeeData.employee_name} onChange={handleInputChange} className="input" required />
         </div>
         <div className="form-group">
-          <label className="label">
+          <label htmlFor='designation' className="label">
             Designation:
           </label>
           <input type="text" name="designation" value={employeeData.designation || ''} onChange={handleInputChange} className="input" />
         </div>
         <div className="form-group">
-          <label className="label">
+          <label htmlFor='phone_number' className="label">
             Phone Number <sup>*</sup>:
           </label>
           <input type="tel" name="phone_number" value={employeeData.phone_number} onChange={handleInputChange} className="input" required />
         </div>
         <div className="form-group">
-          <label className="label">
+          <label htmlFor='email' className="label">
             Email <sup>*</sup>:
           </label>
           <input type="email" name="email" value={employeeData.email} onChange={handleInputChange} className="input" required />
         </div>
         <div className="form-group">
-          <label className="label">
+          <label htmlFor='joining_date' className="label">
             Joining Date:
           </label>
           <input type="date" name="joining_date" value={employeeData.joining_date || ''} onChange={handleInputChange} className="input" />
         </div>
         <div className="form-group">
-          <label className="label">
+          <label htmlFor='leaving_date' className="label">
             Leaving Date:
           </label>
           <input type="date" name="leaving_date" value={employeeData.leaving_date || ''} onChange={handleInputChange} className="input" />
         </div>
         <div className="form-group">
-          <label className="label">
+          <label htmlFor='address' className="label">
             Address:
           </label>
           <textarea
@@ -123,7 +123,7 @@ const AddEmployee = () => {
           />
         </div>
         <div className="form-group">
-          <label className="label">
+          <label htmlFor='username' className="label">
             Login name:
           </label>
           <input
@@ -136,7 +136,7 @@ const AddEmployee = () => {
           {usernameError && <p className="error-message">{usernameError}</p>}
         </div>
         <div className="form-group">
-          <label className="label">
+          <label htmlFor='password' className="label">
             Password:
           </label>
           <input

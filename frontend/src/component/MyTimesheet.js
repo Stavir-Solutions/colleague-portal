@@ -42,10 +42,11 @@ const MyTimesheet = () => {
   return (
     <div className="time-sheet-container">
       <div className="dropdowns">
-        <label>Select Year:</label>
+        <label htmlFor='year'>Select Year:</label>
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+          name='year'
         >
           <option value={2023}>2023</option>
           <option value={2024}>2024</option>
@@ -54,10 +55,11 @@ const MyTimesheet = () => {
           <option value={2027}>2027</option>
           <option value={2028}>2028</option>
         </select>
-        <label style={{ whiteSpace: 'nowrap' }}>Select Month:</label>
+        <label style={{ whiteSpace: 'nowrap' }} htmlFor='month'>Select Month:</label>
         <select
           value={selectedMonth}
           onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+          name='month'
         >
           <option value={1}>January</option>
           <option value={2}>February</option>

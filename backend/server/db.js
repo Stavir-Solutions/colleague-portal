@@ -1,6 +1,6 @@
 const mysql = require('mysql2/promise'); // Use the promise-based version of mysql2
-var PropertiesReader = require('properties-reader');
-var properties = PropertiesReader('config/app.properties');
+const PropertiesReader = require('properties-reader');
+const properties = PropertiesReader('config/app.properties');
 
 // Create a connection pool
 const dbConnectionPool = mysql.createPool({

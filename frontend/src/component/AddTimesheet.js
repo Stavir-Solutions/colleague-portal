@@ -78,7 +78,7 @@ const AddTimesheet = () => {
     <div className="add-timesheet-container">
       <h2>Add Timesheet Entry</h2>
       <form className="add-timesheet-form" onSubmit={handleSubmit}>
-        <label className="add-timesheet-label">Select Date:</label>
+        <label htmlFor="dateInput" className="add-timesheet-label">Select Date:</label>
         <input
           type="date"
           value={date}
@@ -87,13 +87,15 @@ const AddTimesheet = () => {
           required
           min={minDate}
           max={maxDate}
+          name="dateInput"
         />
-        <label className="add-timesheet-label">Total Hours Worked:</label>
+        <label htmlFor="hoursWorked" className="add-timesheet-label">Total Hours Worked:</label>
         <select
           value={hoursWorked}
           onChange={(e) => setHoursWorked(parseInt(e.target.value))}
           className="add-timesheet-input"
           required
+          name="hoursWorked"
         >
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((hours) => (
             <option key={hours} value={hours}>
@@ -101,12 +103,13 @@ const AddTimesheet = () => {
             </option>
           ))}
         </select>
-        <label className="add-timesheet-label">Leave:</label>
+        <label htmlFor="leave" className="add-timesheet-label">Leave:</label>
         <select
           value={leave}
           onChange={(e) => setLeave(parseInt(e.target.value))}
           className="add-timesheet-input"
           required
+          name="leave"
         >
           {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((leaveHours) => (
             <option key={leaveHours} value={leaveHours}>
@@ -114,12 +117,13 @@ const AddTimesheet = () => {
             </option>
           ))}
         </select>
-        <label className="add-timesheet-label">Holiday:</label>
+        <label htmlFor='holiday' className="add-timesheet-label">Holiday:</label>
         <select
           value={holiday}
           onChange={(e) => setHoliday(parseInt(e.target.value))}
           className="add-timesheet-input"
           required
+          name='holiday'
         >
           {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((holidayHours) => (
             <option key={holidayHours} value={holidayHours}>

@@ -1,4 +1,4 @@
-FROM node
+FROM node:21.7.2
 WORKDIR /usr/app
 COPY ./*.js /usr/app
 COPY ./*.json /usr/app

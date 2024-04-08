@@ -1,4 +1,4 @@
-var dbConnectionPool = require('./db.js');
+const dbConnectionPool = require('./db.js');
 const validateToken = async (token) => {
     console.log('Validating token:', token);
     try {

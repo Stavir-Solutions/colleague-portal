@@ -1,8 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
-var dbConnectionPool = require('./db.js');
+const dbConnectionPool = require('./db.js');
 const express = require('./parent.js')
 const { authenticateToken } = require('./tokenValidation');
-var timesheetAPIs = express.Router();
+const timesheetAPIs = express.Router();
 
 // Apply the authentication middleware to all API routes
 timesheetAPIs.use(authenticateToken);
@@ -75,11 +75,9 @@ timesheetAPIs.get('/employees/:employeeId/month/:yearAndMonth', async (req, res)
 
         // Query the database to fetch timesheet data
         const query = `
-    SELECT * FROM emptimesheet
-    WHERE employee_id = ? AND YEAR(date) = ? AND MONTH(date) = ?
-    ORDER BY date
-`;
-
+            SELECT * FROM emptimesheet
+            WHERE employee_id = ? AND YEAR(date) = ? AND MONTH(date) = ?
+        `;
 
         const [results] = await connection.execute(query, [employeeId, year, month]);
 
@@ -125,7 +123,7 @@ timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndM
             JOIN empdata e ON t.employee_id = e.employee_id
             WHERE YEAR(t.date) = ? AND MONTH(t.date) = ?
             AND e.reporting_manager_id = ?
-            ORDER BY e.employee_name,t.date ; -- Sort by date and employee_name
+            ORDER BY t.employee_id, t.date;
         `;
 
         const [timesheetResult] = await connection.execute(fetchTimesheetQuery, [year, month, reporting_manager_id]);
@@ -144,6 +142,7 @@ timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndM
         }
     }
 });
+
 
 
 module.exports = timesheetAPIs;

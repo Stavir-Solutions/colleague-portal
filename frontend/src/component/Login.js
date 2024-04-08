@@ -70,13 +70,11 @@ const Login = () => {
       <h2>Login</h2>
       <form>
         <label>
-          Username:
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+          Username:<input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
         </label>
         <br />
         <label>
-          Password:
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          Password:<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </label>
         <br />
         <button type="button" onClick={() => { handleLogin(); setUserRole(); }}>
