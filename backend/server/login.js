@@ -37,7 +37,7 @@ async function hasReportees(employeeId) {
     connection.release();
 
     const hasReportees = countResults[0].reporteeCount > 0;
-    console.log('Employee ' + employeeId + ' has reportees:' + hasReportees);
+    console.log('Employee ' + employeeId + ' has reportees: ' + hasReportees);
     return hasReportees;
   } catch (error) {
     console.error('Error checking reportees:', error);
@@ -74,8 +74,6 @@ loginAPIs.post('/', async (req, res) => {
       return res.status(401).json({ error: 'Invalid password' });
     }
 
-    // 3. If invalid password, throw error (refer existing code)
-
     // 4. Create token (refer existing code)
     const newToken = uuidv4();
 
@@ -85,13 +83,23 @@ loginAPIs.post('/', async (req, res) => {
     // 6. Get additional employee information
     const hasReporteesValue = await hasReportees(user.employee_id);
 
-    // 7. Return response with additional information
+    // 7. Determine employee type
+    let employeeType = 'colleague'; // Default value
+    if (hasReporteesValue) {
+      employeeType = 'manager';
+    }
+
+    // Log employee type
+    console.log('Employee Type:', employeeType);
+
+    // 8. Return response with additional information
     if (updateSuccess) {
       return res.status(200).json({
         token: newToken,
         employee_id: user.employee_id,
         employee_name: user.employee_name, // Assuming these columns exist in empcred table
         hasReportees: hasReporteesValue,
+        employee_type: employeeType // Adding employee type to response
       });
     } else {
       return res.status(500).json({ error: 'Internal server error' });

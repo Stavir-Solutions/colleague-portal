@@ -117,6 +117,24 @@ timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndM
 
         const [year, month] = yearAndMonth.split('-');
 
+        const fetchEmployeeTypeQuery = `
+            SELECT employee_type FROM empcred WHERE employee_id = ?;
+        `;
+
+        const [employeeTypeResult] = await connection.execute(fetchEmployeeTypeQuery, [reporting_manager_id]);
+
+        if (employeeTypeResult.length === 0) {
+            res.status(404).json({ error: 'Employee type not found' });
+            return;
+        }
+
+        const employeeType = employeeTypeResult[0].employee_type;
+
+        if (employeeType === 'colleague') {
+            res.status(403).json({ error: 'Forbidden: Colleagues are not allowed to access this resource' });
+            return;
+        }
+
         const fetchTimesheetQuery = `
             SELECT t.timesheet_id, t.date, t.working_hours, t.leaves, t.holiday, t.employee_id, e.employee_name
             FROM emptimesheet t
@@ -142,8 +160,6 @@ timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndM
         }
     }
 });
-
-
 
 module.exports = timesheetAPIs;
 

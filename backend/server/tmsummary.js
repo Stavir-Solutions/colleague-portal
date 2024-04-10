@@ -18,13 +18,19 @@ tmsummary.get('/summary', async (req, res) => {
     }
 
     // Check if the employee ID exists
-    const checkEmployeeQuery = 'SELECT COUNT(*) as employeeCount FROM empdata WHERE employee_id = ?';
+    const checkEmployeeQuery = 'SELECT COUNT(*) as employeeCount, employee_type FROM empcred WHERE employee_id = ?';
     const [employeeCheckResult] = await dbConnectionPool.query(checkEmployeeQuery, [employeeId]);
 
     const employeeCount = employeeCheckResult[0].employeeCount;
+    const employeeType = employeeCheckResult[0].employee_type;
 
     if (employeeCount === 0) {
       return res.status(404).json({ error: 'Invalid employee ID' });
+    }
+
+    // If employee type is colleague, return 403
+    if (employeeType === 'colleague') {
+      return res.status(403).json({ error: 'Forbidden: Colleagues are not allowed to access this resource' });
     }
 
     // Check if timesheet entries exist
