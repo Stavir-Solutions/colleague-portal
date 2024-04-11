@@ -4,6 +4,7 @@ const dbConnectionPool = require('./db.js');
 const loginAPIs = express.Router();
 const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader('config/app.properties');
+const hashGenerator = require('./hashGenerator.js');
 
 // Function to update the token in the database
 async function updateTokenInDatabase(username, newToken) {
@@ -68,9 +69,11 @@ loginAPIs.post('/', async (req, res) => {
     }
 
     const user = results[0];
+    const hashedPassword = await hashGenerator.generate_sha_hash(password);
+    console.log("hashed password: " + hashedPassword);
 
     // 2. Validate if the password is correct
-    if (user.password !== password) {
+    if (user.password !== hashedPassword) {
       return res.status(401).json({ error: 'Invalid password' });
     }
 
