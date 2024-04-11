@@ -26,6 +26,7 @@ const validateToken = async (token) => {
         throw error;
     }
 };
+
 const authenticateToken = async (req, res, next) => {
     const token = req.header('Authorization');
 
@@ -51,4 +52,16 @@ const authenticateToken = async (req, res, next) => {
     }
 };
 
+
+const isSameUser = async (employee_id, token) => {
+
+
+    try {
+        //Check if the token belongs to the same user by querying employeecred table
+        //If yes return true, else return false
+    } catch (error) {
+        console.error('Error validating token:', error);
+        throw error;
+    }
+};
 module.exports = { authenticateToken };

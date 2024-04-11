@@ -100,9 +100,13 @@ timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndM
     const { reporting_manager_id, yearAndMonth } = req.params;
     let connection;
 
+    if(!isSameUser(reporting_manager_id, req.header('Authorization'))){
+        console.log("Unauthorized access - reporting manager id passed is not of the user who logged in");
+        //TODO DEvireturn 403 forbidden
+    }
+
     try {
         connection = await dbConnectionPool.getConnection();
-
         const managerResult = await connection.execute('SELECT * FROM empdata WHERE BINARY employee_id = ?', [reporting_manager_id]);
 
         if (managerResult.length === 0) {
