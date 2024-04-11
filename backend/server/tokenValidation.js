@@ -1,4 +1,5 @@
 const dbConnectionPool = require('./db.js');
+
 const validateToken = async (token) => {
     console.log('Validating token:', token);
     try {
@@ -26,6 +27,7 @@ const validateToken = async (token) => {
         throw error;
     }
 };
+
 const authenticateToken = async (req, res, next) => {
     const token = req.header('Authorization');
 
@@ -51,4 +53,32 @@ const authenticateToken = async (req, res, next) => {
     }
 };
 
-module.exports = { authenticateToken };
+const isSameUser = async (employee_id, token) => {
+    try {
+        console.log('Checking if same user:', employee_id, token);
+        const connection = await dbConnectionPool.getConnection();
+        const query = 'SELECT employee_id FROM empcred WHERE token = ?';
+        const [results] = await connection.execute(query, [token]);
+        connection.release();
+
+        if (results.length === 0) {
+            // Token not found in the empcred table
+            console.log('Token not found in database');
+            return false;
+        }
+
+        const tokenEmployeeId = results[0].employee_id;
+
+        // Compare the token's employee_id with the provided employee_id
+        const sameUser = tokenEmployeeId === employee_id;
+
+        console.log('Same user:', sameUser);
+        return sameUser;
+
+    } catch (error) {
+        console.error('Error checking if same user:', error);
+        throw error;
+    }
+};
+
+module.exports = { authenticateToken, isSameUser };

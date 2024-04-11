@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const dbConnectionPool = require('./db.js');
 const express = require('./parent.js')
-const { authenticateToken } = require('./tokenValidation');
+const { authenticateToken, isSameUser } = require('./tokenValidation'); 
 const timesheetAPIs = express.Router();
 
 // Apply the authentication middleware to all API routes
@@ -101,8 +101,14 @@ timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndM
     let connection;
 
     try {
-        connection = await dbConnectionPool.getConnection();
+        const sameUser = await isSameUser(reporting_manager_id, req.header('Authorization'));
+        if (!sameUser) {
+            console.log("Unauthorized access - reporting manager id passed is not of the user who logged in");
+            res.status(403).json({ error: 'Unauthorized access' });
+            return;
+        }
 
+        connection = await dbConnectionPool.getConnection();
         const managerResult = await connection.execute('SELECT * FROM empdata WHERE BINARY employee_id = ?', [reporting_manager_id]);
 
         if (managerResult.length === 0) {
@@ -143,8 +149,4 @@ timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndM
     }
 });
 
-
-
 module.exports = timesheetAPIs;
-
-
