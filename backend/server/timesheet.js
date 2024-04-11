@@ -101,7 +101,8 @@ timesheetAPIs.get('/employees/:reporting_manager_id/subordinates/month/:yearAndM
     let connection;
 
     try {
-        if (!isSameUser(reporting_manager_id, req.header('Authorization'))) {
+        const sameUser = await isSameUser(reporting_manager_id, req.header('Authorization'));
+        if (!sameUser) {
             console.log("Unauthorized access - reporting manager id passed is not of the user who logged in");
             res.status(403).json({ error: 'Unauthorized access' });
             return;
