@@ -3,6 +3,7 @@ const dbConnectionPool = require('./db.js');
 const express = require('./parent.js');
 const { authenticateToken } = require('./tokenValidation');
 const employeeAPIs = express.Router();
+const hashGenerator = require('./hashGenerator.js');
 
 
 // Apply token authentication middleware to all employee APIs
@@ -42,12 +43,15 @@ employeeAPIs.post("/", async (req, res) => {
 
         await connection.execute(empDataQuery.text, empDataQuery.values);
 
+        const hashedPassword = await hashGenerator.generate_sha_hash(empData.password);
+        console.log("hashed password: " + hashedPassword);
+
         // Insert data into the "empcred" table
         const empCredQuery = {
             text: 'INSERT INTO empcred(username, password, employee_id) VALUES(?, ?, ?)',
             values: [
                 empData.username,
-                empData.password,
+                hashedPassword,
                 employee_id
             ],
         };
@@ -145,12 +149,14 @@ employeeAPIs.put('/:employee_id', async (req, res) => {
 
         // Update empcred table if password is provided
         if (password) {
+            const hashedPassword = await hashGenerator.generate_sha_hash(password);
+            console.log("hashed password: " + hashedPassword);
             const empCredQuery = `
                 UPDATE empcred 
                 SET password = ?
                 WHERE employee_id = ?
             `;
-            await connection.query(empCredQuery, [password, employeeId]);
+            await connection.query(empCredQuery, [hashedPassword, employeeId]);
         }
 
         connection.release(); // Release the connection back to the pool
