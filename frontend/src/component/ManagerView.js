@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import './ManagerView.css'; // styling
+import './ManagerView.css'; 
 import ReporteeTimeSheet from './ReporteeTimeSheet';
 import MyData from './MyData';
 import MyTimesheet from './MyTimesheet';
-import ReporteeData from './ReporteeData'; // Modified: Added ReporteeData
+import ReporteeData from './ReporteeData'; 
+import BASE_URL from './Constants';
 
 const ManagerView = () => {
-  const [activeTab, setActiveTab] = useState(null); // Initialize activeTab to null
+  const [activeTab, setActiveTab] = useState(null); 
   const [authToken, setAuthToken] = useState('');
-
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // State to control the success modal
+  const [showSuccessModal, setShowSuccessModal] = useState(false); 
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
@@ -18,58 +18,65 @@ const ManagerView = () => {
     }
   }, []);
 
-
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    setAuthToken('');
-    setShowSuccessModal(true);
-    setTimeout(() => {
-      setShowSuccessModal(false); // Hide success modal after 2 seconds
-      window.location.replace('/login');
-    }, 2000);
-  };
-
+  const handleLogout = async () => {
+    try {
+      localStorage.removeItem('token');
+      setAuthToken('');
+      setShowSuccessModal(true); 
+      setTimeout(() => {
+        setShowSuccessModal(false); 
+        window.location.replace('/login');
+      }, 2000);
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  }
+  
   return (
     <div className="managerview-container">
-      <h2>Welcome {localStorage.getItem('employee_name')}</h2>
       <div className="logout-btn">
         <button onClick={handleLogout}>Logout</button>
       </div>
-      <div className="tabs">
-        <button
-          className={activeTab === 'myTimeSheet' ? 'active' : ''}
-          onClick={() => handleTabChange('myTimeSheet')}
-        >
-          My Time Sheet
-        </button>
-        <button
-          className={activeTab === 'myData' ? 'active' : ''}
-          onClick={() => handleTabChange('myData')}
-        >
-          My Data
-        </button>
-        <button
-          className={activeTab === 'reporteeData' ? 'active' : ''}
-          onClick={() => handleTabChange('reporteeData')}
-        >
-          Reportee Data
-        </button>
-        <button
-          className={activeTab === 'reportingTimeSheet' ? 'active' : ''}
-          onClick={() => handleTabChange('reportingTimeSheet')}
-        >
-          Reportee Time Sheet
-        </button>
+      <br></br>
+      <br></br>
+      <div className="tabs-container">
+        <div className="tabs">
+          <button
+            className={activeTab === 'myTimeSheet' ? 'active' : ''}
+            onClick={() => handleTabChange('myTimeSheet')}
+          >
+            My Time Sheet
+          </button>
+          <button
+            className={activeTab === 'myData' ? 'active' : ''}
+            onClick={() => handleTabChange('myData')}
+          >
+            My Data
+          </button>
+          <button
+            className={activeTab === 'reporteeData' ? 'active' : ''}
+            onClick={() => handleTabChange('reporteeData')}
+          >
+            Reportee Data
+          </button>
+          <button
+            className={activeTab === 'reportingTimeSheet' ? 'active' : ''}
+            onClick={() => handleTabChange('reportingTimeSheet')}
+          >
+            Reportee Time Sheet
+          </button>
+        </div>
       </div>
+      <h2>Welcome {localStorage.getItem('employee_name')}</h2>
       <div className="tab-content">
         {activeTab && (
           <>
             {activeTab === 'myData' && <MyData />}
-            {activeTab === 'reporteeData' && <ReporteeData authToken={authToken} />} {/* Modified: Render ReporteeData */}
+            {activeTab === 'reporteeData' && <ReporteeData authToken={authToken} />}
             {activeTab === 'reportingTimeSheet' && <ReporteeTimeSheet />}
             {activeTab === 'myTimeSheet' && <MyTimesheet />}
           </>
