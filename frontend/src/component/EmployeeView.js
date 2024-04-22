@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import './EmployeeView.css'; // Import styling
 import MyData from './MyData';
 import MyTimesheet from './MyTimesheet';
-import BASE_URL from './Constants'
+/*import BASE_URL from './Constants'*/
+/*will be used in next pr*/
 const storedEmployeeName = localStorage.getItem('employee_name');
 
 const EmployeeView = () => {
