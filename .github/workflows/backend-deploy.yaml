@@ -40,6 +40,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    needs: check-code
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
