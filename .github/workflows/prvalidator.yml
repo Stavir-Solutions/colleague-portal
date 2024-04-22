@@ -25,10 +25,15 @@ jobs:
         
       
 
-      # Frontend Tests
+      # install fontend dependencies
       - name: Install Frontend Dependencies
         working-directory: frontend
         run: npm install
+
+      # install fontend dependencies
+      - name: Build Frontend
+        working-directory: frontend
+        run: npm run build
 
       
 
