@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import './EmployeeView.css'; // Import styling
+import './EmployeeView.css';
 import MyData from './MyData';
 import MyTimesheet from './MyTimesheet';
-/*import BASE_URL from './Constants'*/
-/*will be used in next pr*/
+
 const storedEmployeeName = localStorage.getItem('employee_name');
 
 const EmployeeView = () => {
-  const [activeTab, setActiveTab] = useState(null); // Initialize activeTab to null
+  const [activeTab, setActiveTab] = useState(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -15,42 +15,58 @@ const EmployeeView = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    setShowSuccessModal(true);
     setTimeout(() => {
+      setShowSuccessModal(false);
       window.location.replace('/login');
     }, 2000);
   };
 
   return (
-    <div className="employeeview-container">
-      
+    <div>
       <div className="logout-btn">
+        <div className="welcome-message">
+          <h2>{storedEmployeeName}</h2>
+        </div>
         <button onClick={handleLogout}>Logout</button>
       </div>
-      <div className="tabs">
-        <button
-          className={activeTab === 'myTimeSheet' ? 'active' : ''}
-          onClick={() => handleTabChange('myTimeSheet')}
-        >
-          My Time Sheet
-        </button>
-        <button
-          className={activeTab === 'myData' ? 'active' : ''}
-          onClick={() => handleTabChange('myData')}
-        >
-          My Data
-        </button>
+      <br />
+      <br />
+      <br />
+      <div className="employeeview-container">
+        <div className="tabs">
+          <button
+            className={activeTab === 'myTimeSheet' ? 'active' : ''}
+            onClick={() => handleTabChange('myTimeSheet')}
+          >
+            My Time Sheet
+          </button>
+          <button
+            className={activeTab === 'myData' ? 'active' : ''}
+            onClick={() => handleTabChange('myData')}
+          >
+            My Data
+          </button>
+        </div>
+        <div className="tab-content">
+          {activeTab && (
+            <>
+              {activeTab === 'myData' && <MyData />}
+              {activeTab === 'myTimeSheet' && <MyTimesheet />}
+            </>
+          )}
+        </div>
       </div>
-      <div className="tab-content">
-      <h2>Welcome {storedEmployeeName}</h2>
-        {activeTab && (
-          <>
-            {activeTab === 'myData' && <MyData />}
-            {activeTab === 'myTimeSheet' && <MyTimesheet />}
-          </>
-        )}
-      </div>
+      {showSuccessModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close">&times;</span>
+            <p>You have Successfully logged out..Redirecting to login page...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default EmployeeView;

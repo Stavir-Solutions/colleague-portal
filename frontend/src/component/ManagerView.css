@@ -74,3 +74,15 @@ button.active {
   text-decoration: none;
   cursor: pointer;
 }
+
+
+.logout-btn {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  
+}
+
+.welcome-message {
+  margin-right: 10px;
+}

@@ -5,7 +5,7 @@ import BASE_URL from './Constants';
 
 const AddTimesheet = () => {
   const [date, setDate] = useState('');
-  const [hoursWorked, setHoursWorked] = useState(1);
+  const [hoursWorked, setHoursWorked] = useState(0);
   const [leave, setLeave] = useState(0);
   const [holiday, setHoliday] = useState(0);
   const [successMessage, setSuccessMessage] = useState('');
@@ -39,7 +39,7 @@ const AddTimesheet = () => {
         setSuccessMessage('Timesheet saved successfully.');
 
         setDate('');
-        setHoursWorked(1);
+        setHoursWorked(0);
         setLeave(0);
         setHoliday(0);
 
@@ -58,15 +58,8 @@ const AddTimesheet = () => {
   };
 
   const goBack = () => {
-    const userRole = localStorage.getItem('userRole'); // Assuming you store the user's role in localStorage
-  
-    if (userRole === 'employee') {
-      navigate('/employeeview');
-    } else if (userRole === 'manager') {
-      navigate('/managerview');
-    }
-  };
-  
+    navigate(-1); // Navigate back to the previous route
+};
 
   const currentDate = new Date();
   const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -97,7 +90,7 @@ const AddTimesheet = () => {
           required
           name="hoursWorked"
         >
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((hours) => (
+          {[0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((hours) => (
             <option key={hours} value={hours}>
               {hours}
             </option>
