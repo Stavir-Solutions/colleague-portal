@@ -4,9 +4,7 @@ import ReporteeTimeSheet from './ReporteeTimeSheet';
 import MyData from './MyData';
 import MyTimesheet from './MyTimesheet';
 import ReporteeData from './ReporteeData'; 
-
-/*import BASE_URL from './Constants';*/
-
+import BASE_URL from './Constants';
 
 const ManagerView = () => {
   const [activeTab, setActiveTab] = useState(null); 
@@ -26,13 +24,27 @@ const ManagerView = () => {
 
   const handleLogout = async () => {
     try {
-      localStorage.removeItem('token');
-      setAuthToken('');
-      setShowSuccessModal(true); 
-      setTimeout(() => {
-        setShowSuccessModal(false); 
-        window.location.replace('/login');
-      }, 2000);
+      // Make API call to logout endpoint
+      const employeeId = localStorage.getItem('employee_id');
+      const response = await fetch(`${BASE_URL}/logout/clear-token/${employeeId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: authToken
+        }
+      });
+
+      if (response.ok) {
+        localStorage.removeItem('token');
+        setAuthToken('');
+        setShowSuccessModal(true); 
+        setTimeout(() => {
+          setShowSuccessModal(false); 
+          window.location.replace('/login');
+        }, 2000);
+      } else {
+        console.error('Logout failed:', response.statusText);
+      }
     } catch (error) {
       console.error('Error during logout:', error);
     }
