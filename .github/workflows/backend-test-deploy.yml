@@ -1,9 +1,12 @@
 name: Backend Deployment for Test
 
 on:
-  push:
-    branches:
-      - main 
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'test'
   workflow_run:
     workflows: ["Check-code"]
     types:
