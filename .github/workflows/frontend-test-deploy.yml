@@ -1,12 +1,18 @@
 name: Frontend Deployment for Test
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'frontend/**'  # Specify the path to trigger the workflow on changes in the frontend folder
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'test'
+  workflow_run:
+    workflows: ["Check-code"]
+    types:
+      - completed
 
+      
 jobs:
   build-and-deploy-frontend:
     runs-on: ubuntu-latest
