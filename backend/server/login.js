@@ -6,7 +6,6 @@ const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader('config/app.properties');
 const hashGenerator = require('./hashGenerator.js');
 
-// Function to update the token in the database
 async function updateTokenInDatabase(username, newToken) {
   try {
     const connection = await dbConnectionPool.getConnection();
@@ -15,10 +14,8 @@ async function updateTokenInDatabase(username, newToken) {
       text: 'UPDATE empcred SET token = ?, expiryTime = NOW() + INTERVAL ' + validityDuration + ' HOUR WHERE username = ?',
       values: [newToken, username],
     };
-    console.log("saved new token " + newToken );
     const [updateResults] = await connection.execute(updateQuery.text, updateQuery.values);
     connection.release();
-
     return updateResults.affectedRows > 0;
   } catch (error) {
     console.error('Error updating token in the database:', error);
@@ -26,7 +23,6 @@ async function updateTokenInDatabase(username, newToken) {
   }
 }
 
-// Function to check if the employee has reportees
 async function hasReportees(employeeId) {
   try {
     const connection = await dbConnectionPool.getConnection();
@@ -36,9 +32,7 @@ async function hasReportees(employeeId) {
     };
     const [countResults] = await connection.execute(countQuery.text, countQuery.values);
     connection.release();
-
     const hasReportees = countResults[0].reporteeCount > 0;
-    console.log('Employee ' + employeeId + ' has reportees:' + hasReportees);
     return hasReportees;
   } catch (error) {
     console.error('Error checking reportees:', error);
@@ -48,20 +42,13 @@ async function hasReportees(employeeId) {
 
 loginAPIs.post('/', async (req, res) => {
   try {
-    // 1. Get user password
     const { username, password } = req.body;
     const connection = await dbConnectionPool.getConnection();
 
-    // 1.1 Create connection
-    // 1.2 Query db using connection
-    // 1.3 Get data
     const query = {
       text: 'SELECT e.*, ed.employee_name FROM empcred e JOIN empdata ed ON e.employee_id = ed.employee_id WHERE e.username = ?',
       values: [username],
     };
-
-    console.log(query.text);
-    console.log(query.values);
     const [results] = await connection.execute(query.text, query.values);
 
     if (results.length === 0) {
@@ -70,30 +57,20 @@ loginAPIs.post('/', async (req, res) => {
 
     const user = results[0];
     const hashedPassword = await hashGenerator.generate_sha_hash(password);
-    console.log("hashed password: " + hashedPassword);
 
-    // 2. Validate if the password is correct
     if (user.password !== hashedPassword) {
       return res.status(401).json({ error: 'Invalid password' });
     }
 
-    // 3. If invalid password, throw error (refer existing code)
-
-    // 4. Create token (refer existing code)
     const newToken = uuidv4();
-
-    // 5. Save token to db
     const updateSuccess = await updateTokenInDatabase(username, newToken);
-
-    // 6. Get additional employee information
     const hasReporteesValue = await hasReportees(user.employee_id);
 
-    // 7. Return response with additional information
     if (updateSuccess) {
       return res.status(200).json({
         token: newToken,
         employee_id: user.employee_id,
-        employee_name: user.employee_name, // Assuming these columns exist in empcred table
+        employee_name: user.employee_name, 
         hasReportees: hasReporteesValue,
       });
     } else {
@@ -105,7 +82,6 @@ loginAPIs.post('/', async (req, res) => {
   }
 });
 
-// Handling invalid request payload
 loginAPIs.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
     return res.status(400).json({ error: 'Invalid request payload' });

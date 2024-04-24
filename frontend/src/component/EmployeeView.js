@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import './EmployeeView.css';
 import MyData from './MyData';
 import MyTimesheet from './MyTimesheet';
+import BASE_URL from './Constants';
 
+const storedEmployeeId = localStorage.getItem('employee_id');
 const storedEmployeeName = localStorage.getItem('employee_name');
 
 const EmployeeView = () => {
@@ -13,13 +15,28 @@ const EmployeeView = () => {
     setActiveTab(tab);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    setShowSuccessModal(true);
-    setTimeout(() => {
-      setShowSuccessModal(false);
-      window.location.replace('/login');
-    }, 2000);
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/logout/clear-token/${storedEmployeeId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        localStorage.removeItem('token');
+        setShowSuccessModal(true);
+        setTimeout(() => {
+          setShowSuccessModal(false);
+          window.location.replace('/login');
+        }, 2000);
+      } else {
+        console.error('Logout failed:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   };
 
   return (
