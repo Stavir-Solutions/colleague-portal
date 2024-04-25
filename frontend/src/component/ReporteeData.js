@@ -25,13 +25,17 @@ const ReporteeData = () => {
 
         if (response.ok) {
           const data = await response.json();
-          setEmployeeData(data);
+          const loggedInEmployeeId = localStorage.getItem('employee_id');
+
+        
+          const filteredData = data.filter(employee => employee.employee_id !== loggedInEmployeeId);
+          setEmployeeData(filteredData);
 
           const currentYear = new Date().getFullYear();
           const currentMonth = new Date().getMonth() + 1;
 
           const summaries = {};
-          for (const employee of data) {
+          for (const employee of filteredData) {
             if (employee.employee_id) {
               const timeSheetResponse = await fetch(
                 `${BASE_URL}/tmsummary/summary?employee-id=${employee.employee_id}&year=${currentYear}&month=${currentMonth}`,
@@ -70,6 +74,7 @@ const ReporteeData = () => {
 
     fetchData();
   }, []);
+
   const handleEdit = (employeeId) => {
     console.log("navigating to editreportee employeeId", employeeId)
     navigate(`/editreportee/${employeeId}`); 
