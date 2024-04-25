@@ -10,7 +10,9 @@ absencesAPIs.use(authenticateToken);
 
 //Get the absences statistcs for a specific employee for a given financial year
 //eg: api/v1/employees/ab1232-34fd/leaves/2025
-absencesAPIs.get('/employees/:id/leaves/:yearEnd', async (req, res) => {
+absencesAPIs.get('/employees/:id/leaves/:endYear', async (req, res) => {
+        const employeeId = req.params.id;
+        const endYear = req.params.endYear;
         //get employee from db by id
         const currentDate = new Date();
         const lastDayOfFinancialYear = getLastDayOfFinancialYear(2025);
@@ -20,7 +22,8 @@ absencesAPIs.get('/employees/:id/leaves/:yearEnd', async (req, res) => {
 
 
         //const leavesTakenThisYear = getTheLeavesTakenFromTimesheet(id, employeeStartDateForTheYear, lastDayOfFinancialYear); //TODO
-        const leavesTakenThisYear = getTheLeavesTakenFromTimesheet("b47d663d-f4ab-491c-a5cf-eda28e4ccbb8", "2024-04-01", "2025-03-31"); //TODO
+        const leavesTakenThisYear = await getTheLeavesTakenFromTimesheet(employeeId, '2024-04-01 00:00:00', '2025-03-31 11:59:59'); //TODO
+        
         const remainingLeaves = leavesEligibleThisYear - leavesTakenThisYear
         const proratedLeavesAsOfToday = calculateLeavesEligibleForDays(currentDate - employeeStartDateForTheYear);
         const overUsedAsOfToday = leavesTakenThisYear>proratedLeavesAsOfToday; 
@@ -33,15 +36,16 @@ absencesAPIs.get('/employees/:id/leaves/:yearEnd', async (req, res) => {
 
 
 async function getTheLeavesTakenFromTimesheet(employeeId, startDate, endDate) {
+    console.log("get absences of employee " + employeeId + " from " + startDate + " to " + endDate);
     try {
         const query = `
             SELECT SUM(leaves) AS totalLeaves
             FROM emptimesheet
             WHERE employee_id = ? AND date BETWEEN ? AND ?
         `;      
-        const result = await dbConnectionPool.query(query, [employeeId, 2024, 2025]); 
-        const totalLeavesTaken = result[0].totalLeaves || 0;
-        
+        const result = await dbConnectionPool.query(query, [employeeId, startDate, endDate]); 
+        const totalLeavesTaken = result[0][0].totalLeaves || 0;
+        console.log("leavesTakenThisYear" + totalLeavesTaken);
         return totalLeavesTaken;
     } catch (error) {
         
