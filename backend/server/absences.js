@@ -72,28 +72,40 @@ async function getLastDayOfFinancialYear(yearEnd) {
 
 
 
-async function chooseEmployeeStartDateForTheYear(employeeId) {
+async function chooseEmployeeStartDateForTheYear(employeeId, endYear) {
+    var employeeStartDateForTheYear = new Date();
     try {
         // Query the joining date of the employee
         const query = `
-            SELECT joining_date
-            FROM empdata
-            WHERE employee_id = ?
+            SELECT DATE_FORMAT(e.joining_date,\'%m-%d-%Y\') AS joining_date
+            FROM empdata e
+            WHERE e.employee_id = ?
         `;
         const result = await dbConnectionPool.query(query, [employeeId]);
-        const joiningDate = result[0].joining_date;
+        console.log("result" + JSON.stringify(result));
+        console.log("result" + result);
+        console.log("result0" + JSON.stringify(result[0]));
+        console.log("result0" + result[0]);
+        console.log("result1" + JSON.stringify(result[1]));
+        console.log("result1" + result[1]);
+
+        const joiningDate = result[1].joining_date;
+        console.log("joiningDate" + joiningDate);
 
         const currentYear = new Date().getFullYear();
-        const aprilFirstCurrentYear = new Date(currentYear, 3, 1); 
+        console.log("currentYear" + currentYear);
+        const aprilFirstOfTheYear = new Date(endYear, 3, 1); 
+        console.log("aprilFirstOfTheYear" + aprilFirstOfTheYear);
 
         
-        if (joiningDate < aprilFirstCurrentYear) {
-            
-            return aprilFirstCurrentYear;
+        if (joiningDate < aprilFirstOfTheYear) {
+            employeeStartDateForTheYear = aprilFirstOfTheYear;
         } else {
-            
-            return joiningDate;
+            employeeStartDateForTheYear = joiningDate;
         }
+        console.log("employeeStartDateForTheYear" + employeeStartDateForTheYear);
+        return employeeStartDateForTheYear;
+
     } catch (error) {
         console.error("Error choosing employee start date for the year:", error);
         throw error;

@@ -10,6 +10,7 @@ const dbConnectionPool = mysql.createPool({
     password: properties.get("db.password"),
     port: properties.get("db.port"),
     connectionLimit: properties.get("db.connectionLimit"), // Adjust the connection limit as needed
+    dateStrings: true,
 
 });
 dbConnectionPool.getConnection()
