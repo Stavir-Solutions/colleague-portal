@@ -3,7 +3,8 @@ import './ManagerView.css';
 import ReporteeTimeSheet from './ReporteeTimeSheet';
 import MyData from './MyData';
 import MyTimesheet from './MyTimesheet';
-import ReporteeData from './ReporteeData'; 
+import ReporteeData from './ReporteeData';
+import ReporteeAbsence from './ReporteeAbsence'; 
 import BASE_URL from './Constants';
 
 const ManagerView = () => {
@@ -48,13 +49,13 @@ const ManagerView = () => {
     } catch (error) {
       console.error('Error during logout:', error);
     }
-  }
+  };
   
   return (
     <div>
       <div className="logout-btn">
         <div className="welcome-message">
-          <h2>{localStorage.getItem('employee_name' )}</h2>
+          <h2>{localStorage.getItem('employee_name')}</h2>
         </div>
         <button onClick={handleLogout}>Logout</button>
       </div>
@@ -89,6 +90,13 @@ const ManagerView = () => {
             >
               Reportee Time Sheet
             </button>
+            
+            <button
+              className={activeTab === 'reporteeAbsence' ? 'active' : ''}
+              onClick={() => handleTabChange('reporteeAbsence')}
+            >
+              Absence Data
+            </button>
           </div>
         </div>
         
@@ -99,6 +107,7 @@ const ManagerView = () => {
               {activeTab === 'reporteeData' && <ReporteeData authToken={authToken} />}
               {activeTab === 'reportingTimeSheet' && <ReporteeTimeSheet />}
               {activeTab === 'myTimeSheet' && <MyTimesheet />}
+              {activeTab === 'ReporteeAbsence' && <ReporteeAbsence />}
             </>
           )}
         </div>
