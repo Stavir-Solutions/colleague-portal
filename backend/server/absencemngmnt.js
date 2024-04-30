@@ -6,15 +6,11 @@ const { authenticateToken } = require('./tokenValidation');
 absencemngmntAPIs.use(authenticateToken);
 
 // Function to calculate the last day of the financial year
-function calculateLastDayOfFinancialYear() {
-    const currentYear = new Date().getFullYear();
-    const nextYear = currentYear + 1;
-
-    // March is month index 2 (0-indexed)
-    return new Date(nextYear, 2, 31); // Last day of March
+function calculateLastDayOfFinancialYear(endYear) {
+    return new Date(endYear, 2, 31); // Last day of March
 }
 
-async function getTheLeavesTakenFromTimesheet(employeeId, startDate, endDate) {
+async function getTheLeavesTakenHoursFromTimesheet(employeeId, startDate, endDate) {
     try {
         console.log(`Fetching leaves taken from timesheet for employee ${employeeId} between ${startDate} and ${endDate}`);
         const query = `
@@ -23,7 +19,7 @@ async function getTheLeavesTakenFromTimesheet(employeeId, startDate, endDate) {
             WHERE employee_id = ? AND date BETWEEN ? AND ?
         `;
         console.log(`Executing SQL query: ${query}`);
-        const result = await db.query(query, [employeeId, startDate.getFullYear(), endDate.getFullYear()]);
+        const result = await db.query(query, [employeeId, startDate, endDate]);
         console.log(`Result from database:`, result);
 
         const totalLeavesTaken = result[0][0].totalLeaves || 0;
@@ -37,15 +33,17 @@ async function getTheLeavesTakenFromTimesheet(employeeId, startDate, endDate) {
 }
 
 // Function to calculate prorated leaves
-function calculateProratedLeaves(employeeStartDateForTheYear) {
-    const currentDate = new Date();
-    const differenceInDays = Math.ceil((currentDate - employeeStartDateForTheYear) / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
-    const proratedLeaves = (12 / 365) * differenceInDays;
+function calculateProratedLeaves(employeeStartDateForTheYear, financialYearEndDate) {
+    
+    const endDate = new Date()<financialYearEndDate? new Date(): financialYearEndDate;
+    const differenceInDays = Math.ceil((endDate - employeeStartDateForTheYear) / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+    console.log(`financialYearEndDate: ${financialYearEndDate}, endDate: ${endDate}, differenceInDays ${differenceInDays}`);
+    const proratedLeaves =  Math.ceil(((12 / 365) * differenceInDays)*8);
     return proratedLeaves;
 }
 
-absencemngmntAPIs.get('/employees/:id/leaves/:yearEnd', async (req, res) => {
-    const { id, yearEnd } = req.params;
+absencemngmntAPIs.get('/employees/:id/leaves/:endYear', async (req, res) => {
+    const { id,  endYear } = req.params;
 
     try {
         console.log(`Fetching joining date for employee ${id}`);
@@ -68,19 +66,24 @@ absencemngmntAPIs.get('/employees/:id/leaves/:yearEnd', async (req, res) => {
         const joiningDate = new Date(result[0][0].joining_date);
         console.log(`Joining date for employee ${id}: ${joiningDate}`);
 
+        // Calculate the start date of the financial year - April 1st of the previous year
+        const  financialYearStartDate = new Date(endYear-1,3,1)
+       
+
         // Function to calculate the start date of the year
         function calculateStartDate(joiningDate) {
             // Ensure joiningDate is a Date object
+            //TODO not needed
             if (!(joiningDate instanceof Date)) {
                 return null;
             }
-            const currentYear = new Date().getFullYear();
             const joiningYear = joiningDate.getFullYear();
+            console.log(`financialYearStartDate  ${financialYearStartDate}, joiningYear ${joiningYear}`);
             // Check if the joining date is before April 1st
-            if (joiningDate.getMonth() < 2 || (joiningDate.getMonth() === 2 && joiningDate.getDate() < 1)) {
-                return new Date(currentYear, 3, 1); // Start date is April 1st of the current year
+            if (joiningYear < financialYearStartDate.getFullYear() || joiningDate.getMonth() < 2 || (joiningDate.getMonth() === 2 && joiningDate.getDate() < 1)) {
+                return new Date(financialYearStartDate.getFullYear(), 3, 1); // Start date is April 1st of the current year
             } else {
-                return new Date(joiningYear, joiningDate.getMonth(), joiningDate.getDate()); // Start date is the joining date
+                return joiningDate; // Start date is the joining date
             }
         }
 
@@ -91,41 +94,41 @@ absencemngmntAPIs.get('/employees/:id/leaves/:yearEnd', async (req, res) => {
             return;
         }
 
-        console.log(`Start date of the year for employee ${id} for year ${yearEnd}: ${startDateOfYear}`);
+        console.log(`Start date of the year for employee ${id} for year ${endYear}: ${startDateOfYear}`);
 
+        const  financialYearEndDate = new Date(endYear,2,31)
         // Calculate last day of financial year
-        const lastDayOfFinancialYear = calculateLastDayOfFinancialYear();
-        console.log(`Last day of the financial year: ${lastDayOfFinancialYear.toISOString().slice(0, 10)}`);
+        console.log(`Last day of the financial year: ${financialYearEndDate.toISOString().slice(0, 10)}`);
 
         // Calculate number of expected working days
-        const numberOfExpectedWorkingDays = Math.ceil((lastDayOfFinancialYear - startDateOfYear) / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+        const numberOfExpectedWorkingDays = Math.ceil((financialYearEndDate - startDateOfYear) / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
 
         // Calculate leaves eligible this year based on the formula
-        const leavesEligibleThisYear = (12 / 365) * numberOfExpectedWorkingDays;
-        console.log(`Leaves eligible this year for employee ${id}: ${leavesEligibleThisYear}`);
+        const leavesHoursEligibleThisYear = Math.ceil((12*8 / 365) * numberOfExpectedWorkingDays);
+        console.log(`Leaves eligible this year for employee ${id}: ${leavesHoursEligibleThisYear}`);
 
         // Calculate leaves taken from timesheet
-        const leavesTakenThisYear = await getTheLeavesTakenFromTimesheet(id, startDateOfYear, lastDayOfFinancialYear);
-        console.log(`Leaves taken this year for employee ${id}: ${leavesTakenThisYear}`);
+        const leaveHoursTakenThisYear = await getTheLeavesTakenHoursFromTimesheet(id, startDateOfYear, financialYearEndDate);
+        console.log(`Leaves taken hours this year for employee ${id}: ${leaveHoursTakenThisYear}`);
 
         // Calculate remaining leaves
-        const remainingLeaves = leavesEligibleThisYear - leavesTakenThisYear;
-        console.log(`Remaining leaves this year for employee ${id}: ${remainingLeaves}`);
+        const remainingLeaveHours = leavesHoursEligibleThisYear - leaveHoursTakenThisYear;
+        console.log(`Remaining leave hours this year for employee ${id}: ${remainingLeaveHours}`);
 
         // Calculate prorated leaves
-        const proratedLeaves = calculateProratedLeaves(startDateOfYear);
+        const proratedLeaves = calculateProratedLeaves(startDateOfYear, financialYearEndDate);
         console.log(`Prorated leaves for employee ${id}: ${proratedLeaves}`);
 
         // Determine if leaves taken this year exceed prorated leaves as of today
-        const overUsedAsOfToday = leavesTakenThisYear > proratedLeaves;
+        const overUsedAsOfToday = leaveHoursTakenThisYear > proratedLeaves;
 
         // Send the response with start date of the year, last day of financial year, leaves eligible this year, leaves taken this year, remaining leaves, prorated leaves, and overUsedAsOfToday
         res.send(
-            `Start date of the year for employee ${id} for year ${yearEnd} is: ${startDateOfYear.toISOString().slice(0, 10)}. 
-            Last day of the financial year is: ${lastDayOfFinancialYear.toISOString().slice(0, 10)}. 
-            Leaves eligible this year: ${leavesEligibleThisYear}.
-            Leaves taken this year: ${leavesTakenThisYear}.
-            Remaining leaves this year: ${remainingLeaves}.
+            `Start date of the year for employee ${id} for year ${endYear} is: ${startDateOfYear.toISOString().slice(0, 10)}. 
+            Last day of the financial year is: ${financialYearEndDate.toISOString().slice(0, 10)}. 
+            Leaves eligible this year: ${leavesHoursEligibleThisYear}.
+            Leaves taken this year: ${leaveHoursTakenThisYear}.
+            Remaining leaves this year: ${remainingLeaveHours}.
             Prorated leaves: ${proratedLeaves}.
             Overused as of today: ${overUsedAsOfToday}`);
     } catch (error) {
