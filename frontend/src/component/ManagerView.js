@@ -4,7 +4,8 @@ import ReporteeTimeSheet from './ReporteeTimeSheet';
 import MyData from './MyData';
 import MyTimesheet from './MyTimesheet';
 import ReporteeData from './ReporteeData';
-import ReporteeAbsence from './ReporteeAbsence'; 
+import ReporteeAbsence from './ReporteeAbsence';
+import AbsenceData from './AbsenceData'; 
 import BASE_URL from './Constants';
 
 const ManagerView = () => {
@@ -25,7 +26,6 @@ const ManagerView = () => {
 
   const handleLogout = async () => {
     try {
-      // Make API call to logout endpoint
       const employeeId = localStorage.getItem('employee_id');
       const response = await fetch(`${BASE_URL}/logout/clear-token/${employeeId}`, {
         method: 'POST',
@@ -90,10 +90,16 @@ const ManagerView = () => {
             >
               Reportee Time Sheet
             </button>
+            <button
+              className={activeTab === 'ReporteeAbsence' ? 'active' : ''}
+              onClick={() => handleTabChange('ReporteeAbsence')}
+            >
+              Reportee Absence Data
+            </button>
             
             <button
-              className={activeTab === 'reporteeAbsence' ? 'active' : ''}
-              onClick={() => handleTabChange('reporteeAbsence')}
+              className={activeTab === 'AbsenceData' ? 'active' : ''}
+              onClick={() => handleTabChange('AbsenceData')}
             >
               Absence Data
             </button>
@@ -108,6 +114,7 @@ const ManagerView = () => {
               {activeTab === 'reportingTimeSheet' && <ReporteeTimeSheet />}
               {activeTab === 'myTimeSheet' && <MyTimesheet />}
               {activeTab === 'ReporteeAbsence' && <ReporteeAbsence />}
+              {activeTab === 'AbsenceData' && <AbsenceData />}
             </>
           )}
         </div>

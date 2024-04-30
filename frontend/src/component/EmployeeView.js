@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './EmployeeView.css';
 import MyData from './MyData';
 import MyTimesheet from './MyTimesheet';
-import AbsenceData from './AbsenceData'; // Import the AbsenceData component from absence.js
+import AbsenceData from './AbsenceData'; 
 import BASE_URL from './Constants';
 
 const storedEmployeeId = localStorage.getItem('employee_id');
@@ -65,10 +65,9 @@ const EmployeeView = () => {
           >
             My Data
           </button>
-          {/* Add the absence tab button */}
           <button
-            className={activeTab === 'absenceData' ? 'active' : ''}
-            onClick={() => handleTabChange('absenceData')}
+            className={activeTab === 'AbsenceData' ? 'active' : ''}
+            onClick={() => handleTabChange('AbsenceData')}
           >
             Absence Data
           </button>
@@ -78,7 +77,7 @@ const EmployeeView = () => {
             <>
               {activeTab === 'myData' && <MyData />}
               {activeTab === 'myTimeSheet' && <MyTimesheet />}
-              {activeTab === 'AbsenceData' && <AbsenceData />} {/* Render AbsenceData component */}
+              {activeTab === 'AbsenceData' && <AbsenceData />} 
             </>
           )}
         </div>
