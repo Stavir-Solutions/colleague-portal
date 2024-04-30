@@ -1,5 +1,5 @@
 // absence.js
-
+/*
 import React, { useState, useEffect } from 'react';
 import BASE_URL from './Constants';
 
@@ -51,3 +51,4 @@ const AbsenceData = () => {
 };
 
 export default AbsenceData;
+*/
