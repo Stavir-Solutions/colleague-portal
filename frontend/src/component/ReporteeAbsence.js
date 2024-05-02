@@ -35,7 +35,7 @@ const ReporteeAbsence = () => {
     const currentYear = calculateYearToFetch();
     setSelectedYear(currentYear); 
     fetchData(currentYear); 
-  }, []);
+  }, [fetchData]); // Rectified dependency array
 
   const fetchAbsenceDataForEmployees = async (employees, year, token) => {
     try {
