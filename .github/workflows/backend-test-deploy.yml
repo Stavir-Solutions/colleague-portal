@@ -51,7 +51,7 @@ jobs:
       - name: ssh to server update code and restart node server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.TEST_HOST_DNS }}
+          host: ${{ github.event.inputs.server_ip }}
           username: ${{ secrets.TEST_USERNAME }}
           key: ${{ secrets.TEST_EC2_SSH_KEY }}
           port: 22
