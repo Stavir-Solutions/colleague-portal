@@ -40,7 +40,7 @@ const ReporteeAbsence = () => {
   const fetchAbsenceDataForEmployees = async (employees, year, token) => {
     try {
       const promises = employees.map(async (employee) => {
-        const response = await fetch(`${BASE_URL}/absencemngmnt/employees/${employee.employee_id}/leaves/${year}`, {
+        const response = await fetch(`${BASE_URL}/absences/employees/${employee.employee_id}/leaves/${year}`, {
           headers: {
             Authorization: token,
           },

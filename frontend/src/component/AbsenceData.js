@@ -29,7 +29,7 @@ const AbsenceData = () => {
     try {
       const token = localStorage.getItem('token');
       const employeeId = localStorage.getItem('employee_id');
-      const response = await fetch(`${BASE_URL}/absencemngmnt/employees/${employeeId}/leaves/${year}`, {
+      const response = await fetch(`${BASE_URL}/absences/employees/${employeeId}/leaves/${year}`, {
         headers: {
           Authorization: token
         }
