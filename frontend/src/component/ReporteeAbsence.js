@@ -4,12 +4,9 @@ import BASE_URL from './Constants';
 const ReporteeAbsence = () => {
   const [employeeData, setEmployeeData] = useState([]);
   const [error, setError] = useState(null);
-  
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const [selectedYear, setSelectedYear] = useState(""); 
 
-  const fetchData = async () => {
+  const fetchData = async (year) => {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`${BASE_URL}/employees`, {
@@ -23,7 +20,7 @@ const ReporteeAbsence = () => {
         const loggedInEmployeeId = localStorage.getItem('employee_id');
         const filteredData = data.filter(employee => employee.employee_id !== loggedInEmployeeId);
         setEmployeeData(filteredData);
-        await fetchAbsenceDataForEmployees(filteredData, token);
+        await fetchAbsenceDataForEmployees(filteredData, year, token); 
       } else {
         console.error('Error fetching employee data:', response.statusText);
         setError('Error fetching employee data');
@@ -34,10 +31,16 @@ const ReporteeAbsence = () => {
     }
   };
 
-  const fetchAbsenceDataForEmployees = async (employees, token) => {
+  useEffect(() => {
+    const currentYear = calculateYearToFetch();
+    setSelectedYear(currentYear); 
+    fetchData(currentYear); 
+  }, []);
+
+  const fetchAbsenceDataForEmployees = async (employees, year, token) => {
     try {
       const promises = employees.map(async (employee) => {
-        const response = await fetch(`${BASE_URL}/absencemngmnt/employees/${employee.employee_id}/leaves/2025`, {
+        const response = await fetch(`${BASE_URL}/absencemngmnt/employees/${employee.employee_id}/leaves/${year}`, {
           headers: {
             Authorization: token,
           },
@@ -58,9 +61,39 @@ const ReporteeAbsence = () => {
     }
   };
 
+  const calculateYearToFetch = () => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    
+    let currentFinancialYear = currentYear;
+    
+    if (currentMonth >= 4 && currentMonth <= 12) {
+      currentFinancialYear = currentYear + 1;
+    }
+
+    return currentFinancialYear;
+  };
+
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value); 
+    fetchData(event.target.value); 
+  };
+
   return (
     <div>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+      <div>
+        <label htmlFor="yearToFetch">Select Year:</label>
+        <select id="yearToFetch" value={selectedYear} onChange={handleYearChange}>
+          <option value={calculateYearToFetch()}>{calculateYearToFetch()}</option>
+          <option value={calculateYearToFetch() - 1}>{calculateYearToFetch() - 1}</option>
+        </select>
+      </div>
+      
+      
+      <div style={{ marginBottom: '20px' }}></div>
+      
       <table>
         <thead>
           <tr>
@@ -102,5 +135,3 @@ const ReporteeAbsence = () => {
 };
 
 export default ReporteeAbsence;
-
-

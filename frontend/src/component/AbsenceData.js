@@ -3,20 +3,33 @@ import BASE_URL from './Constants';
 import './AbsenceData.css';
 
 const AbsenceData = () => {
+  const calculateYearToFetch = () => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    
+    if (currentMonth >= 4 && currentMonth <= 12) {
+      return currentYear + 1;
+    } else {
+      return currentYear;
+    }
+  };
+
   const [totalLeaves, setTotalLeaves] = useState(0);
   const [leavesTaken, setLeavesTaken] = useState(0);
   const [leaveDates, setLeaveDates] = useState([]);
   const [overUsed, setOverUsed] = useState(false);
-  
-  useEffect(() => {
-    fetchAbsenceData();
-  }, []);
+  const [selectedYear, setSelectedYear] = useState(calculateYearToFetch());
 
-  const fetchAbsenceData = async () => {
+  useEffect(() => {
+    fetchAbsenceData(selectedYear);
+  }, [selectedYear]);
+
+  const fetchAbsenceData = async (year) => {
     try {
       const token = localStorage.getItem('token');
       const employeeId = localStorage.getItem('employee_id');
-      const response = await fetch(`${BASE_URL}/absencemngmnt/employees/${employeeId}/leaves/2025`, {
+      const response = await fetch(`${BASE_URL}/absencemngmnt/employees/${employeeId}/leaves/${year}`, {
         headers: {
           Authorization: token
         }
@@ -24,7 +37,6 @@ const AbsenceData = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Response data:', data);
         setTotalLeaves(data.leaves_eligible_this_year);
         setLeavesTaken(data.leaves_taken_this_year);
         setLeaveDates(data.leaves_and_dates);
@@ -37,28 +49,41 @@ const AbsenceData = () => {
     }
   };
 
+  const handleYearChange = (event) => {
+    setSelectedYear(parseInt(event.target.value)); 
+  };
+
   return (
     <div className="absence-data">
       <h2>Absence Data</h2>
-      <div className="data-row">
-        <label htmlFor="totalLeaves">Total Leaves:</label>
-        <input type="text" id="totalLeaves" value={totalLeaves} readOnly />
+      <div>
+        <label htmlFor="yearToFetch">Select Year:</label>
+        <select id="yearToFetch" value={selectedYear} onChange={handleYearChange}>
+          <option value={calculateYearToFetch()}>{calculateYearToFetch()}</option>
+          <option value={calculateYearToFetch() - 1}>{calculateYearToFetch() - 1}</option>
+        </select>
       </div>
-      <div className="data-row">
-        <label htmlFor="leavesTaken">Leaves Taken:</label>
-        <input type="text" id="leavesTaken" value={leavesTaken} readOnly />
-      </div>
-      <div className="data-row">
-        <label htmlFor="leaveDates">Leave Dates:</label>
-        <ul id="leaveDates">
-          {leaveDates.map((item, index) => (
-            <li key={index}>{item.date} - {item.leaves} hours </li>
-          ))}
-        </ul>
-      </div>
-      <div className="data-row">
-        <label htmlFor="overUsed">Overused:</label>
-        <input type="text" id="overUsed" value={overUsed ? 'Yes' : 'No'} readOnly style={{ color: overUsed ? 'orange' : 'green' }} />
+      <div style={{ marginTop: '20px' }}> {/* Add space between dropdown and table */}
+        <div className="data-row">
+          <label htmlFor="totalLeaves">Total Leaves:</label>
+          <input type="text" id="totalLeaves" value={totalLeaves} readOnly />
+        </div>
+        <div className="data-row">
+          <label htmlFor="leavesTaken">Leaves Taken:</label>
+          <input type="text" id="leavesTaken" value={leavesTaken} readOnly />
+        </div>
+        <div className="data-row">
+          <label htmlFor="leaveDates">Leave Dates:</label>
+          <ul id="leaveDates">
+            {leaveDates.map((item, index) => (
+              <li key={index}>{item.date} - {item.leaves} hours </li>
+            ))}
+          </ul>
+        </div>
+        <div className="data-row">
+          <label htmlFor="overUsed">Overused:</label>
+          <input type="text" id="overUsed" value={overUsed ? 'Yes' : 'No'} readOnly style={{ color: overUsed ? 'orange' : 'green' }} />
+        </div>
       </div>
     </div>
   );

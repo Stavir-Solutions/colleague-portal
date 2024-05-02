@@ -89,8 +89,8 @@ const ReporteeData = () => {
             <th>Employee Name</th>
             <th>Phone Number</th>
             <th>Email</th>
-            <th>Total Working Hours</th>
-            <th>Total Leaves</th>
+            <th>Total Hours Worked in Current Month</th>
+            <th>Total Leaves Taken in Current Month</th>
             <th>Actions</th>
           </tr>
         </thead>
