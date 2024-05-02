@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import BASE_URL from './Constants';
 
 const ReporteeAbsence = () => {
@@ -6,61 +6,60 @@ const ReporteeAbsence = () => {
   const [error, setError] = useState(null);
   const [selectedYear, setSelectedYear] = useState(""); 
 
+  const fetchData = useCallback(async (year) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${BASE_URL}/employees`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const loggedInEmployeeId = localStorage.getItem('employee_id');
+        const filteredData = data.filter(employee => employee.employee_id !== loggedInEmployeeId);
+        setEmployeeData(filteredData);
+        await fetchAbsenceDataForEmployees(filteredData, year, token); 
+      } else {
+        console.error('Error fetching employee data:', response.statusText);
+        setError('Error fetching employee data');
+      }
+    } catch (error) {
+      console.error('Error in fetchData:', error.message);
+      setError('Error in fetchData. Please try again.');
+    }
+  }, []);
+
   useEffect(() => {
-    const fetchData = async (year) => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`${BASE_URL}/employees`, {
+    const currentYear = calculateYearToFetch();
+    setSelectedYear(currentYear); 
+    fetchData(currentYear); 
+  }, [fetchData]);
+
+  const fetchAbsenceDataForEmployees = async (employees, year, token) => {
+    try {
+      const promises = employees.map(async (employee) => {
+        const response = await fetch(`${BASE_URL}/absencemngmnt/employees/${employee.employee_id}/leaves/${year}`, {
           headers: {
             Authorization: token,
           },
         });
-
         if (response.ok) {
           const data = await response.json();
-          const loggedInEmployeeId = localStorage.getItem('employee_id');
-          const filteredData = data.filter(employee => employee.employee_id !== loggedInEmployeeId);
-          setEmployeeData(filteredData);
-          await fetchAbsenceDataForEmployees(filteredData, year, token); 
+          return { ...employee, ...data };
         } else {
-          console.error('Error fetching employee data:', response.statusText);
-          setError('Error fetching employee data');
+          console.error(`Error fetching absence data for ${employee.employee_id}:`, response.statusText);
+          return employee;
         }
-      } catch (error) {
-        console.error('Error in fetchData:', error.message);
-        setError('Error in fetchData. Please try again.');
-      }
-    };
+      });
 
-    const fetchAbsenceDataForEmployees = async (employees, year, token) => {
-      try {
-        const promises = employees.map(async (employee) => {
-          const response = await fetch(`${BASE_URL}/absencemngmnt/employees/${employee.employee_id}/leaves/${year}`, {
-            headers: {
-              Authorization: token,
-            },
-          });
-          if (response.ok) {
-            const data = await response.json();
-            return { ...employee, ...data };
-          } else {
-            console.error(`Error fetching absence data for ${employee.employee_id}:`, response.statusText);
-            return employee;
-          }
-        });
-
-        const updatedEmployees = await Promise.all(promises);
-        setEmployeeData(updatedEmployees);
-      } catch (error) {
-        console.error('Error fetching absence data:', error);
-      }
-    };
-
-    const currentYear = calculateYearToFetch();
-    setSelectedYear(currentYear); 
-    fetchData(currentYear); 
-
-  }, []);
+      const updatedEmployees = await Promise.all(promises);
+      setEmployeeData(updatedEmployees);
+    } catch (error) {
+      console.error('Error fetching absence data:', error);
+    }
+  };
 
   const calculateYearToFetch = () => {
     const currentDate = new Date();
