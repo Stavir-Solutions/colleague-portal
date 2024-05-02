@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import BASE_URL from './Constants';
 
 const ReporteeAbsence = () => {
@@ -6,7 +6,7 @@ const ReporteeAbsence = () => {
   const [error, setError] = useState(null);
   const [selectedYear, setSelectedYear] = useState(""); 
 
-  const fetchData = async (year) => {
+  const fetchData = useCallback(async (year) => {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`${BASE_URL}/employees`, {
@@ -29,13 +29,13 @@ const ReporteeAbsence = () => {
       console.error('Error in fetchData:', error.message);
       setError('Error in fetchData. Please try again.');
     }
-  };
+  }, []);
 
   useEffect(() => {
     const currentYear = calculateYearToFetch();
     setSelectedYear(currentYear); 
     fetchData(currentYear); 
-  }, [fetchData]); // Rectified dependency array
+  }, [fetchData]);
 
   const fetchAbsenceDataForEmployees = async (employees, year, token) => {
     try {
