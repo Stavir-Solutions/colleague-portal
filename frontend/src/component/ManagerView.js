@@ -3,7 +3,9 @@ import './ManagerView.css';
 import ReporteeTimeSheet from './ReporteeTimeSheet';
 import MyData from './MyData';
 import MyTimesheet from './MyTimesheet';
-import ReporteeData from './ReporteeData'; 
+import ReporteeData from './ReporteeData';
+import ReporteeAbsence from './ReporteeAbsence';
+import AbsenceData from './AbsenceData'; 
 import BASE_URL from './Constants';
 
 const ManagerView = () => {
@@ -24,7 +26,6 @@ const ManagerView = () => {
 
   const handleLogout = async () => {
     try {
-      // Make API call to logout endpoint
       const employeeId = localStorage.getItem('employee_id');
       const response = await fetch(`${BASE_URL}/logout/clear-token/${employeeId}`, {
         method: 'POST',
@@ -48,13 +49,13 @@ const ManagerView = () => {
     } catch (error) {
       console.error('Error during logout:', error);
     }
-  }
+  };
   
   return (
     <div>
       <div className="logout-btn">
         <div className="welcome-message">
-          <h2>{localStorage.getItem('employee_name' )}</h2>
+          <h2>{localStorage.getItem('employee_name')}</h2>
         </div>
         <button onClick={handleLogout}>Logout</button>
       </div>
@@ -89,6 +90,19 @@ const ManagerView = () => {
             >
               Reportee Time Sheet
             </button>
+            <button
+              className={activeTab === 'ReporteeAbsence' ? 'active' : ''}
+              onClick={() => handleTabChange('ReporteeAbsence')}
+            >
+              Reportee Absence Data
+            </button>
+            
+            <button
+              className={activeTab === 'AbsenceData' ? 'active' : ''}
+              onClick={() => handleTabChange('AbsenceData')}
+            >
+              Absence Data
+            </button>
           </div>
         </div>
         
@@ -99,6 +113,8 @@ const ManagerView = () => {
               {activeTab === 'reporteeData' && <ReporteeData authToken={authToken} />}
               {activeTab === 'reportingTimeSheet' && <ReporteeTimeSheet />}
               {activeTab === 'myTimeSheet' && <MyTimesheet />}
+              {activeTab === 'ReporteeAbsence' && <ReporteeAbsence />}
+              {activeTab === 'AbsenceData' && <AbsenceData />}
             </>
           )}
         </div>

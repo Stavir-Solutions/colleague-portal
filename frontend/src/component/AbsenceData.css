@@ -1,0 +1,46 @@
+.absence-data {
+    width: 50%;
+    margin: 0 auto;
+  }
+  
+  .data-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .data-row label {
+    flex: 0 0 150px;
+    margin-right: 10px;
+  }
+  
+  .data-row input,
+  .data-row ul {
+    flex: 1;
+    margin: 0;
+    padding: 5px;
+    box-sizing: border-box;
+  }
+  
+  /* Reduce margin for the "Leave Dates" label */
+  .data-row label[for="leaveDates"] {
+    flex: 0 0 150px; /* Adjust label width if needed */
+    margin-right: 5px; /* Reduce margin between label and list */
+  }
+  
+  /* Remove default bullet points and style list items as numbered */
+  .data-row ul {
+    list-style-type: none; /* Remove default bullet points */
+    padding: 0; /* Remove default padding */
+    counter-reset: listIndex; /* Reset counter for each list */
+  }
+  
+  .data-row ul li {
+    padding: 2px 0; /* Adjust padding as needed */
+  }
+  
+  .data-row ul li:before {
+    content: counter(listIndex) ". "; /* Add numbered list item */
+    counter-increment: listIndex; /* Increment counter */
+  }
+  

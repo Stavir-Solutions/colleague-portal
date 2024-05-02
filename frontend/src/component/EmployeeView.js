@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './EmployeeView.css';
 import MyData from './MyData';
 import MyTimesheet from './MyTimesheet';
+import AbsenceData from './AbsenceData'; 
 import BASE_URL from './Constants';
 
 const storedEmployeeId = localStorage.getItem('employee_id');
@@ -64,12 +65,19 @@ const EmployeeView = () => {
           >
             My Data
           </button>
+          <button
+            className={activeTab === 'AbsenceData' ? 'active' : ''}
+            onClick={() => handleTabChange('AbsenceData')}
+          >
+            Absence Data
+          </button>
         </div>
         <div className="tab-content">
           {activeTab && (
             <>
               {activeTab === 'myData' && <MyData />}
               {activeTab === 'myTimeSheet' && <MyTimesheet />}
+              {activeTab === 'AbsenceData' && <AbsenceData />} 
             </>
           )}
         </div>
