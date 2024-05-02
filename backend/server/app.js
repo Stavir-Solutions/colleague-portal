@@ -11,7 +11,7 @@ const timesheetRoutes = require('./timesheet.js');
 const loginRoutes = require('./login.js');
 const tmsummaryRoutes = require('./tmsummary');
 const logoutRoutes = require('./logout');
-const absencesRoute = require('./absences');
+
 const absencemngmntRoute = require('./absencemngmnt');
 
 app.use('/api/v1/employees', employeeRoutes);
@@ -19,7 +19,7 @@ app.use('/api/v1/timesheet', timesheetRoutes);
 app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/tmsummary', tmsummaryRoutes);
 app.use('/api/v1/logout', logoutRoutes);
-app.use('/api/v1/absences', absencesRoute);
+
 app.use('/api/v1/absencemngmnt', absencemngmntRoute);
 
 const port = 3000;
