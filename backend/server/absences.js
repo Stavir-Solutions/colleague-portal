@@ -1,7 +1,7 @@
 const express = require('./parent.js');
 const absencemngmntAPIs = express.Router();
 const db = require('./db.js');
-const { authenticateToken } = require('./tokenValidation');
+const { authenticateToken } = require('./tokenValidation.js');
 
 absencemngmntAPIs.use(authenticateToken);
 
