@@ -1,9 +1,16 @@
 const express = require('./parent.js');
-const absencemngmntAPIs = express.Router();
+const absencesAPIs = express.Router();
 const db = require('./db.js');
 const { authenticateToken } = require('./tokenValidation.js');
 
-absencemngmntAPIs.use(authenticateToken);
+absencesAPIs.use(authenticateToken);
+
+const MILLI_SECONDS_IN_A_DAY = 1000 * 60 * 60 * 24;
+const MAX_LEAVES = 12;
+const DAYS_IN_A_YEAR = 365;
+const FULL_DAY_LEAVE_HOURS = 8;
+const MARCH = 2;
+const APRIL = 3;
 
 async function getTheLeavesAndDatesFromTimesheet(employeeId, startDate, endDate) {
     try {
@@ -26,8 +33,9 @@ async function getTheLeavesAndDatesFromTimesheet(employeeId, startDate, endDate)
 
 function calculateProratedLeaves(employeeStartDateForTheYear, financialYearEndDate) {
     const endDate = new Date() < financialYearEndDate ? new Date() : financialYearEndDate;
-    const differenceInDays = Math.ceil((endDate - employeeStartDateForTheYear) / (1000 * 60 * 60 * 24));
-    const proratedLeaves = Math.ceil(((12 / 365) * differenceInDays) * 8);
+    
+    const differenceInDays = Math.ceil((endDate - employeeStartDateForTheYear) / (MILLI_SECONDS_IN_A_DAY));
+    const proratedLeaves = Math.ceil(((MAX_LEAVES / DAYS_IN_A_YEAR) * differenceInDays) * FULL_DAY_LEAVE_HOURS);
     return proratedLeaves;
 }
 
@@ -41,19 +49,20 @@ async function getJoiningDate(employeeId) {
     return result[0][0]?.joining_date;
 }
 
+
 function calculateStartDate(joiningDate, financialYearStartDate) {
     if (!(joiningDate instanceof Date)) {
         return null;
     }
     const joiningYear = joiningDate.getFullYear();
-    if (joiningYear < financialYearStartDate.getFullYear() || joiningDate.getMonth() < 2 || (joiningDate.getMonth() === 2 && joiningDate.getDate() < 1)) {
-        return new Date(financialYearStartDate.getFullYear(), 3, 1);
+    if (joiningYear < financialYearStartDate.getFullYear() || joiningDate.getMonth() < APRIL) {
+        return new Date(financialYearStartDate.getFullYear(), APRIL, 1);
     } else {
         return joiningDate;
     }
 }
 
-absencemngmntAPIs.get('/employees/:id/leaves/:endYear', async (req, res) => {
+absencesAPIs.get('/employees/:id/leaves/:endYear', async (req, res) => {
     const { id, endYear } = req.params;
 
     try {
@@ -64,7 +73,7 @@ absencemngmntAPIs.get('/employees/:id/leaves/:endYear', async (req, res) => {
             return;
         }
 
-        const financialYearStartDate = new Date(endYear - 1, 3, 1);
+        const financialYearStartDate = new Date(endYear - 1, APRIL, 1);
         const startDateOfYear = calculateStartDate(new Date(joiningDate), financialYearStartDate);
 
         if (!startDateOfYear) {
@@ -73,7 +82,8 @@ absencemngmntAPIs.get('/employees/:id/leaves/:endYear', async (req, res) => {
             return;
         }
 
-        const financialYearEndDate = new Date(endYear, 2, 32);
+        
+        const financialYearEndDate = new Date(endYear, MARCH, 31);
         
         // Retrieve leaves and dates from timesheet
         const leavesAndDates = await getTheLeavesAndDatesFromTimesheet(id, startDateOfYear, financialYearEndDate);
@@ -84,8 +94,10 @@ absencemngmntAPIs.get('/employees/:id/leaves/:endYear', async (req, res) => {
         // Log retrieved leaves and dates
         console.log(`Leaves and dates retrieved for employee ${id}:`, leavesAndDates);
 
-        const numberOfExpectedWorkingDays = Math.ceil((financialYearEndDate - startDateOfYear) / (1000 * 60 * 60 * 24));
-        const leavesHoursEligibleThisYear = Math.ceil((12 * 8 / 365) * numberOfExpectedWorkingDays);
+        const numberOfExpectedWorkingDays 
+            = Math.ceil((financialYearEndDate - startDateOfYear) / MILLI_SECONDS_IN_A_DAY);
+        const leavesHoursEligibleThisYear 
+            = Math.ceil((MAX_LEAVES * FULL_DAY_LEAVE_HOURS / DAYS_IN_A_YEAR) * numberOfExpectedWorkingDays);
         const remainingLeaveHours = leavesHoursEligibleThisYear - totalLeavesTaken;
 
         const proratedLeaves = calculateProratedLeaves(startDateOfYear, financialYearEndDate);
@@ -107,4 +119,4 @@ absencemngmntAPIs.get('/employees/:id/leaves/:endYear', async (req, res) => {
     }
 });
 
-module.exports = absencemngmntAPIs;
+module.exports = absencesAPIs;
