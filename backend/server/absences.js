@@ -6,7 +6,7 @@ const { authenticateToken } = require('./tokenValidation.js');
 absencesAPIs.use(authenticateToken);
 
 const MILLI_SECONDS_IN_A_DAY = 1000 * 60 * 60 * 24;
-const MAX_LEAVES = 12;
+const MAX_LEAVES = 24;
 const DAYS_IN_A_YEAR = 365;
 const FULL_DAY_LEAVE_HOURS = 8;
 const MARCH = 2;
