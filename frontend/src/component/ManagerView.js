@@ -79,6 +79,12 @@ const ManagerView = () => {
               My Data
             </button>
             <button
+              className={activeTab === 'AbsenceData' ? 'active' : ''}
+              onClick={() => handleTabChange('AbsenceData')}
+            >
+              Absence Data
+            </button>
+            <button
               className={activeTab === 'reporteeData' ? 'active' : ''}
               onClick={() => handleTabChange('reporteeData')}
             >
@@ -97,12 +103,6 @@ const ManagerView = () => {
               Reportee Absence Data
             </button>
             
-            <button
-              className={activeTab === 'AbsenceData' ? 'active' : ''}
-              onClick={() => handleTabChange('AbsenceData')}
-            >
-              Absence Data
-            </button>
           </div>
         </div>
         

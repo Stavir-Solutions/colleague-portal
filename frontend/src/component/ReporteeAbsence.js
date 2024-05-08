@@ -18,7 +18,8 @@ const ReporteeAbsence = () => {
       if (response.ok) {
         const data = await response.json();
         const loggedInEmployeeId = localStorage.getItem('employee_id');
-        const filteredData = data.filter(employee => employee.employee_id !== loggedInEmployeeId);
+        const filteredData = data.filter(employee => employee.employee_id !== loggedInEmployeeId 
+          && employee.leaving_date == null);
         setEmployeeData(filteredData);
         await fetchAbsenceDataForEmployees(filteredData, year, token); 
       } else {
@@ -47,6 +48,7 @@ const ReporteeAbsence = () => {
         });
         if (response.ok) {
           const data = await response.json();
+          console.log(data);
           return { ...employee, ...data };
         } else {
           console.error(`Error fetching absence data for ${employee.employee_id}:`, response.statusText);
@@ -98,18 +100,25 @@ const ReporteeAbsence = () => {
         <thead>
           <tr>
             <th>Employee Name</th>
-            <th>Total Leaves</th>
-            <th>Leaves Taken</th>
-            <th>Leave Dates</th>
+            <th>Total Leaves (hrs)</th>
+            <th>Leaves Taken (hrs)</th>
+            <th>Leaves Eligible as of Today (hrs)</th>
             <th>Overused</th>
+            <th>Leave Dates</th>
           </tr>
         </thead>
         <tbody>
           {employeeData.map((employee, index) => (
             <tr key={index}>
               <td>{employee.employee_name}</td>
-              <td>{employee.leaves_eligible_this_year} hours</td>
-              <td>{employee.leaves_taken_this_year} hours </td>
+              <td>{employee.leaves_eligible_this_year}</td>
+              <td>{employee.leaves_taken_this_year} </td>
+              <td>{employee.prorated_leaves} </td>
+              <td>
+                <span style={{ color: employee.overused_as_of_today ? 'orange' : 'green' }}>
+                  {employee.overused_as_of_today ? 'Yes' : 'No'}
+                </span>
+              </td>
               {employee.leaves_and_dates ? (
                 <td>
                   <ol>
@@ -121,11 +130,6 @@ const ReporteeAbsence = () => {
               ) : (
                 <td>No leave dates available</td>
               )}
-              <td>
-                <span style={{ color: employee.overused_as_of_today ? 'orange' : 'green' }}>
-                  {employee.overused_as_of_today ? 'Yes' : 'No'}
-                </span>
-              </td>
             </tr>
           ))}
         </tbody>

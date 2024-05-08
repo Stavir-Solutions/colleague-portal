@@ -19,6 +19,7 @@ const AbsenceData = () => {
   const [leavesTaken, setLeavesTaken] = useState(0);
   const [leaveDates, setLeaveDates] = useState([]);
   const [overUsed, setOverUsed] = useState(false);
+  const [proratedLeaves, setProratedLeaves] = useState(0);
   const [selectedYear, setSelectedYear] = useState(calculateYearToFetch());
 
   useEffect(() => {
@@ -41,6 +42,7 @@ const AbsenceData = () => {
         setLeavesTaken(data.leaves_taken_this_year);
         setLeaveDates(data.leaves_and_dates);
         setOverUsed(data.overused_as_of_today);
+        setProratedLeaves(data.prorated_leaves);
       } else {
         console.error('Failed to fetch absence data:', response.statusText);
       }
@@ -73,6 +75,10 @@ const AbsenceData = () => {
           <input type="text" id="leavesTaken" value={leavesTaken} readOnly />
         </div>
         <div className="data-row">
+          <label htmlFor="proRatedLeavesAsOfNow">Eligible leaves as of Today:</label>
+          <input type="text" id="proRatedLeavesAsOfNow" value={proratedLeaves} readOnly />
+        </div>
+        <div className="data-row">
           <label htmlFor="leaveDates">Leave Dates:</label>
           <ul id="leaveDates">
             {leaveDates.map((item, index) => (
@@ -82,7 +88,7 @@ const AbsenceData = () => {
         </div>
         <div className="data-row">
           <label htmlFor="overUsed">Overused:</label>
-          <input type="text" id="overUsed" value={overUsed ? 'Yes' : 'No'} readOnly style={{ color: overUsed ? 'orange' : 'green' }} />
+          <input type="text" id="overUsed" value={overUsed ? 'You have overused your leaves !' : 'You have not fully utilized your leaves yet'} readOnly style={{ color: overUsed ? 'orange' : 'green' }} />
         </div>
       </div>
     </div>
