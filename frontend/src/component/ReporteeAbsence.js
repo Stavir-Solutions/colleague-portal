@@ -19,7 +19,7 @@ const ReporteeAbsence = () => {
         const data = await response.json();
         const loggedInEmployeeId = localStorage.getItem('employee_id');
         const filteredData = data.filter(employee => employee.employee_id !== loggedInEmployeeId 
-          && employee.leaving_date < new Date());
+          && employee.leaving_date == null);
         setEmployeeData(filteredData);
         await fetchAbsenceDataForEmployees(filteredData, year, token); 
       } else {
