@@ -18,7 +18,8 @@ const ReporteeAbsence = () => {
       if (response.ok) {
         const data = await response.json();
         const loggedInEmployeeId = localStorage.getItem('employee_id');
-        const filteredData = data.filter(employee => employee.employee_id !== loggedInEmployeeId);
+        const filteredData = data.filter(employee => employee.employee_id !== loggedInEmployeeId 
+          && employee.leaving_date < new Date());
         setEmployeeData(filteredData);
         await fetchAbsenceDataForEmployees(filteredData, year, token); 
       } else {
