@@ -1,0 +1,22 @@
+import boto3
+
+def lambda_handler(event, context):
+    # Function to stop RDS DB instance
+    stop_rds_db = lambda db_instance_identifier: boto3.client('rds').stop_db_instance(DBInstanceIdentifier=db_instance_identifier)
+
+    # Example usage
+    try:
+        # Replace 'your-db-instance-identifier' with the actual identifier of your RDS DB instance
+        db_instance_identifier = 'colleague-db'
+        response = stop_rds_db(db_instance_identifier)
+        print("RDS DB instance stopping:", response)
+        return {
+            'statusCode': 200,
+            'body': "RDS DB instance stopping: " + str(response)
+        }
+    except Exception as e:
+        print("Error stopping RDS DB instance:", e)
+        return {
+            'statusCode': 500,
+            'body': "Error stopping RDS DB instance: " + str(e)
+        }
