@@ -41,6 +41,7 @@ async function hasReportees(employeeId) {
 }
 
 loginAPIs.post('/', async (req, res) => {
+  console.info('Login attempt');
   try {
     const { username, password } = req.body;
     const connection = await dbConnectionPool.getConnection();
@@ -52,6 +53,7 @@ loginAPIs.post('/', async (req, res) => {
     const [results] = await connection.execute(query.text, query.values);
 
     if (results.length === 0) {
+      console.warn('Username or password is incorrect.');
       return res.status(404).json({ error: 'Username not found' });
     }
 
@@ -59,6 +61,7 @@ loginAPIs.post('/', async (req, res) => {
     const hashedPassword = await hashGenerator.generate_sha_hash(password);
 
     if (user.password !== hashedPassword) {
+      console.warn('Username or password is incorrect .');
       return res.status(401).json({ error: 'Invalid password' });
     }
 
@@ -74,6 +77,7 @@ loginAPIs.post('/', async (req, res) => {
         hasReportees: hasReporteesValue,
       });
     } else {
+      console.error('Internal server error');
       return res.status(500).json({ error: 'Internal server error' });
     }
   } catch (error) {
