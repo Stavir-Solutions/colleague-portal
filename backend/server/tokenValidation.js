@@ -32,13 +32,16 @@ const authenticateToken = async (req, res, next) => {
     const token = req.header('Authorization');
 
     if (!token) {
-        return res.status(401).send('Unauthorized - Token missing');
+        console.warn('Authorization Header Missing')
+        return res.status(401).send('Authorization Header Missing');
     }
 
     try {
+        console.info('Validating token')
         const tokenInfo = await validateToken(token);
 
         if (!tokenInfo) {
+            console.warn('Invalid Token')
             return res.status(401).send('Unauthorized - Invalid token');
         }
 
