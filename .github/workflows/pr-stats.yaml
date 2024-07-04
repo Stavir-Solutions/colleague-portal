@@ -1,0 +1,13 @@
+name: PR Statistics
+
+on:
+  workflow_dispatch:
+    inputs:
+
+jobs:
+  pr-stats:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run pull request stats
+        uses: flowwer-dev/pull-request-stats@master
